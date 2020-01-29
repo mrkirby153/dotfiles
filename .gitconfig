@@ -1,0 +1,36 @@
+[user]
+	email = mr.austinwhyte@gmail.com
+	name = mrkirby153
+	signingkey = C875FF31
+[alias]
+	nuke=!git clean -df * && git reset --hard HEAD
+	pp = !git pull --rebase && git push
+	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+	r = reset
+	r1 = reset HEAD^
+	r2 = reset HEAD^^
+	rh = reset --hard
+	rh1 = reset HEAD^ --hard
+	rh2 = reset HEAD^^ --hard
+[commit]
+	gpgsign = true
+	verbose = true
+[gpg]
+	program = /usr/local/MacGPG2/bin/gpg2
+[core]
+	autocrlf = input
+	precomposeUnicode = true
+	excludesfile = /Users/austin/.gitignore_global
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[color]
+	ui = auto
