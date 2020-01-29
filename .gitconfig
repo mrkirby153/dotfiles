@@ -20,7 +20,7 @@
 [core]
 	autocrlf = input
 	precomposeUnicode = true
-	excludesfile = /Users/austin/.gitignore_global
+	excludesfile = ~/.gitignore_global
 [filter "lfs"]
 	required = true
 	clean = git-lfs clean -- %f
