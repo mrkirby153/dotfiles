@@ -7,7 +7,7 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'scrooloose/nerdtree'
+Plugin 'cocopon/vaffle.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat'
 Plugin 'rhysd/conflict-marker.vim'
@@ -142,11 +142,15 @@ set splitbelow
 autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2 " Files that must use spaces
 
 " Easy move tabs and windows
-map <C-J> <C-W>j<C-W>_
-map <C-K> <C-W>k<C-W>_
-map <C-L> <C-W>l<C-W>_
-map <C-H> <C-W>h<C-W>_
-
+map <C-J> <C-W>j
+map <C-K> <C-W>k
+map <C-L> <C-W>l
+map <C-H> <C-W>h
+" Resize windows with arrow keys
+map OB <C-W>-
+map OA <C-W>+
+map OD 5<C-W><
+map OC 5<C-W>>
 noremap j gj
 noremap k gk
 
@@ -167,7 +171,7 @@ endif
 cmap Tabe tabe
 
 nnoremap Y Y$
-
+'
 " Dont exit visual mode when shifting
 vnoremap < <gv
 vnoremap > >gv
