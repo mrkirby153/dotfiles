@@ -172,6 +172,9 @@ nnoremap Y Y$
 vnoremap < <gv
 vnoremap > >gv
 
+nnoremap q: <nop>
+nnoremap Q <nop>
+
 " === PLUGIN SETTINGS ===
 
 " vim-php-namespace
@@ -201,3 +204,4 @@ imap <c-space> <Plug>(asyncomplete_force_refresh)
 if filereadable(expand("~/.vimrc.bundles.local"))
     source ~/.vimrc.bundles.local
 endif
+
