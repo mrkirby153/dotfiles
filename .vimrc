@@ -30,9 +30,6 @@ if executable('ctags')
     Plugin 'majutsushi/tagbar'
 endif
 
-" Autocomplete
-Plugin 'prabirshrestha/asyncomplete.vim'
-
 " PHP
 Plugin 'spf13/PIV'
 Plugin 'arnaud-lb/vim-php-namespace'
@@ -54,7 +51,7 @@ Plugin 'peitalin/vim-jsx-typescript'
 Plugin 'MaxMEllon/vim-jsx-pretty'
 
 " HTML
-Plugin 'vim-scripts/HTML-AutoCloseTag'
+Plugin 'alvan/vim-closetag'
 Plugin 'hail2u/vim-css3-syntax'
 Plugin 'gko/vim-coloresque'
 Plugin 'tpope/vim-haml'
@@ -193,19 +190,12 @@ autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
 let g:DisableAutoPHPFolding = 0
 let g:PIVAutoClose = 0
 
-" asynccomplete.vim
-" Tab Complete
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
-
-imap <c-space> <Plug>(asyncomplete_force_refresh)
-
+" Vaffle
+map <F2> :Vaffle<CR>
 " === END PLUGIN SETTINGS ===
 
-
 " Source vimrc.local for overrides if needed
-if filereadable(expand("~/.vimrc.bundles.local"))
-    source ~/.vimrc.bundles.local
+if filereadable(expand("~/.vimrc.local"))
+    source ~/.vimrc.local
 endif
 
