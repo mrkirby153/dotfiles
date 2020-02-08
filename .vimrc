@@ -30,6 +30,9 @@ if executable('ctags')
     Plugin 'majutsushi/tagbar'
 endif
 
+" Autocomplete
+Plugin 'ycm-core/YouCompleteMe'
+
 " PHP
 Plugin 'spf13/PIV'
 Plugin 'arnaud-lb/vim-php-namespace'
@@ -198,4 +201,5 @@ map <F2> :Vaffle<CR>
 if filereadable(expand("~/.vimrc.local"))
     source ~/.vimrc.local
 endif
+
 
