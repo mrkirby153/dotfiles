@@ -4,14 +4,14 @@
 URxvt.scrollBar: False
 
 ! Font
-URxvt.font: xft:SauceCodePro Nerd Font mono:size=9, \
-            xft:Source Code Pro:size=9, \
-            xft:DejaVuSansMono Nerd Font:size=9, \
-            xft:DroidSansMono Nerd Font:size=9, \
-            xft:FuraMono Nerd Font:size=9, \
-            xft:RobotoMono Nerd Font:size=9, \
-            xft:Noto Sans Mono:size=9, \
-            xft:Monospace:style=Medium:size=9   
+URxvt.font: xft:SauceCodePro Nerd Font mono:size=11, \
+            xft:Source Code Pro:size=11, \
+            xft:DejaVuSansMono Nerd Font:size=11, \
+            xft:DroidSansMono Nerd Font:size=11, \
+            xft:FuraMono Nerd Font:size=11, \
+            xft:RobotoMono Nerd Font:size=11, \
+            xft:Noto Sans Mono:size=11, \
+            xft:Monospace:style=Medium:size=11
 URxvt.saveLines: 2000
 
 !! Extensions
