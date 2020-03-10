@@ -1,0 +1,38 @@
+! urxvt
+
+! Disable that ugly scrollbar
+URxvt.scrollBar: False
+
+! Font
+URxvt.font: xft:SauceCodePro Nerd Font mono:size=9, \
+            xft:Source Code Pro:size=9, \
+            xft:DejaVuSansMono Nerd Font:size=9, \
+            xft:DroidSansMono Nerd Font:size=9, \
+            xft:FuraMono Nerd Font:size=9, \
+            xft:RobotoMono Nerd Font:size=9, \
+            xft:Noto Sans Mono:size=9, \
+            xft:Monospace:style=Medium:size=9   
+URxvt.saveLines: 2000
+
+!! Extensions
+URxvt.perl-ext-common: default,matcher,resize-font,url-select,keyboard-select,clipboard
+URxvt.colorUL: #4682B4
+
+! url-select
+URxvt.keysym.M-u: perl:url-select:select_next
+URxvt.url-select.launcher: firefox
+URxvt.url-select.underline: true
+
+! keyboard-select
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+
+! matcher
+URxvt.url-launcher: firefox
+URxvt.matcher.button: 1
+
+! Clipboard
+URxvt.clipboard.autocopy: true
+URxvt.keysym.M-c: perl:clipboard:copy
+URxvt.keysym.M-v: perl:clipboard:paste
+
+! End URXVT

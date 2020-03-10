@@ -1,0 +1,7 @@
+program_options:
+    tray: auto
+    automount: true
+    notify: true
+device_config:
+    - device_file: /dev/loop*
+      ignore: true

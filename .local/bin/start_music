@@ -1,0 +1,17 @@
+#!/bin/bash
+
+ws10="10"
+ws1="1"
+
+if pgrep spotify >> /dev/null; then
+    echo "Spotify is already running"
+else
+    echo "Starting spotify and cava"
+    i3-msg "workspace $ws10"
+    sleep 0.25
+    i3-msg "exec --no-startup-id spotify"
+    i3-msg "exec --no-startup-id urxvt -name cava -e cava"
+    sleep 2
+    i3-layout-manager MUSIC
+    i3-msg "workspace $ws1"
+fi

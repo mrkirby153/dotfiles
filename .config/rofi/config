@@ -1,0 +1,2 @@
+rofi.modi: window,run,ssh,drun,combi
+rofi.theme: ~/.cache/wal/colors-rofi-dark.rasi

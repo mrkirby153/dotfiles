@@ -1,0 +1,254 @@
+#!/bin/bash
+
+# A screenshot uploader using gnome screenshot
+
+set -e # Exit immediately on error
+
+# ==== BEGIN USER CONFIGURATION ====
+
+# The output directory for screenshots
+SCREENSHOTS_DIR=~/Pictures/Screenshots
+UPLOAD_URL=https://i.mrkirby153.com/upload.php
+
+# ==== END USER CONFIGURAITON ====
+
+VERBOSE=${VERBOSE:0}
+TEMP_DIR="$(mktemp -d /tmp/screenshot-XXXXXXXXXX)"
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+if [[ -e "$HOME/.screenshot_key" ]]; then
+    UPLOAD_KEY=$(cat "$HOME/.screenshot_key")
+else
+    echo "Screenshot key does not exist!"
+    exit 1
+fi
+
+debug() {
+    if [[ $VERBOSE -gt 0 ]]; then
+        echo "debug: $@"
+    fi
+}
+
+trap_add() {
+    trap_add_cmd=$1; shift || fail "${FUNCNAME} usage error"
+    for trap_add_name in "$@"; do
+        trap -- "$(
+            # helper fn to get existing trap command from output
+            # of trap -p
+            extract_trap_cmd() { printf '%s\n' "$3"; }
+            # print existing trap command with newline
+            eval "extract_trap_cmd $(trap -p "${trap_add_name}")"
+            # print the new trap command
+            printf '%s\n' "${trap_add_cmd}"
+        )" "${trap_add_name}" \
+            || fail "unable to add to trap ${trap_add_name}"
+    done
+}
+
+play_sound() {
+    ffplay -nodisp -autoexit $1 >/dev/null 2>&1 &
+}
+
+upload() {
+    local upload_command="curl -v -X POST -F'file=@$1' -F 'key=$UPLOAD_KEY' $UPLOAD_URL >> $TEMP_DIR/output"
+    debug "Executing upload command \"$upload_command\""
+    eval $upload_command
+    play_sound "$DIR/resources/TaskCompletedSound.wav"
+}
+
+cleanup() {
+    debug 'Cleaning up...'
+    rm -rf $TEMP_DIR
+}
+
+region_capture() {
+    debug 'Capturing region with maim'
+    maim -s $1
+    play_sound "$DIR/resources/CaptureSound.wav"
+}
+
+window_capture() {
+    debug 'Capturing full window with maim'
+    maim -i $(xdotool getactivewindow) $1
+    play_sound "$DIR/resources/CaptureSound.wav"
+}
+
+save() {
+    # Save the file to the given directory
+    date=$(date +"%Y-%m")
+    time=$(date +"%H:%M:%S")
+    folder="$SCREENSHOTS_DIR/$date"
+    debug "Saving to folder $folder"
+    if [[ ! -e $folder ]]; then
+        debug "$folder does not exist. Creatng"
+        mkdir -p $folder
+    else
+        debug "$folder already exists"
+    fi
+    file="$folder/Screenshot-${date}_${time}.png"
+    cp $1 $file
+    debug "Saved as $file"
+}
+
+record() {
+    local pid_file="$XDG_RUNTIME_DIR/screenrecord.pid";
+
+    if [[ -f "$pid_file" ]]; then
+        local pid=$(cat $pid_file)
+        if kill -0 $pid 2>/dev/null; then
+            debug "Screen recorder is running. Stopping recorder ($pid)"
+            kill -INT $pid
+            exit 0
+        else
+            rm -rf "$pid_file"
+        fi
+    fi
+
+    local tempout=$(mktemp $TEMP_DIR/outXXXXXXXXXX.avi)
+    local temppalette
+    local tempframe
+    local outfile="$TEMP_DIR/output.gif"
+
+    _record_cleanup() {
+        debug "cleaning up after record"
+        debug "rm -rf $pid_file"
+        rm -rf "$pid_file"
+        debug "rm -rf $1"
+        rm -f $1
+        if [ "$2" ]; then
+            debug "rm -rf $2"
+            rm -f $2
+        fi
+        if [ "$3" ]; then
+            debug "rm -rf $3"
+            rm -f $3
+        fi
+        if [ "$4" ]; then
+            debug "rm -rf $4"
+            rm -rf $4
+        fi
+        cleanup
+    }
+
+    _record_sigint() {
+        notify-send "Stopping screen recorder..."
+        kill -INT $(cat $pid_file)
+    }
+    trap_add "_record_cleanup \"$tempout\" \"$temppalette\" \"$tempframe\" \"$outfile\"" EXIT
+    trap_add _record_sigint SIGINT
+
+    touch "$pid_file"
+
+    notify-send "Select an area to begin recording. Escape to cancel"
+    debug "Slopping"
+
+    read -r X Y W H G ID < <(slop -f "%x %y %w %h %g %i" -q) || true
+    if [ -z "$X" ]; then
+        debug "canceled"
+        exit 1
+    fi
+
+    debug "Starting recording to $tempout"
+    notify-send "Recording..."
+    ffmpeg -loglevel info -y -f x11grab -show_region 1 -framerate 30 \
+        -draw_mouse 1 \
+        -s "$W"x"$H" -i "$DISPLAY".0+"$X","$Y" -codec:v huffyuv   \
+        -vf crop="iw-mod(iw\\,2):ih-mod(ih\\,2)" "$tempout" &
+    local pid="$!"
+    debug "PID = $pid"
+    echo "$pid" >$pid_file
+    wait "$pid" && local rc=$? || local rc=$?
+    if ((rf != 130 && rc != 255)); then
+        echo "FAILED: x11grab failed with $rc"
+        exit 1
+    fi
+    debug "x11grab done. $tempout"
+
+    if ! [ -s "$tempout" ]; then
+        echo "Empty output file $tempout"
+        exit 1
+    fi
+
+    notify-send "Encoding recording. This may take some time"
+    temppalette=$(mktemp $TEMP_DIR/outXXXXXXX.png)
+    debug "Temp pallete: $temppallete"
+    ffmpeg -v info -i "$tempout" -vf "fps=$RECORD_FRAMERATE,palettegen=stats_mode=full" -y $temppalette
+    ffmpeg -v info -i "$tempout" -i "$temppalette" -lavfi "fps=$RECORD_FRAMERATE [x]; [x][1:v] paletteuse=dither=sierra2_4a" -y $outfile
+
+    echo "Saved to $outfile"
+    notify-send "Uploading gif..."
+    upload $outfile
+    result=$(cat $TEMP_DIR/output)
+    echo "Uploaded as $result"
+    echo -n $result | xclip -selection c
+    notify-send "Uploaded" "Gif has been uploaded as $result"
+}
+
+debug "Temporary directory is $TEMP_DIR"
+# upload 'testing.png'
+
+REGION=0
+WINDOW=0
+SCREEN_RECORD=0
+
+# Do the argparsing
+while (("$#")); do
+    case "$1" in
+    -r | --region)
+        REGION=1
+        shift
+        ;;
+    -w | --window)
+        WINDOW=1
+        shift
+        ;;
+    --record)
+        SCREEN_RECORD=1
+        shift
+        ;;
+    --) # end argument parsing
+        shift
+        break
+        ;;
+    -* | --*=) # unsupported flags
+        echo "Error: Unsupported flag $1" >&2
+        exit 1
+        ;;
+    esac
+done
+
+if [[ REGION -gt 0 ]] && [[ WINDOW -gt 0 ]]; then
+    echo "Cannot use region and window capture at the same time"
+    exit 1
+fi
+
+trap_add cleanup SIGINT
+trap_add cleanup EXIT
+
+TEMP_OUTFILE="$TEMP_DIR/capture.png"
+
+if [[ SCREEN_RECORD -gt 0 ]]; then
+    debug "Capturing screen recording"
+    record
+    exit 0
+fi
+
+if [[ REGION -gt 0 ]]; then
+    region_capture $TEMP_OUTFILE
+fi
+
+if [[ WINDOW -gt 0 ]]; then
+    window_capture $TEMP_OUTFILE
+fi
+
+upload $TEMP_OUTFILE
+result=$(cat $TEMP_DIR/output)
+echo "Uploaded as: $result"
+
+# Save results to a file
+save $TEMP_OUTFILE
+
+# Copy results to clipboard
+echo -n $result | xclip -selection c
+
+notify-send "Uploaded" "Capture has been uploaded as $result" -i $TEMP_OUTFILE
+

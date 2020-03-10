@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Only start ckb-next if a corsair keyboard is plugged in
+
+if lsusb | grep "Corsair .* Keyboard" >> /dev/null
+then
+    echo "Keyboard found. Starting ckb-next"
+    # Tell i3 to start ckb-next
+    if ps -C ckb-next >> /dev/null
+    then
+        echo "ckb is already running"
+    else
+        i3-msg "exec --no-startup-id ckb-next &"
+    fi
+else
+    echo "Keyboard not found"
+fi

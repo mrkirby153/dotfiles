@@ -1,0 +1,36 @@
+#!/bin/bash
+
+discord_running=0
+tbird_running=0
+ws1="1"
+ws2="8"
+
+if pgrep discord-canary >> /dev/null; then
+    discord_running=1
+fi
+
+if pgrep thunderbird >> /dev/null; then
+    tbird_running=1
+fi
+
+if [[ $discord_running -eq 0 || $tbird_running -eq 0 ]]; then
+    echo "Discord or thunderbird is not running"
+    i3-msg "workspace $ws2"
+    sleep 0.1
+    if [ $discord_running -eq 0 ]; then
+        echo "Starting discord"
+        i3-msg "exec --no-startup-id discord-canary"
+    fi
+    if [ $tbird_running -eq 0 ]; then
+        echo "Starting thunderbird"
+        i3-msg "exec --no-startup-id thunderbird"
+    fi
+    i3-layout-manager DISTB
+    sleep 0.5
+    i3-msg "workspace $ws1"
+else
+    i3-msg "workspace $ws2"
+    i3-layout-manager DISTB
+    sleep 0.5
+    i3-msg "workspace $ws1"
+fi
