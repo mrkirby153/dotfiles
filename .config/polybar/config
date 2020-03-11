@@ -450,10 +450,10 @@ menu-2-1-exec = menu-open-0
 
 [module/nowplaying]
 type = custom/script
-exec = ~/.config/polybar/now-playing.sh
+exec = ~/.config/polybar/now-playing.sh 2> /dev/null
 interval = 1
 click-left = i3-msg workspace 10
-click-right = playerctl play-pause
+click-right = playerctl -p playerctld play-pause
 
 [settings]
 screenchange-reload = true
