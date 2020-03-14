@@ -146,3 +146,6 @@ clear && neofetch
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export _Z_DATA=$HOME/.config/z
+[[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
+eval $(thefuck --alias)
