@@ -268,3 +268,18 @@ bindsym $mod+Ctrl+greater move workspace to output right
 bindsym $mod+Ctrl+less move workspace to output left
 bindsym $mod+Ctrl+question exec --no-startup-id ~/.local/bin/swap_workspaces
 
+# =================
+# Gap Configuration
+# =================
+smart_gaps on
+smart_borders on
+gaps inner 4
+gaps outer 0
+
+# ==========
+# Scratchpad
+# ==========
+exec --no-startup-id urxvt -name pad
+for_window [instance="pad"] move scratchpad; [instance="pad"] scratchpad show; move scratchpad
+bindsym $mod+c [instance="pad"] scratchpad show
+bindsym $mod+ctrl+c exec --no-startup-id urxvt -name pad; exec --no-startup-id notify-send "Scratchpad started"
