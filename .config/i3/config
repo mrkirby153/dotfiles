@@ -223,6 +223,7 @@ exec_always --no-startup-id wal --theme ~/theme
 assign [instance="discord"] $ws8
 assign [instance="Mail"] $ws8
 assign [class="spotify"] $ws10
+assign [class="Slack"] $ws9
 
 # Set wallpaper with feh
 exec --no-startup-id feh --bg-fill ~/Pictures/14_doctors.jpg
