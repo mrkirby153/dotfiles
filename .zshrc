@@ -149,3 +149,5 @@ clear && neofetch
 export _Z_DATA=$HOME/.config/z
 [[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
 eval $(thefuck --alias)
+
+alias pa-linein="pactl unload-module module-loopback ; pactl load-module module-loopback source_dont_move=true source=alsa_input.pci-0000_00_1b.0.analog-stereo"
