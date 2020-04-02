@@ -242,10 +242,15 @@ mode "$mode_system" {
 }
 bindsym $mod+Pause mode "$mode_system"
 
+# Enable floating windows
+# class = 2nd xprop param, instance = 1st xprop command
 for_window [title="Volume Control"] floating enable
 for_window [class="vorta"] floating enable
 for_window [class="ckb-next"] floating enable
 for_window [class="Galculator"] floating enable
+for_window [instance="Msgcompose" class="Thunderbird"] floating enable
+for_window [instance="Toplevel" class="Zotero"] floating enable
+
 
 # Titlebar & border
 for_window [class="^.*"] border pixel 2
