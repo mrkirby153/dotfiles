@@ -82,12 +82,6 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
-# split in horizontal orientation
-bindsym $mod+h split h
-
-# split in vertical orientation
-bindsym $mod+v split v
-
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 
@@ -216,6 +210,7 @@ bindsym $mod+r mode "resize"
 # ===========
 exec --no-startup-id ~/.config/i3/i3_autostart.sh
 exec_always --no-startup-id wal --theme ~/theme
+exec_always --no-startup-id autotiling
 
 # =====================
 # Workspace assignments
@@ -224,6 +219,8 @@ assign [instance="discord"] $ws8
 assign [instance="Mail"] $ws8
 assign [class="spotify"] $ws10
 assign [class="Slack"] $ws9
+# Banish Zoom and all its windows to WS20
+assign [class="zoom"] $ws20 
 
 # Set wallpaper with feh
 exec --no-startup-id feh --bg-fill ~/Pictures/14_doctors.jpg
@@ -250,6 +247,13 @@ for_window [class="ckb-next"] floating enable
 for_window [class="Galculator"] floating enable
 for_window [instance="Msgcompose" class="Thunderbird"] floating enable
 for_window [instance="Toplevel" class="Zotero"] floating enable
+for_window [instance="Devtools" class="firefox"] floating enable
+
+# Floating dialogs
+for_window[window_role="pop-up"] floating enable
+for_window[window_role="bubble"] floating enable
+for_window[window_role="dialog"] floating enable
+for_window[window_type="menu"] floating enable
 
 
 # Titlebar & border
