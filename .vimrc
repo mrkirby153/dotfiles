@@ -197,6 +197,14 @@ let g:PIVAutoClose = 0
 map <F2> :Vaffle<CR>
 " === END PLUGIN SETTINGS ===
 
+
+set number relativenumber
+augroup numbertoggle
+    autocmd!
+    autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+    autocmd BufLeave,FocusLost,InsertEnter * set norelativenumber
+augroup END
+
 " Source vimrc.local for overrides if needed
 if filereadable(expand("~/.vimrc.local"))
     source ~/.vimrc.local
