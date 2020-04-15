@@ -37,6 +37,9 @@ parcellite &
 
 udiskie &
 
+# Bind right ctrl to compose key
+setxkbmap -option compose:rctrl
+
 # Disown forked programs
 disown
 
