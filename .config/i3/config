@@ -209,7 +209,7 @@ bindsym $mod+r mode "resize"
 # Autostart
 # ===========
 exec --no-startup-id ~/.config/i3/i3_autostart.sh
-exec_always --no-startup-id wal --theme ~/theme
+exec_always --no-startup-id wal -i ~/Pictures/wallpaper.jpg
 exec_always --no-startup-id autotiling
 
 # =====================
@@ -223,7 +223,7 @@ assign [class="Slack"] $ws9
 assign [class="zoom"] $ws20 
 
 # Set wallpaper with feh
-exec --no-startup-id feh --bg-fill ~/Pictures/14_doctors.jpg
+exec --no-startup-id feh --bg-fill ~/Pictures/wallpaper.jpg
 
 
 # System command mode foro sleep, restart, etc.
