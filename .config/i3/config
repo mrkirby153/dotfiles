@@ -265,10 +265,10 @@ focus_on_window_activation urgent
 
 bindsym $mod+n exec thunar &
 bindsym $mod+z exec firefox &
+bindsym $mod+g exec --no-startup-id galculator
 bindsym $mod+Shift+z exec firefox --private-window &
 bindsym $mod+s exec --no-startup-id ~/.local/bin/screenshot -r
 bindsym $mod+Shift+s exec --no-startup-id ~/.local/bin/screenshot --record
-
 bindsym $mod+o exec --no-startup-id ~/.local/bin/dual_monitor
 bindsym $mod+Shift+o exec --no-startup-id ~/.local/bin/single_monitor
 bindsym $mod+greater exec --no-startup-id rofimoji
