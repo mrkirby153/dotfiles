@@ -17,11 +17,11 @@
 ;==========================================================
 
 [colors]
-background = #000
-# background = ${xrdb:color0:#222}
+# background = #000
+background = ${xrdb:color0:#222}
 background-alt = #444
-foreground = #FFF
-# foreground = ${xrdb:color7:#222}
+# foreground = #FFF
+foreground = ${xrdb:color7:#222}
 foreground-alt = #555
 primary = ${xrdb:color1:#ffb52a}
 secondary = ${xrdb:color2:#e60053}
