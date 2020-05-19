@@ -5,7 +5,9 @@ primary="HDMI-0"
 
 # Kill all polybar instances
 killall polybar
-sleep 0.5
+
+# Wait for polybar to stop
+while pgrep -u $UID -x polybar > /dev/null; do sleep 0.1; done
 
 # Start up poybar on all the monitors
 if type "xrandr"; then
