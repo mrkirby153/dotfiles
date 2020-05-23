@@ -11,9 +11,6 @@ sleep 1
 # Notification daemon
 dunst &
 
-# Volume icon
-volumeicon &
-
 # Backups
 vorta &
 

@@ -219,8 +219,6 @@ assign [instance="discord"] $ws8
 assign [instance="Mail"] $ws8
 assign [class="spotify"] $ws10
 assign [class="Slack"] $ws9
-# Banish Zoom and all its windows to WS20
-assign [class="zoom"] $ws20 
 
 # Set wallpaper with feh
 exec --no-startup-id feh --bg-fill ~/Pictures/wallpaper.jpg
@@ -272,6 +270,7 @@ bindsym $mod+Shift+s exec --no-startup-id ~/.local/bin/screenshot --record
 bindsym $mod+o exec --no-startup-id ~/.local/bin/dual_monitor
 bindsym $mod+Shift+o exec --no-startup-id ~/.local/bin/single_monitor
 bindsym $mod+greater exec --no-startup-id rofimoji
+bindsym Shift+XF86AudioPlay exec --no-startup-id pavucontrol
 
 # Move workspaces between monitors
 bindsym $mod+Ctrl+greater move workspace to output right
