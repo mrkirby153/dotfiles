@@ -271,6 +271,8 @@ bindsym $mod+o exec --no-startup-id ~/.local/bin/dual_monitor
 bindsym $mod+Shift+o exec --no-startup-id ~/.local/bin/single_monitor
 bindsym $mod+greater exec --no-startup-id rofimoji
 bindsym Shift+XF86AudioPlay exec --no-startup-id pavucontrol
+bindsym Shift+XF86AudioLowerVolume exec --no-startup-id ~/.local/bin/pypulse -s
+bindsym Shift+XF86AudioRaiseVolume exec --no-startup-id ~/.local/bin/pypulse -p
 
 # Move workspaces between monitors
 bindsym $mod+Ctrl+greater move workspace to output right

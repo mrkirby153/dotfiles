@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+
+try:
+    import pulsectl
+    import notify2
+    import json
+    import os
+    import argparse
+except:
+    print("Missing dependency. Ensure that pulsectl and notify2 are installed!")
+    exit(1)
+
+
+CONFIG_LOCATION = os.path.expanduser("~/.pypulse.json")
+
+HEADPHONES = None
+SPEAKERS = None
+
+
+def find_sink(name: str, pa: pulsectl.Pulse):
+    return pa.get_sink_by_name(name)
+
+def send_notification(message):
+    notify2.init("PyPulse")
+    notice = notify2.Notification('PyPulse', message)
+    notice.show()
+    return
+
+def load_config():
+    global HEADPHONES, SPEAKERS
+    with open(CONFIG_LOCATION, 'r') as cfg_file:
+        raw_data = cfg_file.read()
+        raw_json = json.loads(raw_data)
+        HEADPHONES = raw_json['headphones']
+        SPEAKERS = raw_json['speakers']
+
+def write_config(headphones, speakers):
+    struct = {
+        'headphones': headphones,
+        'speakers': speakers
+    }
+    with open(CONFIG_LOCATION, 'w+') as cfg_file:
+        cfg_file.write(json.dumps(struct))
+    print(f"Config written to {CONFIG_LOCATION}")
+
+def setup():
+    with pulsectl.Pulse('PyPulse') as pulse:
+        # Show a list of sinks and ask the user to specify
+        idx = 1
+        for sink in pulse.sink_list():
+            print(f"{idx}: {sink.description}")
+            idx += 1
+        headphones_id = int(input("Select the audio device to use as headphones > "))
+        speakers_id = int(input("Select the audio device to use as speakers > "))
+        if headphones_id == speakers_id:
+            print("You cannot use the same device as both headphones and speakers")
+            exit(1)
+        if headphones_id > idx or headphones_id < 1:
+            print("Invalid headphone output provided")
+            exit(1)
+        if speakers_id > idx or speakers_id < 1:
+            print("Invalid speaker output provided")
+            exit(1)
+        headphone_sink = pulse.sink_list()[headphones_id-1]
+        speakers_sink = pulse.sink_list()[speakers_id-1]
+
+        write_config(headphone_sink.name, speakers_sink.name)
+        print(f"Selected {headphone_sink.name} as headphones and {speakers_sink.name} as speakers")
+        exit(0)
+
+
+def set_default(new_sink_name):
+    with pulsectl.Pulse('PyPulse') as pulse:
+        # Determine the default sink
+        default_sink = pulse.server_info().default_sink_name
+        print(f"The default sink is currently {default_sink}")
+
+        new_sink = find_sink(new_sink_name, pulse)
+        if new_sink is None:
+            print(f"Could not find sink with name: {new_sink_name}. Try running the setup wizard again")
+            exit(1)
+        else:
+            print(f"Found sink {new_sink.index}")
+        
+        # Move all the sink inputs to the new output
+        for sink_input in pulse.sink_input_list():
+            print(f"Moving sink input {sink_input.index} to sink {new_sink.index}")
+            pulse.sink_input_move(sink_input.index, new_sink.index)
+        
+        # Set default device
+        if new_sink_name == default_sink:
+            print("Skipping default set")
+        else:
+            print("Setting default sink")
+            pulse.default_set(new_sink)
+        send_notification(f"Set default pulse device to {new_sink.description}")
+
+def main():
+    parser = argparse.ArgumentParser(description='Sets default PulseAudio devices')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--headphones', '-p', action='store_true', help='Switch default device to headphones')
+    group.add_argument('--speakers', '-s', action='store_true', help='Switch default device to speakers')
+    group.add_argument('--setup', action='store_true', help='Run setup wizard')
+    group.add_argument('--config', '-c', action='store_true', help='Show the current configuration')
+
+    args = parser.parse_args()
+
+    if args.headphones:
+        # Set headphones
+        load_config()
+        set_default(HEADPHONES)
+    elif args.speakers:
+        # Set speakers
+        load_config()
+        set_default(SPEAKERS)
+    elif args.setup:
+        # Run setup
+        setup()
+    elif args.config:
+        # Dump config
+        load_config()
+        print(f"Headphones: {HEADPHONES}")
+        print(f"Speakers: {SPEAKERS}")
+    else:
+        parser.print_help()
+
+
+if __name__ == "__main__":
+    main()
