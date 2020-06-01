@@ -45,7 +45,7 @@ bindsym XF86AudioPrev exec --no-startup-id playerctl -p playerctld previous
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec st
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -290,7 +290,7 @@ gaps outer 0
 # ==========
 # Scratchpad
 # ==========
-exec --no-startup-id urxvt -name pad
+exec --no-startup-id st -n pad
 for_window [instance="pad"] move scratchpad; [instance="pad"] scratchpad show; move scratchpad
 bindsym $mod+c [instance="pad"] scratchpad show
-bindsym $mod+ctrl+c exec --no-startup-id urxvt -name pad; exec --no-startup-id notify-send "Scratchpad started"
+bindsym $mod+ctrl+c exec --no-startup-id st -n pad; exec --no-startup-id notify-send "Scratchpad started"
