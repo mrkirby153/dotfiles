@@ -10,7 +10,7 @@ else
     i3-msg "workspace $ws10"
     sleep 0.25
     i3-msg "exec --no-startup-id spotify"
-    i3-msg "exec --no-startup-id urxvt -name cava -e cava"
+    i3-msg "exec --no-startup-id st -n cava -e cava"
     sleep 2
     i3-layout-manager MUSIC
     i3-msg "workspace $ws1"
