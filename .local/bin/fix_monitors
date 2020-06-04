@@ -1,0 +1,11 @@
+#!/bin/bash
+
+PRIMARY="HDMI-0"
+SECONDARY="DP-5"
+
+echo "Fixing monitors"
+
+xrandr --output $PRIMARY --auto --panning 0x0 --output DP-5 --off
+
+sleep 1
+~/.local/bin/dual_monitor
