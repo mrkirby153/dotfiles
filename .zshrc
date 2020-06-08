@@ -81,6 +81,7 @@ plugins=(
     docker
     zsh-syntax-highlighting
     zsh-autosuggestions
+    kubectl
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -161,3 +162,10 @@ then
     source /usr/share/fzf/key-bindings.zsh
     source /usr/share/fzf/completion.zsh
 fi
+
+exprop()
+{
+xprop | awk '
+  /^WM_CLASS/{sub(/.* =/, "instance:"); sub(/,/, "\nclass:"); print}
+  /^WM_NAME/{sub(/.* =/, "title:"); print}'
+}

@@ -242,7 +242,7 @@ fi
 
 upload $TEMP_OUTFILE
 result=$(cat $TEMP_DIR/output)
-echo "Uploaded as: $result"
+# echo "Uploaded as: $result"
 
 # Save results to a file
 save $TEMP_OUTFILE
