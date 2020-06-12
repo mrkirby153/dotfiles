@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# (Re)starts the status bar
+killall -q dwmblocks
+setsid dwmblocks &
