@@ -30,5 +30,6 @@ shift + XF86AudioRaiseVolume
 {XF86AudioPlay, XF86AudioNext, XF86AudioPrev}
     playerctl -p playerctld {play-pause, next, previous}
 
-shift + Pause
+super + Pause
     ~/.local/bin/power_menu
+
