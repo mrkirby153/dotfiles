@@ -21,4 +21,7 @@ wal -i ~/Pictures/wallpaper.jpg
 # Start/Reload sxhkd
 ~/.local/bin/start_sxhkd
 
+# Start dwmblocks
+~/.local/bin/statusbar/start
+
 disown
