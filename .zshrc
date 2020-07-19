@@ -82,6 +82,7 @@ plugins=(
     zsh-syntax-highlighting
     zsh-autosuggestions
     kubectl
+    extract
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -155,7 +156,7 @@ eval $(thefuck --alias)
 bindkey "\e$terminfo[kcub1]" backward-word
 bindkey "\e$terminfo[kcuf1]" forward-word
 
-alias pa-linein="pactl unload-module module-loopback ; pactl load-module module-loopback source_dont_move=true source=alsa_input.pci-0000_00_1b.0.analog-stereo"
+alias pa-linein="pactl unload-module module-loopback ; pactl load-module module-loopback source_dont_move=true source=alsa_input.pci-0000_29_00.4.analog-stereo"
 
 if [[ -d /usr/share/fzf  ]];
 then
