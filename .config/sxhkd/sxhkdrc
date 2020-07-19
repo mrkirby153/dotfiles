@@ -33,3 +33,14 @@ shift + XF86AudioRaiseVolume
 super + Pause
     ~/.local/bin/power_menu
 
+super + d
+    j4-dmenu-desktop --dmenu="$(which dmenu) -l 20 -i" --display-binary
+
+super + r
+    dmenu_run -l 20 -i
+
+super + o
+    ~/.local/bin/dual_monitor
+
+super + shift + o
+    ~/.local/bin/single_monitor
