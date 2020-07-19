@@ -3,7 +3,3 @@
 echo "Running randr"
 sh ~/.screenlayout/dualmonitor.sh
 
-sleep 0.1
-
-echo "Launching polybar"
-sh ~/.local/bin/launch_polybar
