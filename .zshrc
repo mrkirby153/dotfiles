@@ -170,3 +170,5 @@ xprop | awk '
   /^WM_CLASS/{sub(/.* =/, "instance:"); sub(/,/, "\nclass:"); print}
   /^WM_NAME/{sub(/.* =/, "title:"); print}'
 }
+
+alias lanplay="sudo lan-play --netif enp34s0 --relay-server-addr mrkirby153.com:11451"
