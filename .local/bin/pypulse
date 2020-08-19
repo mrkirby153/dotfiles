@@ -18,7 +18,11 @@ SPEAKERS = None
 
 
 def find_sink(name: str, pa: pulsectl.Pulse):
-    return pa.get_sink_by_name(name)
+    try:
+        return pa.get_sink_by_name(name)
+    except:
+        send_notification(f"Could not find sink {name}")
+        exit(1)
 
 def send_notification(message):
     notify2.init("PyPulse")
@@ -81,12 +85,12 @@ def set_default(new_sink_name):
             exit(1)
         else:
             print(f"Found sink {new_sink.index}")
-        
+
         # Move all the sink inputs to the new output
         for sink_input in pulse.sink_input_list():
             print(f"Moving sink input {sink_input.index} to sink {new_sink.index}")
             pulse.sink_input_move(sink_input.index, new_sink.index)
-        
+
         # Set default device
         if new_sink_name == default_sink:
             print("Skipping default set")
