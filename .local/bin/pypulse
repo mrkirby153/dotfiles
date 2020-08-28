@@ -6,6 +6,7 @@ try:
     import json
     import os
     import argparse
+    import subprocess
 except:
     print("Missing dependency. Ensure that pulsectl and notify2 are installed!")
     exit(1)
@@ -46,6 +47,40 @@ def write_config(headphones, speakers):
     with open(CONFIG_LOCATION, 'w+') as cfg_file:
         cfg_file.write(json.dumps(struct))
     print(f"Config written to {CONFIG_LOCATION}")
+
+
+def dmenu_prompt(args, prompt=None):
+    cmd = ['dmenu', '-l', '20', '-i']
+    if prompt is not None:
+        cmd.extend(['-p', prompt])
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+    (stdout, _) = proc.communicate(input="\n".join(args).encode('utf-8'))
+    if proc.returncode != 0:
+        return None
+    return stdout.decode('utf-8')[:-1]
+
+def dmenu_select():
+    with pulsectl.Pulse('PyPulse') as pulse:
+        default_sink = pulse.server_info().default_sink_name
+        name_to_sink = {}
+        args = []
+        for sink in pulse.sink_list():
+            name_to_sink[sink.description] = sink.name
+            desc = sink.description
+            if default_sink == sink.name:
+                desc = f"{desc}*"
+            args.append(desc)
+        dev_name = dmenu_prompt(args, prompt="Select a device to switch to")
+        if dev_name is None:
+            print("Canceled selection")
+            exit(0)
+        alsa_name = name_to_sink.get(dev_name, None)
+        if alsa_name is None:
+            print(f"Could not find device {dev_name}")
+            exit(1)
+        print(f"Switching to {dev_name} ({alsa_name})")
+        set_default(alsa_name)
+
 
 def setup():
     with pulsectl.Pulse('PyPulse') as pulse:
@@ -106,6 +141,7 @@ def main():
     group.add_argument('--speakers', '-s', action='store_true', help='Switch default device to speakers')
     group.add_argument('--setup', action='store_true', help='Run setup wizard')
     group.add_argument('--config', '-c', action='store_true', help='Show the current configuration')
+    group.add_argument('--select', '-l', action='store_true', help='Use dmenu to select')
 
     args = parser.parse_args()
 
@@ -125,6 +161,8 @@ def main():
         load_config()
         print(f"Headphones: {HEADPHONES}")
         print(f"Speakers: {SPEAKERS}")
+    elif args.select:
+        dmenu_select()
     else:
         parser.print_help()
 

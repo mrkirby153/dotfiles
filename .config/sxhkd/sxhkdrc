@@ -27,6 +27,9 @@ shift + XF86AudioLowerVolume
 shift + XF86AudioRaiseVolume
     ~/.local/bin/pypulse -p
 
+super +XF86AudioRaiseVolume
+    ~/.local/bin/pypulse -l
+
 {XF86AudioPlay, XF86AudioNext, XF86AudioPrev}
     playerctl -p playerctld {play-pause, next, previous}
 
