@@ -74,7 +74,7 @@ window_capture() {
 
 save() {
     # Save the file to the given directory
-    date=$(date +"%Y-%m")
+    date=$(date +"%Y-%m-%d")
     time=$(date +"%H:%M:%S")
     folder="$SCREENSHOTS_DIR/$date"
     debug "Saving to folder $folder"
