@@ -18,20 +18,28 @@ super + s
 super + shift + s
     ~/.local/bin/screenshot --record
 
+super + control + s
+    maim -s | xclip -selection clipboard -t "image/png"
+
 shift + XF86AudioPlay
     pavucontrol
 
 shift + XF86AudioLowerVolume
-    ~/.local/bin/pypulse -s
+    ~/.local/bin/pypulse -s; pkill -RTMIN+10 dwmblocks
 
 shift + XF86AudioRaiseVolume
-    ~/.local/bin/pypulse -p
+    ~/.local/bin/pypulse -p; pkill -RTMIN+10 dwmblocks
 
 super +XF86AudioRaiseVolume
-    ~/.local/bin/pypulse -l
+    ~/.local/bin/pypulse -l; pkill -RTMIN+10 dwmblocks
 
 {XF86AudioPlay, XF86AudioNext, XF86AudioPrev}
     playerctl -p playerctld {play-pause, next, previous}
+
+XF86Audio{Raise,Lower}Volume
+    pamixer {-i,-d} 5; pkill -RTMIN+10 dwmblocks
+XF86AudioMute
+    pamixer -t ; pkill -RTMIN+10 dwmblocks
 
 super + Pause
     ~/.local/bin/power_menu
