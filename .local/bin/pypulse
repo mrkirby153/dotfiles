@@ -50,7 +50,7 @@ def write_config(headphones, speakers):
 
 
 def dmenu_prompt(args, prompt=None):
-    cmd = ['dmenu', '-l', '20', '-i']
+    cmd = ['dmenu', '-c', '-l', '20', '-i']
     if prompt is not None:
         cmd.extend(['-p', prompt])
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stdin=subprocess.PIPE)

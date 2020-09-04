@@ -48,7 +48,7 @@ super + d
     j4-dmenu-desktop --dmenu="$(which dmenu) -l 20 -i" --display-binary
 
 super + r
-    dmenu_run -l 20 -i
+    dmenu_run -c -l 20 -i
 
 super + o
     ~/.local/bin/dual_monitor
