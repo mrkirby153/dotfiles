@@ -74,7 +74,8 @@ window_capture() {
 
 save() {
     # Save the file to the given directory
-    date=$(date +"%Y-%m-%d")
+    date=$(date +"%Y-%m")
+    day=$(date +"%d")
     time=$(date +"%H:%M:%S")
     folder="$SCREENSHOTS_DIR/$date"
     debug "Saving to folder $folder"
@@ -84,7 +85,7 @@ save() {
     else
         debug "$folder already exists"
     fi
-    file="$folder/Screenshot-${date}_${time}.png"
+    file="$folder/Screenshot-${date}-${day}_${time}.png"
     cp $1 $file
     debug "Saved as $file"
 }
