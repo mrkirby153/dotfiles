@@ -1,0 +1,72 @@
+#!/bin/bash
+set -e
+# Script to automatically create backups with restic
+
+# --- START CONFIGURATION ---
+REPO_LOCATION="/run/media/austin/Clara Oswald/restic"
+# --- END CONFIGURATION ---
+
+
+LOCKFILE="$XDG_RUNTIME_DIR/restic_backup.lock"
+CFG_DIR="${XDG_CONFIG_DIRS:-$HOME/.config}"
+
+exit_error() {
+    echo "Error: $1"
+    notify-send -u critical "$1"
+    exit 1
+}
+verify_restic_binary() {
+    if ! command -v restic &> /dev/null
+    then
+        exit_error "Restic binary not found"
+    fi
+}
+
+verify_repo() {
+    if [ ! -d "$REPO_LOCATION" ]; then
+        exit_error "Repository at $REPO_LOCATION was not found"
+    fi
+}
+
+acquire_lock() {
+    echo "Acquiring lock at $LOCKFILE"
+    if { set -C; > "$LOCKFILE";  }; then
+        echo "Lock acquired"
+        trap 'rm -f $LOCKFILE' EXIT
+    else
+        echo "Backup is already in progress. If you are confident no other backup processes are running delete $LOCKFILE"
+        exit 1
+    fi
+}
+
+load_password() {
+    if [ -f "$CFG_DIR/restic_backup/backup_password" ]; then
+        PWD_FILE="$CFG_DIR/restic_backup/backup_password"
+        echo "Reading password from $PWD_FILE"
+    else
+        echo -n "Enter repository password: "
+        read -sr password
+        echo "$password" > "$XDG_RUNTIME_DIR/restic_password" 
+        trap 'rm -f $XDG_RUNTIME_DIR/restic_password' EXIT
+        PWD_FILE="$XDG_RUNTIME_DIR/restic_password"
+    fi
+}
+
+
+trap 'notify-send -u critical "Backup Failed" "The restic backup did not complete successfully"' exit
+
+verify_restic_binary
+verify_repo
+acquire_lock
+load_password
+
+echo "Starting backup"
+restic -r "$REPO_LOCATION" backup -x --files-from="$CFG_DIR/restic_backup/include" --exclude-file="$CFG_DIR/restic_backup/exclude" --exclude-if-present=.nobackup --password-file="$PWD_FILE"
+
+echo "Backup complete. Pruning old archives"
+
+# restic -r "$REPO_LOCATION" forget --keep-within 24h -H 4 -d 14 -w 4 -m 6 -y 2 --password-file="$PWD_FILE"
+
+echo "Pruned old backups"
+
+notify-send -t 10000 "Backup Complete" "Backup performed successfully"

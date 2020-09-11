@@ -1,0 +1,22 @@
+#!/bin/bash
+
+SHUTDOWN="Shutdown"
+RESTART="Restart"
+SUSPEND="Suspend"
+
+OPTION=$(echo -e "$SHUTDOWN\n$RESTART\n$SUSPEND" | dmenu -c -l 20)
+
+case "$OPTION" in
+"$SHUTDOWN")
+    echo "Shutting down"
+    systemctl poweroff
+    ;;
+"$RESTART")
+    echo "Restarting"
+    systemctl reboot
+    ;;
+"$SUSPEND")
+    echo "Suspending"
+    systemctl suspend
+    ;;
+esac

@@ -1,0 +1,45 @@
+#!/bin/bash
+set -e
+# Script to automatically create backups with restic
+
+# --- START CONFIGURATION ---
+REPO_LOCATION="/run/media/austin/Clara Oswald/restic"
+# --- END CONFIGURATION ---
+
+
+CFG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
+
+exit_error() {
+    echo "Error: $1"
+    notify-send -u critical "$1"
+    exit 1
+}
+verify_restic_binary() {
+    if ! command -v restic 2>&1 /dev/null
+    then
+        exit_error "Restic binary not found"
+    fi
+}
+
+verify_repo() {
+    if [ ! -d "$REPO_LOCATION" ]; then
+        exit_error "Repository at $REPO_LOCATION was not found"
+    fi
+}
+
+load_password() {
+    if [ -f "$CFG_DIR/restic_backup/backup_password" ]; then
+        PWD_FILE="$CFG_DIR/restic_backup/backup_password"
+        echo "Reading password from $PWD_FILE"
+    else
+        printf "Enter repository password: "
+        read -sr password
+        echo "$password" > "$XDG_RUNTIME_DIR/restic_password" 
+        trap 'rm -f $XDG_RUNTIME_DIR/restic_password' EXIT
+        PWD_FILE="$XDG_RUNTIME_DIR/restic_password"
+    fi
+}
+
+verify_repo
+load_password
+restic -r "$REPO_LOCATION" --password-file="$PWD_FILE" "$@"
