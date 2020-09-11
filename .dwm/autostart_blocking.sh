@@ -4,8 +4,6 @@
 
 pidof dunst || dunst &
 
-pgrep -u $UID -x vorta > /dev/null || vorta &
-
 pidof xfce-polkit || /usr/lib/xfce-polkit/xfce-polkit &
 
 pidof picom || picom -f &
@@ -16,6 +14,7 @@ pgrep -u $UID -x udiskie || udiskie &
 
 # Set wallpaper and colors with wal
 wal -i ~/Pictures/wallpaper.jpg
+dwmc xrdb
 
 
 # Start/Reload sxhkd
