@@ -45,7 +45,7 @@ super + Pause
     ~/.local/bin/power_menu
 
 super + d
-    j4-dmenu-desktop --dmenu="$(which dmenu) -l 20 -i" --display-binary
+    j4-dmenu-desktop --dmenu="$(which dmenu) -c -l 20 -i" --display-binary
 
 super + r
     dmenu_run -c -l 20 -i
@@ -55,3 +55,4 @@ super + o
 
 super + shift + o
     ~/.local/bin/single_monitor
+
