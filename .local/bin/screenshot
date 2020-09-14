@@ -178,6 +178,22 @@ record() {
     echo "Saved to $outfile"
     notify-send "Uploading gif..."
     upload $outfile
+
+    echo "Saving to folder"
+    date=$(date +"%Y-%m")
+    day=$(date +"%d")
+    time=$(date +"%H:%M:%S")
+    folder="$SCREENSHOTS_DIR/$date"
+    debug "Saving to folder $folder"
+    if [[ ! -e $folder ]]; then
+        debug "$folder does not exist. Creatng"
+        mkdir -p $folder
+    else
+        debug "$folder already exists"
+    fi
+    file="$folder/screencapture-${date}-${day}_${time}.gif"
+    cp $outfile $file
+
     result=$(cat $TEMP_DIR/output)
     echo "Uploaded as $result"
     echo -n $result | xclip -selection c
