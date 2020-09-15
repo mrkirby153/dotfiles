@@ -1,0 +1,19 @@
+#!/bin/bash
+
+dmenu_cmd="dmenu -c -l 20"
+args=()
+
+if [ $# -gt 0 ]; then
+    args=(-p "$*")
+fi
+
+selected=$(printf "Yes\nNo" | $dmenu_cmd "${args[@]}")
+
+case "$selected" in
+"Yes")
+    exit 0
+    ;;
+*)
+    exit 1
+    ;;
+esac
