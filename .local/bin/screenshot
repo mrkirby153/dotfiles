@@ -62,7 +62,7 @@ cleanup() {
 
 region_capture() {
     debug 'Capturing region with maim'
-    maim -s $1
+    maim -su $1
     play_sound "$DIR/resources/CaptureSound.wav"
 }
 

@@ -23,4 +23,6 @@ dwmc xrdb
 # Start dwmblocks
 ~/.local/bin/statusbar/start
 
+st -c mail neomutt &
+
 disown

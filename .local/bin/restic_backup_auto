@@ -65,7 +65,7 @@ restic -r "$REPO_LOCATION" backup -x --files-from="$CFG_DIR/restic_backup/includ
 
 echo "Backup complete. Pruning old archives"
 
-# restic -r "$REPO_LOCATION" forget --keep-within 24h -H 4 -d 14 -w 4 -m 6 -y 2 --password-file="$PWD_FILE"
+restic -r "$REPO_LOCATION" forget --keep-within 24h -H 4 -d 14 -w 4 -m 6 -y 2 --password-file="$PWD_FILE"
 
 echo "Pruned old backups"
 

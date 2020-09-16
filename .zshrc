@@ -172,3 +172,8 @@ xprop | awk '
 }
 
 alias lanplay="sudo lan-play --netif enp34s0 --relay-server-addr mrkirby153.com:11451"
+
+alias cp="cp -iv" \
+        mv="mv -iv" \
+        rm="rm -vI"
+

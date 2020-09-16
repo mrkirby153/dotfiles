@@ -34,7 +34,7 @@ super +XF86AudioRaiseVolume
     ~/.local/bin/pypulse -l; pkill -RTMIN+10 dwmblocks
 
 {XF86AudioPlay, XF86AudioNext, XF86AudioPrev}
-    playerctl -p playerctld {play-pause, next, previous}
+    ~/.local/bin/media_control {play-pause, next, previous}; pkill -RTMIN+2 dwmblocks
 
 XF86Audio{Raise,Lower}Volume
     pamixer {-i,-d} 5; pkill -RTMIN+10 dwmblocks
@@ -56,3 +56,5 @@ super + o
 super + shift + o
     ~/.local/bin/single_monitor
 
+super + shift + m
+    st -c mail neomutt

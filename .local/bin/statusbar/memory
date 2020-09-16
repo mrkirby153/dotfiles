@@ -15,4 +15,4 @@ done < /proc/meminfo
 
 mem_used=$(printf '%.2f' $(echo "$mem_used / 1048575" | bc -l))
 mem_total=$(printf '%.2f' $(echo "$mem_total / 1048576" | bc -l))
-echo " $mem_used GiB/$mem_total GiB"
+echo " $mem_used GiB"
