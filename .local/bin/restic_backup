@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eE
 # Script to automatically create backups with restic
 
 # --- START CONFIGURATION ---
@@ -7,7 +7,8 @@ REPO_LOCATION="/run/media/austin/Clara Oswald/restic"
 # --- END CONFIGURATION ---
 
 
-CFG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
+LOCKFILE="$XDG_RUNTIME_DIR/restic_backup.lock"
+CFG_DIR="${XDG_CONFIG_DIRS:-$HOME/.config}"
 
 exit_error() {
     echo "Error: $1"
@@ -15,7 +16,7 @@ exit_error() {
     exit 1
 }
 verify_restic_binary() {
-    if ! command -v restic 2>&1 /dev/null
+    if ! command -v restic &> /dev/null
     then
         exit_error "Restic binary not found"
     fi
@@ -27,12 +28,23 @@ verify_repo() {
     fi
 }
 
+acquire_lock() {
+    echo "Acquiring lock at $LOCKFILE"
+    if { set -C; > "$LOCKFILE";  }; then
+        echo "Lock acquired"
+        trap 'rm -f $LOCKFILE' EXIT
+    else
+        echo "Backup is already in progress. If you are confident no other backup processes are running delete $LOCKFILE"
+        exit 1
+    fi
+}
+
 load_password() {
     if [ -f "$CFG_DIR/restic_backup/backup_password" ]; then
         PWD_FILE="$CFG_DIR/restic_backup/backup_password"
         echo "Reading password from $PWD_FILE"
     else
-        printf "Enter repository password: "
+        echo -n "Enter repository password: "
         read -sr password
         echo "$password" > "$XDG_RUNTIME_DIR/restic_password" 
         trap 'rm -f $XDG_RUNTIME_DIR/restic_password' EXIT
@@ -40,6 +52,36 @@ load_password() {
     fi
 }
 
+
+# Runs a restic command on the repository
+run_restic_command() {
+    restic -r "$REPO_LOCATION" --password-file="$PWD_FILE" "$@"
+}
+
+perform_automatic_backup() {
+    start_time=$(date +"%Y-%m-%d %H:%M:%S")
+    echo "===== Starting automatic backup at $start_time ====="
+    trap 'notify-send -u critical "Backup Failed" "The restic backup did not complete successfully"' ERR
+    acquire_lock
+    run_restic_command backup -x --files-from="$CFG_DIR/restic_backup/include" --exclude-file="$CFG_DIR/restic_backup/exclude" --exclude-if-present=.nobackup || true
+    echo "Backup complete. Pruning old archives"
+    run_restic_command forget --keep-within 24h -H 4 -d 14 -w 4 -m 6 -y 2
+    echo "Pruned old backups"
+    echo "===== Automatic Backup Complete ====="
+    notify-send -t 10000 "Backup Complete" "Backup performed successfully"
+}
+
+
+
+verify_restic_binary
 verify_repo
 load_password
-restic -r "$REPO_LOCATION" --password-file="$PWD_FILE" "$@"
+
+case "$1" in
+"auto-backup")
+    perform_automatic_backup
+    ;;
+*)
+    run_restic_command "$@"
+    ;;
+esac
