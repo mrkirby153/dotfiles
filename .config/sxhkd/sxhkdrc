@@ -58,3 +58,9 @@ super + shift + o
 
 super + shift + m
     st -c mail neomutt
+
+super + shift + l
+    betterlockscreen -l dimblur --off 60
+
+super + shift + g
+    ~/.local/bin/dmenu_multimc
