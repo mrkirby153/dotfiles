@@ -9,11 +9,11 @@ OPTION=$(echo -e "$SHUTDOWN\n$RESTART\n$SUSPEND" | dmenu -c -l 20)
 case "$OPTION" in
 "$SHUTDOWN")
     echo "Shutting down"
-    dmenu_confirm "Shut Down?" && systemctl poweroff
+    ~/.local/bin/dmenu_confirm "Shut Down?" && systemctl poweroff
     ;;
 "$RESTART")
     echo "Restarting"
-    dmenu_confirm "Restart?" && systemctl reboot
+    ~/.local/bin/dmenu_confirm "Restart?" && systemctl reboot
     ;;
 "$SUSPEND")
     echo "Suspending"
