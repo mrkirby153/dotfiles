@@ -13,7 +13,9 @@ pidof parcellite || parcellite &
 pgrep -u $UID -x udiskie || udiskie &
 
 # Set wallpaper and colors with wal
-wal -i ~/Pictures/wallpaper.jpg
+# wal -i ~/Pictures/wallpaper.jpg
+feh --bg-fill ~/Pictures/wallpaper.jpg
+wal --theme base16-nord
 dwmc xrdb
 
 
@@ -22,7 +24,5 @@ dwmc xrdb
 
 # Start dwmblocks
 ~/.local/bin/statusbar/start
-
-st -c mail neomutt &
 
 disown
