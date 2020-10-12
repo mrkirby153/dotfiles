@@ -1,0 +1,46 @@
+#!/bin/bash
+
+mpd_status() {
+    mpc status | grep -o "\[.*\]" | sed -e 's/\[//' -e 's/\]//'
+}
+
+mpd() {
+    ! [ "$(mpd_status)" = "" ]
+}
+
+
+play_pause() {
+    ! (mpd && mpc -q toggle) && playerctl -p playerctld play-pause
+}
+
+next() {
+    ! (mpd && mpc -q next) && playerctl -p playerctld next
+}
+
+prev() {
+    ! (mpd && mpc -q prev) && playerctl -p playerctld previous
+}
+
+pause() {
+    ! (mpd && mpc -q pause) && playerctl -p playerctld pause
+}
+
+
+case "$1" in
+"play-pause")
+   play_pause
+   ;;
+"next")
+    next
+    ;;
+"previous")
+    prev
+    ;;
+"pause")
+    pause
+    ;;
+*)
+    echo "Unrecognized argument."
+    exit 1;
+    ;;
+esac
