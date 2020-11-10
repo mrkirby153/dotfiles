@@ -1,0 +1,18 @@
+#!/bin/sh
+
+file=$(readlink -f "$1")
+dir=${file%/*}
+base="${file%.*}"
+ext="${file##*.}"
+filename=$(basename "$file" ".$ext")
+
+cd "$dir" || exit
+
+shift
+
+case "$ext" in
+c) gcc "$file" -o "$filename" "$@";;
+md) pandoc "$file" -f markdown -t pdf --pdf-engine=xelatex -s -o "$filename.pdf" ;;
+tex) pdflatex "$file" ;;
+*) echo "Unsupported File Type" && exit 1 ;;
+esac
