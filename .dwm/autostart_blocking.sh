@@ -15,7 +15,8 @@ pgrep -u $UID -x udiskie || udiskie &
 # Set wallpaper and colors with wal
 # wal -i ~/Pictures/wallpaper.jpg
 feh --bg-fill ~/Pictures/wallpaper.jpg
-wal --theme base16-nord
+# wal --theme base16-nord
+wal -f ~/theme
 dwmc xrdb
 
 
