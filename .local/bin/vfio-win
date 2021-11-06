@@ -1,0 +1,3 @@
+#!/bin/sh
+
+~/.local/bin/dmenu_confirm "Start win10? This will terminate the currently running X session" && sudo virsh start win10

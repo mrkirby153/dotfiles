@@ -1,6 +1,10 @@
 #!/bin/sh
+case "$BUTTON" in
+    1) pactl set-source-volume alsa_input.usb-Samson_Technologies_Samson_Go_Mic-00.analog-stereo 52477 && notify-send "Adjusted microphone volume" ;;
+    2) pactl set-source-volume alsa_input.usb-Samson_Technologies_Samson_Go_Mic-00.analog-stereo 0 && notify-send "Muted Microphone" ;;
+esac
 
-[ $(pamixer --get-mute) = true ] && echo "ﱝ" && exit
+[ "$(pamixer --get-mute)" = true ] && echo "ﱝ" && exit
 
 vol="$(pamixer --get-volume)"
 

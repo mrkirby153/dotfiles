@@ -3,7 +3,7 @@ set -eE
 # Script to automatically create backups with restic
 
 # --- START CONFIGURATION ---
-REPO_LOCATION="/run/media/austin/Clara Oswald/restic"
+REPO_LOCATION="/run/media/austin/Elements/restic"
 # --- END CONFIGURATION ---
 
 
@@ -59,16 +59,33 @@ run_restic_command() {
 }
 
 perform_automatic_backup() {
+    tmp_out=$(mktemp)
+    trap "rm -rfv $tmp_out" ERR
+    trap "rm -rfv $tmp_out" EXIT
+    trap "rm -rfv $tmp_out" SIGINT
     start_time=$(date +"%Y-%m-%d %H:%M:%S")
+    start_s=$(date +"%s")
     echo "===== Starting automatic backup at $start_time ====="
     trap 'notify-send -u critical "Backup Failed" "The restic backup did not complete successfully"' ERR
     acquire_lock
-    run_restic_command backup -x --files-from="$CFG_DIR/restic_backup/include" --exclude-file="$CFG_DIR/restic_backup/exclude" --exclude-if-present=.nobackup || true
-    echo "Backup complete. Pruning old archives"
-    run_restic_command forget --keep-within 24h -H 4 -d 14 -w 4 -m 6 -y 2
-    echo "Pruned old backups"
+    echo "Back up a list of installed packages"
+    rm -f "$CFG_DIR/restic_backup/installed_packages" && pacman -Qqe > "$CFG_DIR/restic_backup/installed_packages"
+    if [ -t 0 ]; then
+        echo "Running in interactive mode"
+        run_restic_command backup -x --files-from="$CFG_DIR/restic_backup/include" --exclude-file="$CFG_DIR/restic_backup/exclude" --exclude-if-present=.nobackup || true
+    else
+        echo "Logging output to $tmp_out"
+        (run_restic_command backup -x --files-from="$CFG_DIR/restic_backup/include" --exclude-file="$CFG_DIR/restic_backup/exclude" --exclude-if-present=.nobackup || true) | tee "$tmp_out"
+    fi
     echo "===== Automatic Backup Complete ====="
-    notify-send -t 10000 "Backup Complete" "Backup performed successfully"
+    runtime=$(($(date +'%s') - start_s))
+    if [ -t 0 ]; then
+        notify-send -t 10000 "Backup Complete" "Backup performed successfully in ${runtime}s"
+    else
+        added=$(grep "Added to the repo:" "$tmp_out" | cut -d " " -f 5-)
+        notify-send -t 10000 "Backup Complete" "Backup performed successfully in ${runtime}s ($added added)"
+    fi
+    rm -rfv "$tmp_out"
 }
 
 
@@ -80,6 +97,10 @@ load_password
 case "$1" in
 "auto-backup")
     perform_automatic_backup
+    ;;
+"clean-backup")
+    run_restic_command forget -H 24 -d 14 -w 4 -m 6 -y 5 -g "host"
+    run_restic_command prune --max-unused=0
     ;;
 *)
     run_restic_command "$@"

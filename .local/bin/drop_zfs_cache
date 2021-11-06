@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [[ $EUID -ne 0 ]]; then sudo "$0" "$@" || exit 1 ; exit 0; fi
+
+sync
+echo 3 > /proc/sys/vm/drop_caches
+echo "Caches have been dropped"
+notify-send "Dropped level 3 caches"

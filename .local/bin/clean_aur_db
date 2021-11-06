@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -e
+
+to_remove=()
+echo "Finding packages that are no longer installed"
+for file in $(paru -Ll | awk '{print $2}');
+do
+    # echo "Checking $file"
+    if ! pacman -Qi "$file" > /dev/null 2>1;
+    then
+        to_remove+=("$file")
+    fi
+done
+
+if [ ${#to_remove[@]} -eq 0 ]; then
+    echo "Nothing to do!"
+    exit
+fi
+echo "To Remove: ${to_remove[*]}"
+
+read -p "Confirm removal? " -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]];
+then
+    echo
+    paru -Ld "${to_remove[@]}"
+else
+    echo
+    echo "Aborting"
+    exit 1
+fi
+
+clean_aur_signatures

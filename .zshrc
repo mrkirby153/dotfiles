@@ -16,7 +16,7 @@ export ZSH="/home/austin/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 # ZSH_THEME="robbyrussell"
-ZSH_THEME="powerlevel10k/powerlevel10k"
+# ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -134,20 +134,30 @@ update_system() {
     echo "System upgrade complete!"
 }
 # Path modifications
-export PATH=$PATH:/home/austin/AndroidSDK/platform-tools:/home/austin/go/bin:/home/austin/.config/composer/vendor/bin:/home/austin/.local/bin
+export PATH=$HOME/.krew/bin:/home/austin/AndroidSDK/platform-tools:/home/austin/go/bin:/home/austin/.config/composer/vendor/bin:/home/austin/.local/bin:$PATH
 
 # Snapd
-export PATH=$PATH:/var/lib/snapd/snap/bin
 alias files="thunar ."
 CHANGE_MINIKUBE_NONE_USER=true
 alias zshcfg="vim ~/.zshrc && source ~/.zshrc"
 prompt_context() {}
 alias config='git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
-# Run neofetch
+# Run neofetch if we're not ssh
+if ! [ -n "$SSH_CLIENT" ] || ! [ -n "$SSH_TTY" ]; then
 clear && neofetch
-
+else
+    # Set up some ssh stuff
+    # Utility for launching GUI programs over ssh
+    ssh_launch() {
+        if [ "$#" -lt 1 ]; then
+            echo "Usage: $0 <program>"
+            return 1
+        fi
+        DISPLAY=:0.0 "$@"
+    }
+fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 export _Z_DATA=$HOME/.config/z
 [[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
 eval $(thefuck --alias)
@@ -157,6 +167,7 @@ bindkey "\e$terminfo[kcub1]" backward-word
 bindkey "\e$terminfo[kcuf1]" forward-word
 
 alias pa-linein="pactl unload-module module-loopback ; pactl load-module module-loopback source_dont_move=true source=alsa_input.pci-0000_29_00.4.analog-stereo"
+#alias jack-linein="jack_connect 'Starship/Matisse HD Audio Controller Analog Stereo:capture_FL' 'Starship/Matisse HD Audio Controller Analog Stereo:playback_FL' && jack_connect 'Starship/Matisse HD Audio Controller Analog Stereo:capture_FR' 'Starship/Matisse HD Audio Controller Analog Stereo:playback_FR'"
 
 if [[ -d /usr/share/fzf  ]];
 then
@@ -177,3 +188,41 @@ alias cp="cp -iv" \
         mv="mv -iv" \
         rm="rm -vI"
 
+alias startgdrive="systemctl --user start uop-gdrive.service"
+alias ls="lsd"
+alias flatten-folder="mv ./*/**/*(.D) ."
+alias h="home-manager edit && home-manager switch"
+
+
+# https://github.com/NixOS/nixpkgs/issues/85823
+export LOCALE_ARCHIVE=/usr/lib/locale/locale-archive
+
+eval "$(starship init zsh)"
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/austin/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+
+if [[ -d "$HOME/.miktex/bin" ]];
+then
+    export PATH="$HOME/.miktex/bin:$PATH"
+fi
+alias cat='bat'
+alias bsc='/mnt/Seagate/Games/BeatSyncConsole/BeatSyncConsole'
+alias clippaste="xclip -selection c -o | curl -F'file=@-' https://0x0.st"
+alias paste="curl -F'file=@-' https://0x0.st"
+alias dedicated_redis="echo 'Opened 127.0.0.1:6380 -> dedicated:6379' && ssh -N -L 127.0.0.1:6380:localhost:6379 dedicated"
+
+mkcd() {
+    mkdir -p $1
+    cd $1
+}
+
+journalctl() {
+    sudo journalctl "${@:--b}"
+}
+
+[ -f /usr/share/nvm/init-nvm.sh ] && source /usr/share/nvm/init-nvm.sh

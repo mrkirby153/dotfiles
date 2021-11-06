@@ -1,0 +1,15 @@
+#!/bin/bash
+
+
+AUR_REPO=/mnt/Seagate/aur/
+
+echo "Cleaning orpahned signatures in $AUR_REPO"
+
+for signature_file in "$AUR_REPO"*.sig; do
+    package="$AUR_REPO$(basename "$signature_file" .sig)"
+    if ! [ -f "$package" ]; then
+        echo "Removing orphaned signature $signature_file"
+        rm "$signature_file"
+    fi
+done
+echo "Done"

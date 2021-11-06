@@ -1,0 +1,31 @@
+#!/bin/bash
+
+
+MULTIMC_BASEDIR="$HOME/.local/share/multimc/instances"
+
+get_instance_name() {
+    (grep "name" | awk -F '=' '{print $2}') < "$1"
+}
+
+shopt -s globstar
+
+
+declare -A instances
+
+for i in "$MULTIMC_BASEDIR"/**/instance.cfg; do
+    name=$(get_instance_name "$i")
+    dir=$(dirname "$i")
+    id=$(basename "$dir")
+    instances[$name]=$id
+done
+
+
+selected=$( (for key in "${!instances[@]}"; do echo "$key"; done) | dmenu -c -l 20 -i)
+
+[ -z "$selected" ] && exit 1
+
+to_launch="${instances[$selected]}"
+echo "Launching $to_launch"
+
+multimc --launch "$to_launch" &> /dev/null &
+disown

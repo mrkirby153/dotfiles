@@ -1,3 +1,8 @@
 #!/bin/sh
 
+case "$BUTTON" in
+    1) notify-send "$(cal)" & ;;
+    2) notify-send "$(date --date='-1 month' +'%d %m %Y' | xargs cal)" & ;;
+    3) notify-send "$(date --date='+1 month' +'%d %m %Y' | xargs cal)" & ;;
+esac
 echo " $(date '+%Y-%m-%d %H:%M:%S')"

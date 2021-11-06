@@ -1,0 +1,25 @@
+#!/bin/bash
+
+PID_FILE="$XDG_RUNTIME_DIR/shkxd.pid"
+
+if [ -f $PID_FILE ]; then
+    PID=$(cat $PID_FILE)
+    if !  kill -0 $PID 2>/dev/null
+    then
+        echo "removing stale pid file $PID_FILE"
+        rm $PID_FILE
+    else
+        echo "Reloading sxhkd ($PID)"
+        kill -SIGUSR1 $PID
+        exit
+    fi
+fi
+
+echo "Starting sxhkd"
+
+/usr/bin/sxhkd &
+SXHKD_PID=$!
+
+echo $SXHKD_PID > $PID_FILE
+
+echo "Sxhkd started as pid $SXHKD_PID"

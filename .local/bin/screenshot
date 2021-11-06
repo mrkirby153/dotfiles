@@ -62,6 +62,30 @@ cleanup() {
 
 region_capture() {
     debug 'Capturing region with maim'
+    if [ $FREEZE -gt 0 ]; then
+        echo "Fullscreen capture with maim"
+        out_dir=$(mktemp -d)
+        echo "Cropping to $out_dir"
+        out_file=$(mktemp -t screenshotXXXX.png)
+        maim "$out_file"
+        i=0
+        for mon in $(xrandr | grep -Po "\d+x\d+\+\d+\+\d+"); do
+            echo "Cropping monitor $0 at $mon"
+            convert "$out_file" -crop "$mon" "$out_dir/$i.png"
+            ((i=i+1))
+        done
+        # Open the folder in feh
+        feh "$out_dir" -Z -F &
+        local pid="$!"
+        echo "feh pid is $pid"
+        echo "$pid" > "$XDG_RUNTIME_DIR/ss_feh.pid"
+        notify-send "Use the left and right arrow keys to switch monitors"
+        wait "$pid" && local rc=$? || local rc=$?
+        rm "$out_file"
+        rm -rfv "$out_dir"
+        rm -v "$XDG_RUNTIME_DIR/ss_feh.pid"
+        exit
+    fi
     maim -su $1
     play_sound "$DIR/resources/CaptureSound.wav"
 }
@@ -206,6 +230,7 @@ debug "Temporary directory is $TEMP_DIR"
 REGION=0
 WINDOW=0
 SCREEN_RECORD=0
+FREEZE=0
 
 # Do the argparsing
 while (("$#")); do
@@ -220,6 +245,10 @@ while (("$#")); do
         ;;
     --record)
         SCREEN_RECORD=1
+        shift
+        ;;
+    -f | --freeze)
+        FREEZE=1
         shift
         ;;
     --) # end argument parsing
@@ -256,6 +285,20 @@ fi
 if [[ WINDOW -gt 0 ]]; then
     window_capture $TEMP_OUTFILE
 fi
+
+
+# Kill feh
+if [[ -r "$XDG_RUNTIME_DIR/ss_feh.pid" ]]; then
+    pid=$(cat "$XDG_RUNTIME_DIR/ss_feh.pid")
+    echo "feh is running as $pid"
+    if kill -0 $pid 2>/dev/null; then
+        echo "Killing feh"
+        kill -INT $pid
+    else
+        rm -rf "$XDG_RUNTIME_DIR/ss_feh.pid"
+    fi
+fi
+
 
 upload $TEMP_OUTFILE
 result=$(cat $TEMP_DIR/output)

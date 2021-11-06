@@ -1,5 +1,7 @@
-#!/bin/sh
-
+#!/bin/bash
+case $BUTTON in
+    2) pkexec --user root ~/.local/bin/drop_zfs_cache ;;
+esac
 
 # free --mebi | sed -n '2{p;q}' | awk '{printf (" %2.2fGiB/%2.2fGiB\n", ( ($2 - $7) / 1024 ), ($2/1024))}'
 
@@ -12,7 +14,18 @@ while IFS=":" read -r a b; do
 		;;
 	esac
 done < /proc/meminfo
+zfs_arc_size=$(cat /proc/spl/kstat/zfs/arcstats | grep "^size" | awk '{printf("%.f", $3 / 1024)}')
+size=$((mem_used - zfs_arc_size))
+total_without_zfs_arc=$(printf '%.2f' "$(echo "$size / 1048576" | bc -l)")
 
-mem_used=$(printf '%.2f' $(echo "$mem_used / 1048575" | bc -l))
-mem_total=$(printf '%.2f' $(echo "$mem_total / 1048576" | bc -l))
-echo " $mem_used GiB"
+mem_used=$(printf '%.2f' "$(echo "$mem_used / 1048576" | bc -l)")
+mem_total=$(printf '%.2f' "$(echo "$mem_total / 1048576" | bc -l)")
+
+swap_use=$(tail -n +2 < /proc/swaps | awk '{size+=$4;total+=$3} END{print (size/total)*100;}')
+swap_display=""
+if (( $(echo "$swap_use > 5" | bc -l) )); then
+    swap_use=$(printf '%.2f' "$swap_use")
+    swap_display=" / $swap_use%"
+fi
+
+echo " $mem_used / $total_without_zfs_arc GiB$swap_display"

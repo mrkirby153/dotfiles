@@ -7,7 +7,7 @@ super + n
     thunar
 
 super + shift + n
-    st -e ranger
+    st -c ranger -e ranger
 
 super + g
     galculator
@@ -21,8 +21,14 @@ super + shift + s
 super + control + s
     maim -s | xclip -selection clipboard -t "image/png"
 
+super + alt + s
+    ~/.local/bin/screenshot --freeze -r
+
 shift + XF86AudioPlay
     pavucontrol
+
+alt + XF86AudioPlay
+    catia
 
 shift + XF86AudioLowerVolume
     ~/.local/bin/pypulse -s; pkill -RTMIN+10 dwmblocks
@@ -60,7 +66,19 @@ super + shift + m
     st -c mail neomutt
 
 super + shift + l
-    betterlockscreen -l dimblur --off 60
+    ~/.local/bin/lockscreen
 
 super + shift + g
     ~/.local/bin/dmenu_multimc
+
+super + shift + t
+    ~/.local/bin/mpv-twitch
+
+super + F12
+    ~/.local/bin/vfio-win
+
+super + p
+    ~/.local/bin/ocr
+
+alt + super + m
+    st -c ncmpcpp -e ncmpcpp

@@ -11,7 +11,7 @@ Plugin 'cocopon/vaffle.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat'
 Plugin 'rhysd/conflict-marker.vim'
-Plugin 'jiangmiao/auto-pairs'
+" Plugin 'jiangmiao/auto-pairs'
 
 Plugin 'Shougo/neosnippet.vim'
 Plugin 'Shougo/neosnippet-snippets'
@@ -29,6 +29,7 @@ Plugin 'luochen1990/rainbow'
 if executable('ctags')
     Plugin 'majutsushi/tagbar'
 endif
+Plugin 'machakann/vim-highlightedyank'
 
 " Autocomplete
 Plugin 'ycm-core/YouCompleteMe'
@@ -66,7 +67,14 @@ Plugin 'cespare/vim-toml'
 
 " Fancy titlebar
 Plugin 'vim-airline/vim-airline'
-Plugin 'bling/vim-bufferline'
+" Plugin 'bling/vim-bufferline'
+Plugin 'vim-airline/vim-airline-themes'
+
+
+Plugin 'arcticicestudio/nord-vim'
+
+" Nix
+Plugin 'LnL7/vim-nix'
 
 call vundle#end()
 filetype plugin indent on
@@ -154,6 +162,7 @@ map OC 5<C-W>>
 noremap j gj
 noremap k gk
 
+map <C-h> :noh<CR>
 
 " Fix shift keys being dumb
 if has("user_commands")
@@ -205,9 +214,53 @@ augroup numbertoggle
     autocmd BufLeave,FocusLost,InsertEnter * set norelativenumber
 augroup END
 
+augroup muttSpell
+    autocmd!
+    autocmd BufRead,BufNewFile neomutt-* setlocal spell
+augroup END
+
+
+" Spellchecking
+set spelllang=en_us
+
 " Source vimrc.local for overrides if needed
 if filereadable(expand("~/.vimrc.local"))
     source ~/.vimrc.local
 endif
 
+colorscheme nord
 
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.crypt = '🔒'
+let g:airline_symbols.linenr = '☰ '
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.maxlinenr = '㏑'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.spell = 'Ꞩ'
+let g:airline_symbols.notexists = 'Ɇ'
+let g:airline_symbols.whitespace = 'Ξ'
+
+" powerline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = '☰ '
+let g:airline_symbols.maxlinenr = ''

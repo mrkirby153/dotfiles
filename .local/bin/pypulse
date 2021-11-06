@@ -7,6 +7,7 @@ try:
     import os
     import argparse
     import subprocess
+    from packaging import version
 except:
     print("Missing dependency. Ensure that pulsectl and notify2 are installed!")
     exit(1)
@@ -17,6 +18,8 @@ CONFIG_LOCATION = os.path.expanduser("~/.pypulse.json")
 HEADPHONES = None
 SPEAKERS = None
 
+notify_initialized = False
+
 
 def find_sink(name: str, pa: pulsectl.Pulse):
     try:
@@ -25,8 +28,18 @@ def find_sink(name: str, pa: pulsectl.Pulse):
         send_notification(f"Could not find sink {name}")
         exit(1)
 
+def find_source(name: str, pa: pulsectl.Pulse):
+    try:
+        return pa.get_source_by_name(name)
+    except:
+        send_notification(f"Could not find source {name}")
+        exit(1)
+
 def send_notification(message):
-    notify2.init("PyPulse")
+    global notify_initialized
+    if not notify_initialized:
+        notify2.init("PyPulse")
+        notify_initialized = True
     notice = notify2.Notification('PyPulse', message)
     notice.show()
     return
@@ -70,9 +83,13 @@ def dmenu_select():
             if default_sink == sink.name:
                 desc = f"{desc}*"
             args.append(desc)
+        args.append("Change Default Microphone")
         dev_name = dmenu_prompt(args, prompt="Select a device to switch to")
         if dev_name is None:
             print("Canceled selection")
+            exit(0)
+        if dev_name == "Change Default Microphone":
+            set_default_mic()
             exit(0)
         alsa_name = name_to_sink.get(dev_name, None)
         if alsa_name is None:
@@ -122,9 +139,14 @@ def set_default(new_sink_name):
             print(f"Found sink {new_sink.index}")
 
         # Move all the sink inputs to the new output
-        for sink_input in pulse.sink_input_list():
-            print(f"Moving sink input {sink_input.index} to sink {new_sink.index}")
-            pulse.sink_input_move(sink_input.index, new_sink.index)
+        # No longer needed as of PulseAudio 14
+        if version.parse(pulse.server_info().server_version) < version.parse("14.0"):
+            for sink_input in pulse.sink_input_list():
+                print(f"Moving sink input {sink_input.index} to sink {new_sink.index}")
+                try:
+                    pulse.sink_input_move(sink_input.index, new_sink.index)
+                except:
+                    print(f"Could not move sink input {sink_input.name} to {new_sink.index}")
 
         # Set default device
         if new_sink_name == default_sink:
@@ -133,6 +155,43 @@ def set_default(new_sink_name):
             print("Setting default sink")
             pulse.default_set(new_sink)
         send_notification(f"Set default pulse device to {new_sink.description}")
+
+def set_default_mic():
+    with pulsectl.Pulse('PyPuse') as pulse:
+        default_source = pulse.server_info().default_source_name
+        print(f"The default source is {default_source}")
+
+        name_to_source = {}
+        args = []
+        for source in pulse.source_list():
+            if source.name.endswith('monitor'):
+                continue
+            name_to_source[source.description] = source.name
+            desc = source.description
+            if source.name == default_source:
+                desc = f"{desc}*"
+            args.append(desc)
+        
+        dev_name = dmenu_prompt(args, "Select a microphone to use")
+        
+        if dev_name is None:
+            print(f"Nothing selected")
+            exit(1)
+
+        target_source_name = name_to_source.get(dev_name, None)
+        if target_source_name is None:
+            print(f"Target source {dev_name} was not found!")
+            exit(1)
+        
+        new_source = find_source(target_source_name, pulse)
+
+        if target_source_name == default_source:
+            print("Skipping default set")
+        else:
+            print("Setting default source")
+            pulse.default_set(new_source)
+        send_notification(f"Set default pulse input device to {new_source.description}")
+
 
 def main():
     parser = argparse.ArgumentParser(description='Sets default PulseAudio devices')

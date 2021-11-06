@@ -1,0 +1,72 @@
+#!/bin/bash
+
+# A list of mail accounts to sync
+ACCOUNTS=(gmail uop whyte mrkirby153)
+
+LOCKFILE="$XDG_RUNTIME_DIR/mailsync.lock"
+
+if { set -C; > "$LOCKFILE"; }; then
+    echo "Lock acquired"
+    trap 'rm -f $LOCKFILE' EXIT
+else
+    echo "Sync is already in progress"
+    exit
+fi
+
+get_mail_files() {
+    find "${XDG_DATA_HOME:-$HOME/.local/share}/mail/$1"/[Ii][Nn][Bb][Oo][Xx]/new/* -type f 2>/dev/null
+}
+
+get_mail_count() {
+    find "${XDG_DATA_HOME:-$HOME/.local/share}/mail/$1"/[Ii][Nn][Bb][Oo][Xx]/new/* -type f 2>/dev/null | wc -l
+}
+
+ mbsync -a
+
+# https://github.com/LukeSmithxyz/mutt-wizard/blob/cafc945138370f64f7d2342dda6a8748058b2090/bin/mailsync#L60
+! [ -f "$HOME/.local/share/mail/.mailsync_last_run" ] && touch "$HOME/.local/share/mail/.mailsync_last_run" -d "0"
+for account in "${ACCOUNTS[@]}";
+do
+    new=$(find "$HOME/.local/share/mail/$account/INBOX/new/" "$HOME/.local/share/mail/$account/Inbox/new/" "$HOME/.local/share/mail/$account/inbox/new/" -type f -newer "$HOME/.local/share/mail/.mailsync_last_run" 2> /dev/null)
+    newcount=$(echo "$new" | sed '/^\s*$/d' | wc -l)
+    if [ "$newcount" -gt "0" ]; then
+        msg="$account has $newcount new"
+        if [ "$newcount" -eq "1" ]; then
+            msg="${msg} message"
+        else
+            msg="${msg} messages"
+        fi
+        for file in $new; do
+            from=$(awk '/^From: / && ++n ==1,/^\<.*\>:/' "$file" | perl -CS -MEncode -ne 'print decode("MIME-Header", $_)' | awk '{ $1=""; if (NF>=3)$NF=""; print $0 }' | sed 's/^[[:blank:]]*[\"'\''\<]*//;s/[\"'\''\>]*[[:blank:]]*$//')
+            subject=$(awk '/^Subject: / && ++n == 1,/^\<.*\>: / && ++i == 2' "$file" | head -n 1 | perl -CS -MEncode -ne 'print decode("MIME-Header", $_)' | sed 's/^Subject: //' | sed 's/^{[[:blank:]]*[\"'\''\<]*//;s/[\"'\''\>]*[[:blank:]]*$//' | tr -d '\n')
+            msg="${msg}\n---\nFrom: $from\nSubject: $subject"
+        done
+        notify-send "New Mail" "$msg"
+    fi
+done
+
+touch "$HOME/.local/share/mail/.mailsync_last_run"
+
+# Run notmuch to index
+notmuch new
+
+
+notmuch_compact_last_run_file="${XDG_DATA_HOME:-$HOME/.local/share}/mail/.notmuch/.last_compact"
+target=$(date -d 'now - 14 days' +%s)
+last_compact=$(date -r "$notmuch_compact_last_run_file" +%s)
+
+if ! [ -f "$notmuch_compact_last_run_file" ] || [ "$last_compact" -lt "$target" ]; then
+    echo "Compacting notmuch database"
+    notify-send "Compacting notmuch database"
+    notmuch compact
+    notify-send "Notmuch db compacted. Next run in 14 days"
+
+    touch "$notmuch_compact_last_run_file"
+fi
+unread_count="$(find "${XDG_DATA_HOME:-$HOME/.local/share}"/mail/*/[Ii][Nn][Bb][Oo][Xx]/new/* -type f 2>/dev/null | wc -l 2>/dev/null)"
+
+if [ "$unread_count" = "0" ]; then
+    xset -led named "Scroll Lock"
+else
+    xset led named "Scroll Lock"
+fi

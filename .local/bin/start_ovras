@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Fork ovras into the background
+
+if [ -z "$FORKED" ]; then
+    echo "Re-running forked $0"
+    FORKED=1 /bin/sh "$0" &
+else
+    echo "Waiting for SteamVR to boot..."
+    sleep 5
+    killall ovras
+    ovras &
+fi
+
