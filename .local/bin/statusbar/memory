@@ -14,7 +14,13 @@ while IFS=":" read -r a b; do
 		;;
 	esac
 done < /proc/meminfo
-zfs_arc_size=$(cat /proc/spl/kstat/zfs/arcstats | grep "^size" | awk '{printf("%.f", $3 / 1024)}')
+has_zfs=0
+if [ -f /proc/spl/kstat/zfs/arcstats ]; then
+    has_zfs=1
+    zfs_arc_size=$(cat /proc/spl/kstat/zfs/arcstats | grep "^size" | awk '{printf("%.f", $3 / 1024)}')
+else
+    zfs_arc_size=0
+fi
 size=$((mem_used - zfs_arc_size))
 total_without_zfs_arc=$(printf '%.2f' "$(echo "$size / 1048576" | bc -l)")
 
@@ -28,4 +34,8 @@ if (( $(echo "$swap_use > 5" | bc -l) )); then
     swap_display=" / $swap_use%"
 fi
 
-echo " $mem_used / $total_without_zfs_arc GiB$swap_display"
+if [ $has_zfs -gt 0 ]; then
+    echo " $mem_used / $total_without_zfs_arc GiB$swap_display"
+else
+    echo " $mem_used GiB$swap_display"
+fi
