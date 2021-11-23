@@ -1,0 +1,31 @@
+#!/bin/sh
+
+[ $# -ne 2 ] && echo "Usage: $0 <date> <format>" && exit 1
+
+case "$2" in
+    "Short Time")
+        format="t"
+        ;;
+    "Long Time")
+        format="T"
+        ;;
+    "Short Date")
+        format="d"
+        ;;
+    "Long Date")
+        format="D"
+        ;;
+    "Short Date/Time")
+        format="f"
+        ;;
+    "Long Date/Time")
+        format="F"
+        ;;
+    "Relative Time")
+        format="R"
+        ;;
+    *)
+        format="f"
+esac
+
+echo "$(date -d "$1" "+%s"):$format"

@@ -1,0 +1,45 @@
+# espanso configuration file
+
+# This is the default configuration file, change it as you like it
+# You can refer to the official documentation:
+# https://espanso.org/docs/
+
+# Matches are the substitution rules, when you type the "trigger" string
+# it gets replaced by the "replace" string.
+matches:
+  # Dates
+  - trigger: ":date"
+    replace: "{{mydate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%m/%d/%Y"
+
+  # Shell commands
+  - trigger: ":discorddate"
+    replace: "<t:{{iso_timestamp}}>"
+    vars:
+      - name: form1
+        type: form
+        params:
+          layout: |
+            Enter Timestamp in YYYY-MM-DD HH:MM:SS:
+            {{timestamp}}
+            {{format}}
+          fields:
+            format:
+              type: choice
+              default: Short Date/Time
+              values:
+                - Short Time
+                - Long Time
+                - Short Date
+                - Long Date
+                - Short Date/Time
+                - Long Date/Time
+                - Relative Time
+      - name: iso_timestamp
+        type: shell
+        params:
+          cmd: "~/.local/bin/espanso/discorddate \"$ESPANSO_FORM1_TIMESTAMP\" \"$ESPANSO_FORM1_FORMAT\""
