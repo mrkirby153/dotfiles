@@ -10,7 +10,8 @@ then
     then
         echo "ckb is already running"
     else
-        i3-msg "exec --no-startup-id ckb-next &"
+        ckb-next -b &
+        disown
     fi
 else
     echo "Keyboard not found"

@@ -141,7 +141,6 @@ alias files="thunar ."
 CHANGE_MINIKUBE_NONE_USER=true
 alias zshcfg="vim ~/.zshrc && source ~/.zshrc"
 prompt_context() {}
-alias config='git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 # Run neofetch if we're not ssh
 if ! [ -n "$SSH_CLIENT" ] || ! [ -n "$SSH_TTY" ]; then
 clear && neofetch
@@ -226,3 +225,6 @@ journalctl() {
 }
 
 [ -f /usr/share/nvm/init-nvm.sh ] && source /usr/share/nvm/init-nvm.sh
+
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+
