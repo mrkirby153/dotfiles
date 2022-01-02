@@ -1,0 +1,8 @@
+auth = "oidc"
+auth_mount = "oidc"
+identity = "~/.ssh/id_rsa"
+mount = "ssh"
+persist = true
+role = "default"
+
+server = "http://10.32.99.16"
