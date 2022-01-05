@@ -1,0 +1,34 @@
+filter_class: "discord"
+
+matches:
+  - triggers: ["dissupport", "disTns"]
+    replace: "Support (<https://dis.gd/contact>)"
+  - triggers: ["distns", "disTns"]
+    replace: "Trust & Safety (<https://dis.gd/howtoreport>)"
+  # Shell commands
+  - trigger: ":discorddate"
+    replace: "<t:{{iso_timestamp}}>"
+    vars:
+      - name: form1
+        type: form
+        params:
+          layout: |
+            Enter Timestamp in YYYY-MM-DD HH:MM:SS:
+            {{timestamp}}
+            {{format}}
+          fields:
+            format:
+              type: choice
+              default: Short Date/Time
+              values:
+                - Short Time
+                - Long Time
+                - Short Date
+                - Long Date
+                - Short Date/Time
+                - Long Date/Time
+                - Relative Time
+      - name: iso_timestamp
+        type: shell
+        params:
+          cmd: "~/.local/bin/espanso/discorddate \"$ESPANSO_FORM1_TIMESTAMP\" \"$ESPANSO_FORM1_FORMAT\""

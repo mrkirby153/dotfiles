@@ -10,12 +10,12 @@ rm -rf "$holding_path"
 # Make a new holding path
 mkdir -p "$holding_path"
 
-# Move everything that hasn't been modified in 30 days to the holding path
-find "$target_path" -maxdepth 1 -mtime +30 -exec mv -v {} "$holding_path" \;
+# Move everything that hasn't been modified in 7 days to the holding path
+find "$target_path" -maxdepth 1 -mtime +7 -exec mv -v {} "$holding_path" \;
 
 # Get a count of folders and files that were moved
 file_count=$(find "$holding_path" -type f | wc -l)
 folder_count=$(find "$holding_path" -type d | wc -l)
 size=$(du -h --max-depth=0 "$holding_path" | awk '{print $1}')
 
-notify-send "Download Reaper" "$file_count files and $folder_count folders ($size) older than 30 days have been moved to ~/Downloads/.stale"
+notify-send "Download Reaper" "$file_count files and $folder_count folders ($size) older than 7 days have been moved to ~/Downloads/.stale"

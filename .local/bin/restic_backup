@@ -94,6 +94,7 @@ verify_restic_binary
 verify_repo
 load_password
 
+restic cache --cleanup
 case "$1" in
 "auto-backup")
     perform_automatic_backup
