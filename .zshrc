@@ -226,5 +226,8 @@ journalctl() {
 
 [ -f /usr/share/nvm/init-nvm.sh ] && source /usr/share/nvm/init-nvm.sh
 
-[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+if [ -f ~/.zshrc.local ];
+then
+    source ~/.zshrc.local
+fi
 
