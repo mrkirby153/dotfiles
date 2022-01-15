@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # A list of mail accounts to sync
-ACCOUNTS=(gmail uop whyte mrkirby153)
+ACCOUNTS=(gmail 'mrkirby153@mrkirby153.com')
 
 LOCKFILE="$XDG_RUNTIME_DIR/mailsync.lock"
 
@@ -18,10 +18,10 @@ get_mail_files() {
 }
 
 get_mail_count() {
-    find "${XDG_DATA_HOME:-$HOME/.local/share}/mail/$1"/[Ii][Nn][Bb][Oo][Xx]/new/* -type f 2>/dev/null | wc -l
+    find "${XDG_DATA_HOME:-$HOME/.local/share}/mail/$1"/[Ii][Nn][Bb][Oo][Xx]/new/ -type f 2>/dev/null | wc -l
 }
 
- mbsync -a
+mbsync -a
 
 # https://github.com/LukeSmithxyz/mutt-wizard/blob/cafc945138370f64f7d2342dda6a8748058b2090/bin/mailsync#L60
 ! [ -f "$HOME/.local/share/mail/.mailsync_last_run" ] && touch "$HOME/.local/share/mail/.mailsync_last_run" -d "0"
@@ -63,7 +63,7 @@ if ! [ -f "$notmuch_compact_last_run_file" ] || [ "$last_compact" -lt "$target" 
 
     touch "$notmuch_compact_last_run_file"
 fi
-unread_count="$(find "${XDG_DATA_HOME:-$HOME/.local/share}"/mail/*/[Ii][Nn][Bb][Oo][Xx]/new/* -type f 2>/dev/null | wc -l 2>/dev/null)"
+unread_count="$(find "${XDG_DATA_HOME:-$HOME/.local/share}"/mail/*/[Ii][Nn][Bb][Oo][Xx]/new -type f 2>/dev/null | wc -l 2>/dev/null)"
 
 if [ "$unread_count" = "0" ]; then
     xset -led named "Scroll Lock"
