@@ -5,6 +5,6 @@ case $BUTTON in
 esac
 cpu=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}')
 
-cpu_temp=$(sensors k10temp-pci-00c3 | awk '/^Tdie:/{print $2}' | sed 's/+//')
+cpu_temp=$(sensors k10temp-pci-00c3 | awk '/^Tctl:/{print $2}' | sed 's/+//')
 
 echo " $cpu / $cpu_temp"
