@@ -1,0 +1,10 @@
+#!/bin/sh
+
+minikube_ip=$(minikube ip)
+
+echo "Seting server for *.k8s to $minikube_ip"
+
+echo "server=/k8s/$minikube_ip" | sudo tee /etc/dnsmasq.d/minikube
+
+echo "Restarting dnsmasq..."
+sudo systemctl restart dnsmasq
