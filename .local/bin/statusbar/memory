@@ -34,6 +34,11 @@ if (( $(echo "$swap_use > 5" | bc -l) )); then
     swap_display=" / $swap_use%"
 fi
 
+# Display an asterisk when swap is disabled
+if [ "$(swapon -s)" = "" ]; then
+    swap_display="$swap_display*"
+fi
+
 if [ $has_zfs -gt 0 ]; then
     echo " $mem_used / $total_without_zfs_arc GiB$swap_display"
 else
