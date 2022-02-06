@@ -220,6 +220,9 @@ mkcd() {
     cd $1
 }
 
+dmesg() {
+    command dmesg -T "$@"
+}
 journalctl() {
     sudo journalctl "${@:--b}"
 }
