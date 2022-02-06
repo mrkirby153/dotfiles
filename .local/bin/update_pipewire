@@ -2,5 +2,5 @@
 
 set -x
 
-systemctl --user reload
+systemctl --user daemon-reload
 systemctl --user restart pipewire.service pipewire.socket pipewire-pulse.service pipewire-pulse.socket pipewire-media-session.service
