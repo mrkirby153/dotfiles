@@ -1,0 +1,43 @@
+#!/bin/sh
+
+case $BUTTON in
+    2) setsid -f "$TERMINAL" -e nmtui ;;
+esac
+
+has_wifi=0
+has_ethernet=0
+case "$(cat /sys/class/net/w*/operstate 2>/dev/null)" in
+    down) wifiicon="睊 " ;;
+    up) wifiicon="$(awk '/^\s*w/ { print "直", int($3 * 100 / 70) "% " }' /proc/net/wireless)"
+        has_wifi=1
+        ;;
+esac
+
+ethicon=""
+IFS=$'\n'
+for LINE in `cat /sys/class/net/e*/operstate 2>/dev/null`
+do
+    case "$LINE" in
+        up) ethicon=""
+            has_ethernet=1
+            ;;
+    esac
+done
+
+# If there is no ethernet or wifi, show us as disconnected
+if [ $has_ethernet -eq 0 ] && [ $has_wifi -eq 0 ]; then
+    echo " "
+    exit
+fi
+
+if [ $has_ethernet -gt 0 ]; then
+    printf "%s %s\n" "$ethicon" "$([ $has_wifi -gt 0 ] && echo "$wifiicon")"
+    exit
+fi
+
+if [ $has_wifi -gt 0 ]; then
+    printf "%s\n" "$wifiicon"
+    exit
+fi
+
+# printf "%s%s\n" "$wifiicon" "$(sed "s/down//;s/up//" /sys/class/net/e*/operstate 2>/dev/null)"

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+temp=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits)
+fan=$(nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits)
+gpu_usage=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits)
+
+fandisp=""
+if [ "$fan" -gt 0 ]; then
+fandisp=" / $fan "
+fi
+echo "﴿ $gpu_usage% / $temp 糖"

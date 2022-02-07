@@ -1,0 +1,14 @@
+#!/bin/sh
+DBUS_PATH=$(upower -e | grep "mouse_hidpp" | head -n 1)
+s=$(upower -i "$DBUS_PATH" | grep warning-level | awk '{print $2}')
+
+case "$s" in
+low)
+    echo "ﴊ "
+    ;;
+critical)
+    echo "ﴏ "
+    ;;
+*)
+    ;;
+esac
