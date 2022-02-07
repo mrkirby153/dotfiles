@@ -1,0 +1,105 @@
+#!/bin/bash
+case $BUTTON in
+    2) /home/austin/.local/bin/media_control play-pause ;;
+    3) echo "0" > "${XDG_RUNTIME_DIR}/music_paused_since" ;;
+esac
+
+ignored_players=(chromium)
+target_player="playerctld"
+
+for player in $(playerctl -l); do
+    is_ignored=0
+    for ignored in "${ignored_players[@]}"; do
+        if echo "$player" | grep "$ignored" > /dev/null; then
+            is_ignored=1
+            break
+        fi
+    done
+    if [ ! $is_ignored -gt 0 ]; then
+        target_player="$player"
+        break
+    fi
+done
+
+
+mpd_status() {
+    mpc status | grep -o "\[.*\]" | sed -e 's/\[//' -e 's/\]//'
+}
+
+mpd_artist() {
+    title=$(mpc --format '%title%' current)
+    artist=$(mpc --format '%artist%' current)
+    echo "$title - ${artist:0:32}"
+}
+
+mpd() {
+    if [ "$(mpd_status)" = "" ]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+
+playerctl_status() {
+    playerctl -p "$target_player" status
+}
+
+playerctl_artist() {
+    artist=$(playerctl -p "$target_player" metadata --format "{{artist}}")
+    title=$(playerctl -p "$target_player" metadata --format "{{title}}")
+    if [ -z "$artist" ]; then
+        echo "$title"
+    else
+        echo "$title - ${artist:0:32}"
+    fi
+}
+
+MUSIC_PAUSE_DURATION="1800"
+
+if ! playerctl -p "$target_player" status &> /dev/null && ! mpd; then
+    echo "Nothing Playing"
+    exit
+fi
+
+playing=$(playerctl -p "$target_player" status)
+mpd && playing=$(mpd_status)
+status=""
+
+case "$playing" in
+"Playing"|"playing")
+    status=""
+    playing="Playing"
+    ;;
+"Paused"|"paused")
+    status=""
+    playing="Paused"
+    ;;
+"Stopped")
+    status=""
+    ;;
+esac
+
+
+# if we've been paused for more than 1800 seconds (30 mins), don't output anything, removing the statusbar text
+if [ "$playing" = "Paused" ] || [ "$playing" = "Stopped"  ]; then
+    if [ ! -f "$XDG_RUNTIME_DIR/music_paused_since" ]; then
+        date +%s > "$XDG_RUNTIME_DIR/music_paused_since"
+    fi
+    if [ -f "$XDG_RUNTIME_DIR/music_paused_since" ]; then
+        if [ "$(($(date +%s) - $(cat "$XDG_RUNTIME_DIR/music_paused_since")))" -gt $MUSIC_PAUSE_DURATION ]; then
+            exit
+        fi
+    fi
+fi
+
+[ "$playing" = "Playing" ] && [ -f "$XDG_RUNTIME_DIR/music_paused_since" ] && rm -f "$XDG_RUNTIME_DIR/music_paused_since"
+
+if [ "$playing" = "Stopped" ]; then
+    artist_song="Nothing Playing"
+else
+    artist_song=$(playerctl_artist)
+    mpd && artist_song=$(mpd_artist)
+fi
+
+echo "$status  $artist_song"

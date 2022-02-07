@@ -8,21 +8,37 @@ mpd() {
     ! [ "$(mpd_status)" = "" ]
 }
 
+ignored_players=(chromium)
+target_player="playerctld"
+
+for player in $(playerctl -l); do
+    is_ignored=0
+    for ignored in "${ignored_players[@]}"; do
+        if echo "$player" | grep "$ignored" > /dev/null; then
+            is_ignored=1
+            break
+        fi
+    done
+    if [ ! $is_ignored -gt 0 ]; then
+        target_player="$player"
+        break
+    fi
+done
 
 play_pause() {
-    ! (mpd && mpc -q toggle) && playerctl -p playerctld play-pause
+    ! (mpd && mpc -q toggle) && playerctl -p "$target_player" play-pause
 }
 
 next() {
-    ! (mpd && mpc -q next) && playerctl -p playerctld next
+    ! (mpd && mpc -q next) && playerctl -p "$target_player" next
 }
 
 prev() {
-    ! (mpd && mpc -q prev) && playerctl -p playerctld previous
+    ! (mpd && mpc -q prev) && playerctl -p "$target_player" previous
 }
 
 pause() {
-    ! (mpd && mpc -q pause) && playerctl -p playerctld pause
+    ! (mpd && mpc -q pause) && playerctl -p "$target_player" pause
 }
 
 
