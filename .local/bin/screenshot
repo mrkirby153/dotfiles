@@ -96,6 +96,12 @@ window_capture() {
     play_sound "$DIR/resources/CaptureSound.wav"
 }
 
+floating_capture() {
+    file="$(mktemp $TEMP_DIR/floatingXXXXXX.png)"
+    maim -su "$file"
+    feh "$file" --class=fehfloat --reload=0
+}
+
 save() {
     # Save the file to the given directory
     date=$(date +"%Y-%m")
@@ -231,6 +237,7 @@ REGION=0
 WINDOW=0
 SCREEN_RECORD=0
 FREEZE=0
+FLOAT=0
 
 # Do the argparsing
 while (("$#")); do
@@ -249,6 +256,10 @@ while (("$#")); do
         ;;
     -f | --freeze)
         FREEZE=1
+        shift
+        ;;
+    --floating | -F)
+        FLOAT=1
         shift
         ;;
     --) # end argument parsing
@@ -286,6 +297,10 @@ if [[ WINDOW -gt 0 ]]; then
     window_capture $TEMP_OUTFILE
 fi
 
+if [[ FLOAT -gt 0 ]]; then
+    floating_capture
+    exit 0
+fi
 
 # Kill feh
 if [[ -r "$XDG_RUNTIME_DIR/ss_feh.pid" ]]; then

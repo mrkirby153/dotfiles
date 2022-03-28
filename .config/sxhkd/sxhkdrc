@@ -24,6 +24,9 @@ super + control + s
 super + alt + s
     ~/.local/bin/screenshot --freeze -r
 
+super + ctrl + alt + s
+    ~/.local/bin/screenshot --floating
+
 shift + XF86AudioPlay
     pavucontrol
 
