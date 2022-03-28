@@ -79,10 +79,11 @@ export ZSH="/home/austin/.oh-my-zsh"
 plugins=(
     git
     docker
-    zsh-syntax-highlighting
     zsh-autosuggestions
     kubectl
     extract
+    notify
+    zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -112,10 +113,30 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-transfer() { if [ $# -eq 0 ]; then echo -e "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"; return 1; fi
-tmpfile=$( mktemp -t transferXXX ); if tty -s; then basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g'); curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> $tmpfile; else curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> $tmpfile ; fi; cat $tmpfile; xclip -selection clipboard < $tmpfile; rm -f $tmpfile; }
+
+
+zstyle ':notify:*' error-title "Command failed in #{time_elapsed}"
+zstyle ':notify:*' success-title "Command finished in #{time_elapsed}"
+zstyle ':notify:*' app-name sh
+
 alias a="php artisan"
 
+
+upload() {
+    tmpfile=$(mktemp -t uploadXXXX)
+    if tty -s; then
+        if [ $# -eq 0 ]; then
+            echo -e "Usage: $0 <file>"
+            return 1;
+        fi
+        curl --progress-bar -F "file=@$1" https://0x0.st >> $tmpfile
+    else
+        curl --progress-bar -F 'file=@-' https://0x0.st >> $tmpfile
+    fi
+    /bin/cat $tmpfile
+    xclip -selection clipboard < $tmpfile
+    rm -f $tmpfile
+}
 
 # Path modification
 # export PYTHONPATH=/usr/lib/tensorflow/lib/python3.7:$PYTHONPAtH
@@ -143,7 +164,7 @@ alias zshcfg="vim ~/.zshrc && source ~/.zshrc"
 prompt_context() {}
 # Run neofetch if we're not ssh
 if ! [ -n "$SSH_CLIENT" ] || ! [ -n "$SSH_TTY" ]; then
-clear && neofetch
+neofetch
 else
     # Set up some ssh stuff
     # Utility for launching GUI programs over ssh
@@ -214,6 +235,7 @@ alias bsc='/mnt/Seagate/Games/BeatSyncConsole/BeatSyncConsole'
 alias clippaste="xclip -selection c -o | curl -F'file=@-' https://0x0.st"
 alias paste="curl -F'file=@-' https://0x0.st"
 alias dedicated_redis="echo 'Opened 127.0.0.1:6380 -> dedicated:6379' && ssh -N -L 127.0.0.1:6380:localhost:6379 dedicated"
+alias wine="bottles -b Main-Wine-Prefix -e $1"
 
 mkcd() {
     mkdir -p $1
@@ -234,3 +256,8 @@ then
     source ~/.zshrc.local
 fi
 
+
+osx_cargo() {
+    [ ! -d "$HOME/Development/osxcross/target/bin" ] && echo "OSXCross not found" && exit 1
+    PATH="$HOME/Development/osxcross/target/bin:$PATH" CC=o64-clang CXX=o64-clang++ cargo "$@"
+}
