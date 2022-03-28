@@ -1,8 +1,6 @@
 #!/bin/sh
-case "$BUTTON" in
-    1) pactl set-source-volume alsa_input.usb-Samson_Technologies_Samson_Go_Mic-00.analog-stereo 52477 && notify-send "Adjusted microphone volume" ;;
-    2) pactl set-source-volume alsa_input.usb-Samson_Technologies_Samson_Go_Mic-00.analog-stereo 0 && notify-send "Muted Microphone" ;;
-esac
+SPEAKERS=$(jq -r '.speakers' ~/.pypulse.json)
+HEADPHONES=$(jq -r '.headphones' ~/.pypulse.json)
 
 [ "$(pamixer --get-mute)" = true ] && echo "ﱝ" && exit
 
@@ -16,4 +14,15 @@ else
     icon="奔"
 fi
 
-echo "$icon $vol%"
+sink=""
+default=$(pamixer --get-default-sink | tail -n 1 | awk '{print $2}' | tr -d '"')
+if [ "$default" = "$SPEAKERS" ]; then
+    sink="S"
+elif [ "$default" = "$HEADPHONES" ]; then
+    sink="H"
+fi
+if [ "$vol" -eq "100" ]; then
+    echo "$icon $sink"
+else
+    echo "$icon $sink $vol%"
+fi
