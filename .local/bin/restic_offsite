@@ -5,7 +5,6 @@ set -e
 # --- START CONFIGURATION ---
 # REPO_LOCATION="rclone:snow:Backups/aus-box/"
 RCLONE_REPO_LOCATION="vault:/vault/backups/aus-box/"
-LOCAL_TEMP_DIRECTORY="/mnt/Seagate/offsite_temp/"
 # --- END CONFIGURATION ---
 
 
@@ -54,60 +53,25 @@ load_password() {
 }
 
 run_restic_command() {
-    restic --password-file="$PWD_FILE" "$@"
+    restic --password-file="$PWD_FILE" -r "rclone:$RCLONE_REPO_LOCATION" "$@"
 }
 
 load_password
 
-mkdir -p "$LOCAL_TEMP_DIRECTORY"
-
 case "$1" in
 "backup")
-    offsite_repo_location=$(mktemp -d)
-    merged_location="$XDG_RUNTIME_DIR/offsite.merged"
-    mkdir -p $merged_location
-	_cleanup_mergerfs() {
-        echo "Cleaning up mergerfs"
-		umount -v "$offsite_repo_location" || true
-        rmdir -v "$offsite_repo_location" || true
-        umount -v "$merged_location" || true
-        rmdir -v "$merged_location" || true
-	}
-    trap_add _cleanup_mergerfs EXIT
     notify-send "Performing backup to offsite repository"
     echo "Performing backup to offsite repository $REPO_LOCATION"
     echo "backing up packages"
     rm -f "$CFG_DIR/restic_backup/installed_packages" && pacman -Qqe > "$CFG_DIR/restic_backup/installed_packages"
-    rclone mount "$RCLONE_REPO_LOCATION" "$offsite_repo_location" &
-    pid=$!
-    echo "Rclone started as pid $pid"
-    trap_add "ps --pid $pid &> /dev/null && kill -9 $pid" EXIT
-    echo "Mounted $RCLONE_REPO_LOCATION to $offsite_repo_location"
 
-    mergerfs -o defaults,use_ino,category.create=mfs,minfreespace=1M "$LOCAL_TEMP_DIRECTORY=RW:$offsite_repo_location=NC" "$merged_location"
+    run_restic_command backup -x --files-from="$CFG_DIR/restic_backup/include" --exclude-file="$CFG_DIR/restic_backup/exclude" --exclude-if-present=.nobackup --exclude-if-present=.noremote || true
+    run_restic_command forget -w 5 -g "host" --prune --max-unused=0
 
-    echo "Waiting for config file"
-    count=0
-    until [ -f "$merged_location/config" ]
-    do
-        if [ "$count" -gt 10 ]; then
-            echo "Config file not present after 10 seconds, exiting"
-            exit 1
-        fi
-        count=$((count + 1))
-        sleep 1
-    done
-    echo "Config file is present!"
-
-    run_restic_command -r "$merged_location" backup -x --files-from="$CFG_DIR/restic_backup/include" --exclude-file="$CFG_DIR/restic_backup/exclude" --exclude-if-present=.nobackup --exclude-if-present=.noremote || true
-    run_restic_command -r "$merged_location" forget -w 5 -g "host" --prune --max-unused=0
-
-    echo "Moving data"
-    rclone move "$LOCAL_TEMP_DIRECTORY" "$RCLONE_REPO_LOCATION" -P --delete-empty-src-dirs
     notify-send "Offiste backup complete"
     ;;
 *)
-    run_restic_command -r "rclone:$RCLONE_REPO_LOCATION" "$@"
+    run_restic_command "$@"
     ;;
 esac
 
