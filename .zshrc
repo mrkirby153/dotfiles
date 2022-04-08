@@ -261,3 +261,9 @@ osx_cargo() {
     [ ! -d "$HOME/Development/osxcross/target/bin" ] && echo "OSXCross not found" && exit 1
     PATH="$HOME/Development/osxcross/target/bin:$PATH" CC=o64-clang CXX=o64-clang++ cargo "$@"
 }
+
+if [ -f /usr/bin/switch.sh ]; then
+    source /usr/bin/switch.sh
+    alias kctx='switch'
+    alias kns='switch ns'
+fi
