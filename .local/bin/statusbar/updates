@@ -1,11 +1,19 @@
 #!/bin/sh
 
+
 TEMP_FILE="$XDG_RUNTIME_DIR/statusbar_next_update"
 TEMP_UPDATES="$XDG_RUNTIME_DIR/statusbar_pending_updates"
 next_update=$(date -d 'now + 30 minutes' +%s)
 [ -f "$TEMP_FILE" ] || touch "$TEMP_FILE"
 [ -f "$TEMP_UPDATES" ] || touch "$TEMP_UPDATES"
 last_updated=$(cat "$TEMP_FILE")
+
+
+case "$BUTTON" in
+    2)
+        echo "0" > "$TEMP_FILE"
+        ;;
+esac
 
 
 if [ -z "$last_updated" ] || [ "$last_updated" -lt "$(date +%s)" ]; then
