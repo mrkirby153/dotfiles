@@ -1,0 +1,12 @@
+add_newline = false
+
+# Prompt on a single line
+[line_break]
+disabled = true
+
+[status]
+disabled = false
+symbol = "✖ "
+
+[kubernetes]
+disabled = false
