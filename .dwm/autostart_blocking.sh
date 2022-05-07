@@ -33,4 +33,7 @@ dwmc xrdb
 # Start dwmblocks
 ~/.local/bin/statusbar/start
 
+# Start ckb-next if needed
+~/.local/bin/ckb_start
+
 disown
