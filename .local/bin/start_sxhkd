@@ -17,7 +17,7 @@ fi
 
 echo "Starting sxhkd"
 
-/usr/bin/sxhkd &
+/usr/bin/sxhkd -t 0 -r /tmp/sxhkd_out.log &
 SXHKD_PID=$!
 
 echo $SXHKD_PID > $PID_FILE

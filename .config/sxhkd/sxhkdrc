@@ -15,17 +15,8 @@ super + g
 super + s
     ~/.local/bin/screenshot -r 2> /tmp/screenshot_log.log
 
-super + shift + s
-    ~/.local/bin/screenshot --record
-
-super + control + s
-    maim -s | xclip -selection clipboard -t "image/png"
-
-super + alt + s
-    ~/.local/bin/screenshot --freeze -r
-
-super + ctrl + alt + s
-    ~/.local/bin/screenshot --floating
+super + shift + s ; { r, f, l }
+    ~/.local/bin/screenshot { --record , --freeze -r , --floating }
 
 shift + XF86AudioPlay
     pavucontrol
@@ -33,14 +24,14 @@ shift + XF86AudioPlay
 alt + XF86AudioPlay
     catia
 
-shift + XF86AudioLowerVolume
-    ~/.local/bin/pypulse -s; pkill -RTMIN+10 dwmblocks
+shift + { XF86AudioLowerVolume, XF86AudioRaiseVolume }
+    ~/.local/bin/pypulse {--speakers, --headphones}; pkill -RTMIN+10 dwmblocks
 
-shift + XF86AudioRaiseVolume
-    ~/.local/bin/pypulse -p; pkill -RTMIN+10 dwmblocks
-
-super +XF86AudioRaiseVolume
-    ~/.local/bin/pypulse -l; pkill -RTMIN+10 dwmblocks
+# shift + XF86AudioRaiseVolume
+#     ~/.local/bin/pypulse -p; pkill -RTMIN+10 dwmblocks
+# 
+# super +XF86AudioRaiseVolume
+#     ~/.local/bin/pypulse -l; pkill -RTMIN+10 dwmblocks
 
 {XF86AudioPlay, XF86AudioNext, XF86AudioPrev}
     ~/.local/bin/media_control {play-pause, next, previous}; pkill -RTMIN+2 dwmblocks
@@ -85,3 +76,4 @@ super + p
 
 alt + super + m
     st -c ncmpcpp -e ncmpcpp
+
