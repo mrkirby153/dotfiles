@@ -9,17 +9,28 @@ if [ -f $PID_FILE ]; then
         echo "removing stale pid file $PID_FILE"
         rm $PID_FILE
     else
-        echo "Reloading sxhkd ($PID)"
-        kill -SIGUSR1 $PID
-        exit
+        if [ ! -z $DEBUG ]; then
+            echo "Killing sxhkd ($PID)"
+            kill -SIGTERM $PID
+            rm $PID_FILE
+        else
+            echo "Reloading sxhkd ($PID)"
+            kill -SIGUSR1 $PID
+            exit
+        fi
     fi
 fi
 
-echo "Starting sxhkd"
 
-/usr/bin/sxhkd -t 0 -r /tmp/sxhkd_out.log &
-SXHKD_PID=$!
+if [ ! -z $DEBUG ]; then
+    echo "Starting sxhkd in foreground"
+    /usr/bin/sxhkd -t 0
+    exit
+else
+    /usr/bin/sxhkd -t 0 &
+    SXHKD_PID=$!
 
-echo $SXHKD_PID > $PID_FILE
+    echo $SXHKD_PID > $PID_FILE
 
-echo "Sxhkd started as pid $SXHKD_PID"
+    echo "Sxhkd started as pid $SXHKD_PID"
+fi
