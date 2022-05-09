@@ -1,0 +1,33 @@
+#!/bin/bash
+
+[ $# -ne 3 ] && echo "Usage: $0 <onstart|onstop> <folder id> <api key>" && exit 1
+
+FOLDER_ID="$2"
+API_KEY="$3"
+
+pause() {
+    notify-send "Pausing Syncthing syncing of $FOLDER_ID"
+    curl -s -X PATCH -H "X-Api-Key: $API_KEY" "http://localhost:8384/rest/config/folders/$FOLDER_ID" --data "{\"paused\": true}"
+}
+
+resume() {
+    notify-send "Resuming Syncthing syncing of $FOLDER_ID"
+    curl -s -X PATCH -H "X-Api-Key: $API_KEY" "http://localhost:8384/rest/config/folders/$FOLDER_ID" --data "{\"paused\": false}"
+}
+
+case "$1" in
+    onstart)
+        echo "Stopping sync of $FOLDER_ID"
+        pause
+        ;;
+    onstop)
+        echo "Resuming sync of $FOLDER_ID"
+        resume
+        ;;
+    *)
+        echo "Unrecognized argument"
+        exit 1
+        ;;
+esac
+
+
