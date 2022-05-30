@@ -18,6 +18,9 @@ super + s
 super + shift + s ; { r, f, l }
     ~/.local/bin/screenshot { --record , --freeze -r , --floating }
 
+super + shift + s ; c
+    maim -s | xclip -selection clipboard -t "image/png"
+
 shift + XF86AudioPlay
     pavucontrol
 
@@ -77,3 +80,14 @@ super + p
 alt + super + m
     st -c ncmpcpp -e ncmpcpp
 
+# Dunst
+alt + space
+    dunstctl close
+alt + shift + space
+    dunstctl close-all
+
+super + grave
+    dunstctl history-pop
+
+super + alt + .
+    dunstctl context
