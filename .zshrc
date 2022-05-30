@@ -1,10 +1,3 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -84,6 +77,7 @@ plugins=(
     extract
     notify
     zsh-syntax-highlighting
+    nix-shell
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -162,9 +156,9 @@ alias files="thunar ."
 CHANGE_MINIKUBE_NONE_USER=true
 alias zshcfg="vim ~/.zshrc && source ~/.zshrc"
 prompt_context() {}
-# Run neofetch if we're not ssh
+# Run neofetch if we're not ssh or a nix shell
 if ! [ -n "$SSH_CLIENT" ] || ! [ -n "$SSH_TTY" ]; then
-neofetch
+    (! [ -n "$IN_NIX_SHELL" ]) && neofetch
 else
     # Set up some ssh stuff
     # Utility for launching GUI programs over ssh
@@ -266,4 +260,37 @@ if [ -f /usr/bin/switch.sh ]; then
     source /usr/bin/switch.sh
     alias kctx='switch'
     alias kns='switch ns'
+fi
+
+export NIX_PATH=$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels${NIX_PATH:+:$NIX_PATH}
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/mcli mcli
+
+# Generate with "autoload zkbd"then run "zkbd"
+TERM_FILE="$HOME/.zkbd/$TERM-${DISPLAY:t}"
+
+if [ -f "$TERM_FILE" ]; then
+    source "$TERM_FILE"
+    [[ -n ${key[Home]} ]] && bindkey "${key[Home]}" beginning-of-line
+    [[ -n ${key[End]} ]] && bindkey "${key[End]}" end-of-line
+fi
+
+
+SSH_AGENT_FILE="$HOME/.ssh/ssh_agent"
+RUNNING_AGENT=$(pgrep ssh-agent)
+if [ -f "$SSH_AGENT_FILE" ]; then
+    source "$SSH_AGENT_FILE"
+
+    if [ ! "$RUNNING_AGENT" -eq "$SSH_AGENT_PID" ]; then
+        NEED_INIT=1
+    fi
+else
+    NEED_INIT=1
+fi
+
+if [ ! -z "$NEED_INIT" ]; then
+    echo $(ssh-agent -s) | sed -e 's/echo[ A-Za-z0-9]*;//g' > "$SSH_AGENT_FILE"
+    source "$SSH_AGENT_FILE"
+    echo "Initialized SSH agent as $SSH_AGENT_PID"
 fi
