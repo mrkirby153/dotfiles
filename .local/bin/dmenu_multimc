@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-MULTIMC_BASEDIR="$HOME/.local/share/multimc/instances"
+MULTIMC_BASEDIR="$HOME/.local/share/PolyMC/instances"
 
 get_instance_name() {
     (grep "name" | awk -F '=' '{print $2}') < "$1"
@@ -27,5 +27,5 @@ selected=$( (for key in "${!instances[@]}"; do echo "$key"; done) | dmenu -c -l 
 to_launch="${instances[$selected]}"
 echo "Launching $to_launch"
 
-multimc --launch "$to_launch" &> /dev/null &
+polymc --launch "$to_launch" &> /dev/null &
 disown
