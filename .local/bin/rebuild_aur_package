@@ -1,0 +1,8 @@
+#!/bin/sh
+
+[ $# -lt 1 ] && echo "Usage: $0 <package>" && exit 1
+
+paru -Ld "$1"
+clean_aur_signatures
+paru --rebuild -S "$1"
+
