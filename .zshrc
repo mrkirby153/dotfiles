@@ -134,7 +134,7 @@ upload() {
 
 # Path modification
 # export PYTHONPATH=/usr/lib/tensorflow/lib/python3.7:$PYTHONPAtH
-export EDITOR=/usr/bin/vim
+export EDITOR=/usr/bin/nvim
 
 update_system() {
     echo "Performing full system upgrade"
@@ -231,6 +231,7 @@ alias paste="curl -F'file=@-' https://0x0.st"
 alias dedicated_redis="echo 'Opened 127.0.0.1:6380 -> dedicated:6379' && ssh -N -L 127.0.0.1:6380:localhost:6379 dedicated"
 alias wine="bottles -b Main-Wine-Prefix -e $1"
 alias nixpkg-repl="nix repl '<nixpkgs>'"
+alias vim=nvim
 
 mkcd() {
     mkdir -p $1
