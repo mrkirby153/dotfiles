@@ -4,7 +4,7 @@ set -e
 
 # --- START CONFIGURATION ---
 # REPO_LOCATION="rclone:snow:Backups/aus-box/"
-RCLONE_REPO_LOCATION="vault:/vault/backups/aus-box/"
+RCLONE_REPO_LOCATION="vault-local:/srv/merged"
 # --- END CONFIGURATION ---
 
 
@@ -65,11 +65,12 @@ case "$1" in
     echo "backing up packages"
     rm -f "$CFG_DIR/restic_backup/installed_packages" && pacman -Qqe > "$CFG_DIR/restic_backup/installed_packages"
 
-    run_restic_command backup -x --files-from="$CFG_DIR/restic_backup/include" --exclude-file="$CFG_DIR/restic_backup/exclude" --exclude-if-present=.nobackup --exclude-if-present=.noremote || true
+    run_restic_command backup -x --files-from="$CFG_DIR/restic_backup/include" --exclude-file="$CFG_DIR/restic_backup/exclude" --exclude-file="$CFG_DIR/restic_backup/offsite_exclude" --exclude-if-present=.nobackup --exclude-if-present=.noremote || true
     run_restic_command forget -w 5 -g "host" --prune --max-unused=0
 
     notify-send "Offiste backup complete"
     ;;
+
 *)
     run_restic_command "$@"
     ;;

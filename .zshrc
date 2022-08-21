@@ -229,7 +229,6 @@ alias bsc='/mnt/Seagate/Games/BeatSyncConsole/BeatSyncConsole'
 alias clippaste="xclip -selection c -o | curl -F'file=@-' https://0x0.st"
 alias paste="curl -F'file=@-' https://0x0.st"
 alias dedicated_redis="echo 'Opened 127.0.0.1:6380 -> dedicated:6379' && ssh -N -L 127.0.0.1:6380:localhost:6379 dedicated"
-alias wine="bottles -b Main-Wine-Prefix -e $1"
 alias nixpkg-repl="nix repl '<nixpkgs>'"
 alias vim=nvim
 

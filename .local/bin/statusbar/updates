@@ -11,6 +11,7 @@ last_updated=$(cat "$TEMP_FILE")
 
 case "$BUTTON" in
     2)
+        notify-send "Refreshing updates..."
         echo "0" > "$TEMP_FILE"
         ;;
 esac
