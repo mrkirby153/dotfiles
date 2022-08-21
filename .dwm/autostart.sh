@@ -5,4 +5,6 @@ pidof DiscordCanary || discord-canary --ignore-gpu-blocklist --disable-features=
 
 pidof spotify || spotify &
 
+pidof 1password || 1password --silent &
+
 disown
