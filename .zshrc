@@ -149,7 +149,7 @@ update_system() {
     echo "System upgrade complete!"
 }
 # Path modifications
-export PATH=$HOME/.krew/bin:/home/austin/AndroidSDK/platform-tools:/home/austin/go/bin:/home/austin/.config/composer/vendor/bin:/home/austin/.local/bin:$PATH
+export PATH=$HOME/.krew/bin:/home/austin/AndroidSDK/platform-tools:/home/austin/go/bin:/home/austin/.config/composer/vendor/bin:/home/austin/.local/bin:$HOME/.mix/escripts:$PATH
 
 # Snapd
 alias files="thunar ."
@@ -294,4 +294,5 @@ if [ ! -z "$NEED_INIT" ]; then
     echo $(ssh-agent -s) | sed -e 's/echo[ A-Za-z0-9]*;//g' > "$SSH_AGENT_FILE"
     source "$SSH_AGENT_FILE"
     echo "Initialized SSH agent as $SSH_AGENT_PID"
+    ssh-add > /dev/null
 fi

@@ -2,22 +2,19 @@
 
 ~/.screenlayout/dualmonitor.sh
 
-pidof dunst || dunst &
+pidof dunst || setsid -f dunst
 
-pidof xfce-polkit || /usr/lib/xfce-polkit/xfce-polkit &
+pidof xfce-polkit || setsid -f /usr/lib/xfce-polkit/xfce-polkit
 
-pidof picom || picom -f &
+pidof picom || setsid -f picom -f
 
-pidof parcellite || parcellite -n &
+pidof parcellite || setsid -f parcellite -n
 
-pgrep -u $UID -x udiskie || udiskie &
+pgrep -u $UID -x udiskie || setsid -f udiskie
 
-pidof geoclue || /usr/lib/geoclue-2.0/demos/agent &
+pidof geoclue || setsid -f /usr/lib/geoclue-2.0/demos/agent
 
-pgrep -u $UID -x redshift-gtk || redshift-gtk &
-
-pidof kdeconnectd || /usr/lib/kdeconnectd &
-pidof kdeconnect-indicator || kdeconnect-indicator &
+pgrep -u $UID -x redshift-gtk || setsid -f redshift-gtk &
 
 # Set wallpaper and colors with wal
 # wal -i ~/Pictures/wallpaper.jpg

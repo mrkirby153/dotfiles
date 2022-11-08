@@ -2,20 +2,40 @@
 
 target_path="$HOME/Downloads"
 
-holding_path="$HOME/Downloads/.stale"
+if [ -d "/autofs/popstar/downloads" ]; then
+    holding_path="/autofs/popstar/downloads/$(date +"%Y/%m")/$(date +"%Y-%m-%d")"
+else
+    holding_path="$HOME/Downloads/.stale"
+    notify-send "Download Reaper" "Using local path as remote path is unavailable"
+    # Delete the old holding path
+    rm -rf "$holding_path"
+fi
 
-# Delete the old holding path
-rm -rf "$holding_path"
 
 # Make a new holding path
 mkdir -p "$holding_path"
 
+local_path=$(mktemp -d ~/Downloads/reaper-XXXXXX)
+
 # Move everything that hasn't been modified in 7 days to the holding path
-find "$target_path" -maxdepth 1 -mtime +7 -exec mv -v {} "$holding_path" \;
+find "$target_path" -maxdepth 1 -mtime +7 -exec mv -v {} "$local_path" \;
 
 # Get a count of folders and files that were moved
-file_count=$(find "$holding_path" -type f | wc -l)
-folder_count=$(find "$holding_path" -type d | wc -l)
-size=$(du -h --max-depth=0 "$holding_path" | awk '{print $1}')
+file_count=$(find "$local_path" -type f | wc -l)
+folder_count=$(find "$local_path" -type d | wc -l)
+size=$(du -h --max-depth=0 "$local_path" | awk '{print $1}')
 
-notify-send "Download Reaper" "$file_count files and $folder_count folders ($size) older than 7 days have been moved to ~/Downloads/.stale"
+if [ $((file_count + folder_count - 1)) -eq 0 ]; then
+    echo "Nothing to move"
+    notify-send "Download Reaper" "Nothing to move"
+    rmdir "$local_path"
+    rmdir "$holding_path"
+    exit
+fi
+
+
+rsync -avh "$local_path/" "$holding_path/" --progress
+
+rm -rf "$local_path"
+
+notify-send "Download Reaper" "$file_count files and $folder_count folders ($size) older than 7 days have been moved to $holding_path"

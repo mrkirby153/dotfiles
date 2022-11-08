@@ -82,8 +82,8 @@ perform_automatic_backup() {
     if [ -t 0 ]; then
         notify-send -t 10000 "Backup Complete" "Backup performed successfully in ${runtime}s"
     else
-        added=$(grep "Added to the repo:" "$tmp_out" | cut -d " " -f 5-)
-        notify-send -t 10000 "Backup Complete" "Backup performed successfully in ${runtime}s ($added added)"
+        added=$(grep "Added to the repository:" "$tmp_out" | cut -d " " -f 5-)
+        notify-send -t 10000 "Backup Complete" "Backup performed successfully in ${runtime}s. Added: $added"
     fi
     rm -rfv "$tmp_out"
 }
