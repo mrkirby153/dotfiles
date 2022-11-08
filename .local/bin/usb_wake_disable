@@ -1,0 +1,25 @@
+#!/bin/bash
+
+[ $# -ne 2 ] && echo "Usage: $0 <vendor id> <product id>" && exit 1
+
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 
+   exit 1
+fi
+
+vendor=$1
+product=$2
+
+for d in /sys/bus/usb/devices/*; do
+    if [ -f $d/idVendor ] && [ -f $d/idProduct ]; then
+        if [ $(cat $d/idVendor) = $vendor ] && [ $(cat $d/idProduct) = $product ]; then
+            echo "Found device at $d"
+            if [ $(cat $d/power/wakeup) = enabled ]; then
+                echo disabled > $d/power/wakeup
+                echo "Disabled wakeup for $vendor:$product"
+            else
+                echo "Wakeup already disabled for $vendor:$product"
+            fi
+        fi
+    fi
+done

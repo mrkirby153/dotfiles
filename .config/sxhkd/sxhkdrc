@@ -88,3 +88,6 @@ super + grave
 
 super + alt + .
     dunstctl context
+
+ctrl + shift + space
+    1password --quick-access
