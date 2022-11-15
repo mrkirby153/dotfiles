@@ -27,5 +27,5 @@ selected=$( (for key in "${!instances[@]}"; do echo "$key"; done) | dmenu -c -l 
 to_launch="${instances[$selected]}"
 echo "Launching $to_launch"
 
-polymc --launch "$to_launch" &> /dev/null &
+prismlauncher --launch "$to_launch" &> /dev/null &
 disown
