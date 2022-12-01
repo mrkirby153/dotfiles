@@ -172,8 +172,6 @@ else
 fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-export _Z_DATA=$HOME/.config/z
-[[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
 eval $(thefuck --alias)
 
 # Use alt + arrows to navigate words
@@ -218,6 +216,8 @@ zstyle :compinstall filename '/home/austin/.zshrc'
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
+
+eval "$(zoxide init zsh)"
 
 
 if [[ -d "$HOME/.miktex/bin" ]];
