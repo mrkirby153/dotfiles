@@ -75,10 +75,13 @@ plugins=(
     zsh-autosuggestions
     kubectl
     extract
-    notify
     zsh-syntax-highlighting
     nix-shell
 )
+
+if [ ! "$TERM_PROGRAM" = "vscode" ]; then
+    plugins+=(notify)
+fi
 
 source $ZSH/oh-my-zsh.sh
 
