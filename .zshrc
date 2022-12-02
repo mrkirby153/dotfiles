@@ -278,21 +278,22 @@ if [ -f "$TERM_FILE" ]; then
 fi
 
 
-SSH_AGENT_FILE="$HOME/.ssh/ssh_agent"
-RUNNING_AGENT=$(pgrep ssh-agent)
-if [ -f "$SSH_AGENT_FILE" ]; then
-    source "$SSH_AGENT_FILE"
-
-    if [ ! "$RUNNING_AGENT" -eq "$SSH_AGENT_PID" ]; then
-        NEED_INIT=1
-    fi
-else
-    NEED_INIT=1
-fi
-
-if [ ! -z "$NEED_INIT" ]; then
-    echo $(ssh-agent -s) | sed -e 's/echo[ A-Za-z0-9]*;//g' > "$SSH_AGENT_FILE"
-    source "$SSH_AGENT_FILE"
-    echo "Initialized SSH agent as $SSH_AGENT_PID"
-    ssh-add > /dev/null
-fi
+# SSH_AGENT_FILE="$HOME/.ssh/ssh_agent"
+# RUNNING_AGENT=$(pgrep ssh-agent)
+# if [ -f "$SSH_AGENT_FILE" ]; then
+#     source "$SSH_AGENT_FILE"
+# 
+#     if [ ! "$RUNNING_AGENT" -eq "$SSH_AGENT_PID" ]; then
+#         NEED_INIT=1
+#     fi
+# else
+#     NEED_INIT=1
+# fi
+# 
+# if [ ! -z "$NEED_INIT" ]; then
+#     echo $(ssh-agent -s) | sed -e 's/echo[ A-Za-z0-9]*;//g' > "$SSH_AGENT_FILE"
+#     source "$SSH_AGENT_FILE"
+#     echo "Initialized SSH agent as $SSH_AGENT_PID"
+#     ssh-add > /dev/null
+# fi
+export SSH_AUTH_SOCK=~/.1password/agent.sock
