@@ -86,7 +86,7 @@ alt + shift + space
 super + grave
     dunstctl history-pop
 
-super + alt + .
+super + alt + period
     dunstctl context
 
 ctrl + shift + space
