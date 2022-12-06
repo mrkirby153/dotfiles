@@ -1,0 +1,58 @@
+#!/bin/sh
+
+
+CFG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
+PREFIX_FILE="$CFG_DIR/wine_prefixes"
+
+register_wine_prefix() {
+    grep -Fxq "$1" "$PREFIX_FILE" || echo "$1" >> "$PREFIX_FILE"
+}
+
+unregister_wine_prefix() {
+    file=$(mktemp)
+    while read -r line
+    do
+        [ ! "$line" = "$1" ] && echo "$line"
+    done < "$PREFIX_FILE" > "$file"
+    mv "$file" "$PREFIX_FILE"
+    rm -f "$file"
+}
+
+
+add_wine_prefix() {
+    prefix=$(dmenu -p "Enter path of wineprefix" -c -l 20 <&- && echo)
+    [ ! "$prefix" = "" ] && register_wine_prefix "$prefix"
+    set_wine_prefix
+}
+
+
+remove_wine_prefix() {
+    prefix=$(dmenu -c -l 20 -p "Prefix to remove" < "$PREFIX_FILE")
+    [ ! "$prefix" = "" ] && unregister_wine_prefix "$prefix"
+    set_wine_prefix
+}
+
+set_wine_prefix() {
+    prefixes=$(cat "$PREFIX_FILE")
+    prefix=$(printf "%s\nAdd\nRemove" "$prefixes" | dmenu -c -l 20)
+    export prefix
+    case "$prefix" in
+    "")
+        exit
+        ;;
+    "Add")
+        add_wine_prefix
+        ;;
+    "Remove")
+        remove_wine_prefix
+        ;;
+    "*")
+        echo "$prefix"
+        ;;
+    esac
+}
+
+
+# Ensure we always have the default wine prefix selectable
+register_wine_prefix '~/.wine'
+set_wine_prefix

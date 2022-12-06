@@ -1,0 +1,5 @@
+#!/bin/sh
+
+export TARGET_PATH="$HOME/Downloads"
+export HOLDING_PATH_ROOT="/autofs/popstar/downloads"
+export HOLDING_PATH_FALLBACK="$HOME/Downloads/.stale"

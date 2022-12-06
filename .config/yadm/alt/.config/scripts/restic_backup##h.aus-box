@@ -1,0 +1,3 @@
+#!/bin/sh
+
+export REPO_LOCATION="/run/media/austin/Elements/restic"

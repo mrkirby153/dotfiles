@@ -3,8 +3,7 @@ set -e
 # Script to automatically create backups with restic
 
 # --- START CONFIGURATION ---
-# REPO_LOCATION="rclone:snow:Backups/aus-box/"
-RCLONE_REPO_LOCATION="vault-local:/srv/merged"
+source "${XDG_CONFIG_DIR:-$HOME/.config}/scripts/restic_offsite"
 # --- END CONFIGURATION ---
 
 

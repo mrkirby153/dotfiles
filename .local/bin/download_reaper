@@ -1,11 +1,19 @@
 #!/bin/bash
 
-target_path="$HOME/Downloads"
+source "${XDG_CONFIG_DIR:-$HOME/.config}/scripts/download_reaper"
 
-if [ -d "/autofs/popstar/downloads" ]; then
-    holding_path="/autofs/popstar/downloads/$(date +"%Y/%m")/$(date +"%Y-%m-%d")"
+echo "TARGET_PATH: ${TARGET_PATH}"
+echo "HOLDING_PATH_ROOT: ${HOLDING_PATH_ROOT}"
+echo "HOLDING_PATH_FALLBACK: ${HOLDING_PATH_FALLBACK}"
+
+target_path="$TARGET_PATH"
+
+[ -z "$target_path" ] && echo "TARGET_PATH is not set" && exit 1
+
+if [ ! -z "$HOLDING_PATH_ROOT" ] && [ -d "$HOLDING_PATH_ROOT" ]; then
+    holding_path="$HOLDING_PATH_ROOT/$(date +"%Y/%m")/$(date +"%Y-%m-%d")"
 else
-    holding_path="$HOME/Downloads/.stale"
+    holding_path="$HOLDING_PATH_FALLBACK"
     notify-send "Download Reaper" "Using local path as remote path is unavailable"
     # Delete the old holding path
     rm -rf "$holding_path"
@@ -15,7 +23,7 @@ fi
 # Make a new holding path
 mkdir -p "$holding_path"
 
-local_path=$(mktemp -d ~/Downloads/reaper-XXXXXX)
+local_path=$(mktemp -d $TARGET_PATH/reaper-XXXXXX)
 
 # Move everything that hasn't been modified in 7 days to the holding path
 find "$target_path" -maxdepth 1 -mtime +7 -exec mv -v {} "$local_path" \;

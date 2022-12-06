@@ -1,0 +1,52 @@
+#!/bin/sh
+
+# Extracts a NSP using hactool
+
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 <nsp> <destination>"
+    exit 1
+fi
+
+
+
+OUTDIR="$2"
+TEMPDIR=$(mktemp -d)
+
+trap "rm -rf $TEMPDIR" exit
+
+mkdir -p $2
+
+verify_hactool() {
+    if ! command -v hactool &> /dev/null
+    then
+        echo "Hactool was not found on the path."
+        exit 1
+    fi
+}
+
+extract_ncas_from_nsp() {
+    hactool --disablekeywarns -t pfs0 -i "$1" --pfs0dir="$TEMPDIR"
+}
+
+extract_nca() {
+    nca=$(basename $1)
+    echo "Extracting NCA $nca ($1)"
+    mkdir -p "$OUTDIR/$nca/exefs"
+    mkdir -p "$OUTDIR/$nca/romfs"
+    hactool --disablekeywarns -t nca -x --romfsdir="$OUTDIR/$nca/romfs" --exefsdir="$OUTDIR/$nca/romfs" $1
+}
+
+verify_hactool
+if [ ! -f $1 ]; then
+    echo "File $1 was not found!"
+    exit 1
+fi
+
+extract_ncas_from_nsp "$1"
+
+for file in $TEMPDIR/*.nca;
+do
+    extract_nca "$file"
+done
+
+echo "Extraction complete!"

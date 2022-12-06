@@ -1,0 +1,3 @@
+#!/bin/sh
+
+RCLONE_REPO_LOCATION="vault-local:/srv/merged"

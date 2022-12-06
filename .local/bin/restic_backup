@@ -3,7 +3,7 @@ set -eE
 # Script to automatically create backups with restic
 
 # --- START CONFIGURATION ---
-REPO_LOCATION="/run/media/austin/Elements/restic"
+source "${XDG_CONFIG_DIR:-$HOME/.config}/scripts/restic_backup"
 # --- END CONFIGURATION ---
 
 
@@ -96,6 +96,7 @@ load_password
 
 restic cache --cleanup
 case "$1" in
+"backup")
 "auto-backup")
     perform_automatic_backup
     ;;

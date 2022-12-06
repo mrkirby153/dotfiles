@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if [ "$#" -lt 1 ]; then
+    echo "Specify an image"
+    exit 1
+fi
+
+# Update the wallpaper symlink
+ln -sf "$1" ~/Pictures/wallpaper
+
+# Run feh
+feh --bg-fill ~/Pictures/wallpaper
+
+# Regenerate betterlockscreen
+betterlockscreen -u ~/Pictures/wallpaper
+#betterlockscreen -u ~/Pictures/wallpaper -r 1920x1080
+
+echo "Wallpaper has been set!"

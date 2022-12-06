@@ -1,0 +1,19 @@
+#!/bin/sh
+set -xe
+
+enable_32_bit() {
+    arch-nspawn .chroot/root bash -c "[ -f /etc/.multilib ] || (echo \"[multilib]\" >> /etc/pacman.conf && echo \"Include = /etc/pacman.d/mirrorlist\" >> /etc/pacman.conf && touch /etc/.multilib)"
+}
+
+
+if ! [ -d .chroot/root ]; then
+    mkdir -p .chroot
+    mkarchroot .chroot/root base base-devel
+fi
+
+if [ -n "$ENABLE_32_BIT" ]; then
+    enable_32_bit
+fi
+
+arch-nspawn .chroot/root pacman -Syu
+makechrootpkg -c -r .chroot

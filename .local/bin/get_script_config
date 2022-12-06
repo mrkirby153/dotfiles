@@ -1,0 +1,17 @@
+#!/bin/sh
+
+ROOT_DIR="${XDG_CONFIG_DIR:-$HOME/.config}/scripts"
+
+[ "$#" -ne 1 ] && echo "Usage: $0 [script_name]" && exit 1
+
+config_path="$ROOT_DIR/$1"
+
+if [ -f "$config_path" ]; then
+    echo "# Loaded $1"
+    cat "$config_path"
+else
+    echo "echo \"No configuration exists for: $1\""
+    echo "exit 1"
+    notify-send -u critical "Script Configuration" "No such configuration file: $config_path"
+    exit 1
+fi

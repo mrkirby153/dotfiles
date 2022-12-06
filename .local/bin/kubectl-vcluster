@@ -1,0 +1,23 @@
+#!/bin/bash
+
+create_vcluster() {
+    vcluster create --expose -n "$1" "$1"
+    vcluster connect -n "$1" --kube-config "cluster-$1.yaml" "$1"
+    export KUBECONFIG="$(pwd)/cluster-$1.yaml"
+    echo "=== Cluster $1 has been created ==="
+}
+
+destroy_vcluster() {
+    vcluster delete -n "$1" "$1"
+}
+
+case "$1" in
+    create)
+        echo "Creating vcluster $2"
+        create_vcluster "$2"
+        ;;
+    destroy)
+        echo "Destroying vcluster $2"
+        destroy_vcluster "$2"
+        ;;
+esac

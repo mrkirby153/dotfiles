@@ -1,0 +1,3 @@
+#!/bin/sh
+
+REPO_LOCATION="/autofs/popstar/restic"
