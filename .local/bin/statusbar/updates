@@ -12,7 +12,8 @@ last_updated=$(cat "$TEMP_FILE")
 case "$BUTTON" in
     2)
         notify-send "Refreshing updates..."
-        echo "0" > "$TEMP_FILE"
+        echo "-1" > "$TEMP_FILE"
+        last_updated="-1"
         ;;
 esac
 
@@ -21,6 +22,9 @@ if [ -z "$last_updated" ] || [ "$last_updated" -lt "$(date +%s)" ]; then
     pending=$( (checkupdates ; paru -Qua) | wc -l)
     echo "$next_update" > "$TEMP_FILE"
     echo "$pending" > "$TEMP_UPDATES"
+    if [ "$last_updated" == -1 ]; then
+        notify-send "Done!"
+    fi
 else
     pending=$(cat "$TEMP_UPDATES")
 fi
