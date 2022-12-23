@@ -2,4 +2,6 @@
 export TERM=xterm-256color
 
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/bin/vault vault
+
+eval "$(direnv hook zsh)"
+export PASSWORD_STORE_GPG_OPTS="--default-key gpg-pass@archlinux.localdomain"
