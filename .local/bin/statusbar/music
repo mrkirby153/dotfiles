@@ -48,10 +48,12 @@ playerctl_status() {
 playerctl_artist() {
     artist=$(playerctl -p "$target_player" metadata --format "{{artist}}")
     title=$(playerctl -p "$target_player" metadata --format "{{title}}")
+    duration=$(playerctl -p "$target_player" metadata --format "{{duration(mpris:length)}}")
+    position=$(playerctl -p "$target_player" position --format "{{ duration(position) }}")
     if [ -z "$artist" ]; then
-        echo "$title"
+        echo "$title - [$position/$duration]"
     else
-        echo "$title - ${artist:0:32}"
+        echo "$title - ${artist:0:32} [$position/$duration]"
     fi
 }
 
