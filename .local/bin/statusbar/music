@@ -29,7 +29,8 @@ mpd_status() {
 mpd_artist() {
     title=$(mpc --format '%title%' current)
     artist=$(mpc --format '%artist%' current)
-    echo "$title - ${artist:0:32}"
+    position=$(mpc status | sed -sn 2p | awk '{print $3}')
+    echo "$title - ${artist:0:32} [$position]"
 }
 
 mpd() {
