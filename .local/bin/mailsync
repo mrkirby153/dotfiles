@@ -65,8 +65,3 @@ if ! [ -f "$notmuch_compact_last_run_file" ] || [ "$last_compact" -lt "$target" 
 fi
 unread_count="$(find "${XDG_DATA_HOME:-$HOME/.local/share}"/mail/*/[Ii][Nn][Bb][Oo][Xx]/new -type f 2>/dev/null | wc -l 2>/dev/null)"
 
-if [ "$unread_count" = "0" ]; then
-    xset -led named "Scroll Lock"
-else
-    xset led named "Scroll Lock"
-fi

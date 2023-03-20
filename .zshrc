@@ -234,6 +234,8 @@ alias paste="curl -F'file=@-' https://0x0.st"
 alias dedicated_redis="echo 'Opened 127.0.0.1:6380 -> dedicated:6379' && ssh -N -L 127.0.0.1:6380:localhost:6379 dedicated"
 alias nixpkg-repl="nix repl '<nixpkgs>'"
 alias vim=nvim
+alias http-server="python -m http.server"
+alias dust="dust -r -b"
 
 mkcd() {
     mkdir -p $1

@@ -1,8 +1,16 @@
 #!/bin/bash
 
 create_vcluster() {
-    vcluster create --expose -n "$1" "$1"
-    vcluster connect -n "$1" --kube-config "cluster-$1.yaml" "$1"
+    temp_file=$(mktemp)
+    trap "rm -rf $temp_file" EXIT
+
+    cat > "$temp_file" << EOF
+sync:
+  nodes:
+    enabled: true
+EOF
+    vcluster create --expose -n "$1" --update-current=false -f="$temp_file" "$1"
+    vcluster connect --update-current=false -n "$1" --kube-config "cluster-$1.yaml" "$1"
     export KUBECONFIG="$(pwd)/cluster-$1.yaml"
     echo "=== Cluster $1 has been created ==="
 }

@@ -6,4 +6,5 @@ pidof DiscordCanary || setsid -f discord-canary --ignore-gpu-blocklist --disable
 pidof spotify || setsid -f spotify
 
 pidof 1password || setsid -f /sbin/1password --silent
+numlockx
 
