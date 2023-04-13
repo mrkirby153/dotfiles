@@ -1,0 +1,9 @@
+[Unit]
+Description=ActivityWatch server
+
+[Service]
+ExecStart=/sbin/aw-server
+
+
+[Install]
+WantedBy=default.target

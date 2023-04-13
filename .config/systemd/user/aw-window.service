@@ -1,0 +1,9 @@
+[Unit]
+Description=ActivityWatch Watcher: Window
+
+[Service]
+ExecStart=/sbin/aw-watcher-window
+
+
+[Install]
+WantedBy=default.target

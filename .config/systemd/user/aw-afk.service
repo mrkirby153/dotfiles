@@ -1,0 +1,9 @@
+[Unit]
+Description=ActivityWatch Watcher: AFK
+
+[Service]
+ExecStart=/sbin/aw-watcher-afk
+
+
+[Install]
+WantedBy=default.target
