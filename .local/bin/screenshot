@@ -8,7 +8,8 @@ set -e # Exit immediately on error
 
 # The output directory for screenshots
 SCREENSHOTS_DIR=~/Pictures/Screenshots
-UPLOAD_URL=https://i.mrkirby153.com/upload.php
+UPLOAD_URL=https://i.mrkirby153.com/_upload
+USERNAME="mrkirby153"
 
 # ==== END USER CONFIGURAITON ====
 
@@ -49,7 +50,7 @@ play_sound() {
 }
 
 upload() {
-    local upload_command="curl -v -X POST -F'file=@$1' -F 'key=$UPLOAD_KEY' $UPLOAD_URL >> $TEMP_DIR/output"
+    local upload_command="curl -v -X POST -F'file=@$1' -u $USERNAME:$UPLOAD_KEY --basic $UPLOAD_URL >> $TEMP_DIR/output"
     debug "Executing upload command \"$upload_command\""
     eval $upload_command
     play_sound "$DIR/resources/TaskCompletedSound.wav"
