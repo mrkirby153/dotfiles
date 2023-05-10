@@ -4,10 +4,10 @@ s=$(upower -i "$DBUS_PATH" | grep warning-level | awk '{print $2}')
 
 case "$s" in
 low)
-    echo "ﴊ "
+    echo "󰠌 "
     ;;
 critical)
-    echo "ﴏ "
+    echo "󰠑 "
     ;;
 *)
     ;;

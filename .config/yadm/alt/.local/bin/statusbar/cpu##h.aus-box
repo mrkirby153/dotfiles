@@ -6,7 +6,7 @@ esac
 
 if command -v gamemoded &> /dev/null; then
     if [ "$(gamemoded -s)" = "gamemode is active" ]; then
-        gamemode_status=" "
+        gamemode_status=" 󰊴"
     else
         gamemode_status=""
     fi
@@ -23,4 +23,4 @@ else
     cpu_display=" / $cpu_temp"
 fi
 
-echo " $cpu$cpu_display$gamemode_status"
+echo "󰻠 $cpu$cpu_display$gamemode_status"

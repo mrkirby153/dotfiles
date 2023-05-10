@@ -7,11 +7,11 @@ HEADPHONES=$(jq -r '.headphones' ~/.pypulse.json)
 vol="$(pamixer --get-volume)"
 
 if [ "$vol" -gt "70" ]; then
-    icon="墳"
+    icon="󰕾"
 elif [ "$vol" -lt "30" ]; then
     icon=""
 else
-    icon="奔"
+    icon="󰖀"
 fi
 
 sink=""

@@ -30,5 +30,5 @@ else
 fi
 
 if [ "$pending" -gt 0 ]; then
-    echo " $pending"
+    echo "󰏕 $pending"
 fi

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+numlock=$(xset -q | sed -n 's/^.*Num Lock:\s*\(\S*\).*$/\1/p')
+capslock=$(xset -q | sed -n 's/^.*Caps Lock:\s*\(\S*\).*$/\1/p')
+
+raw_str=""
+
+if [ "$numlock" == "on" ]; then
+    raw_str="${raw_str}N"
+fi
+
+if [ "$capslock" == "on" ]; then
+    raw_str="${raw_str}C"
+fi
+
+if [ ! "$raw_str" == "" ]; then
+    echo " $raw_str"
+fi

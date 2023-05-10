@@ -8,4 +8,4 @@ fandisp=""
 if [ "$fan" -gt 0 ]; then
 fandisp=" / $fan "
 fi
-echo "﴿ $gpu_usage% / $temp 糖"
+echo "󰡁 $gpu_usage% / $temp 󰔄"

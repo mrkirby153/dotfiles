@@ -40,7 +40,7 @@ if [ "$(swapon -s)" = "" ]; then
 fi
 
 if [ $has_zfs -gt 0 ]; then
-    echo " $mem_used / $total_without_zfs_arc GiB$swap_display"
+    echo "󰍛 $mem_used / $total_without_zfs_arc GiB$swap_display"
 else
-    echo " $mem_used GiB$swap_display"
+    echo "󰍛 $mem_used GiB$swap_display"
 fi

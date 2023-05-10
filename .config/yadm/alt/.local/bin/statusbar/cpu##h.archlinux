@@ -3,8 +3,18 @@
 case $BUTTON in
     2) setsid -f "$TERMINAL" htop ;;
 esac
+
+if command -v gamemoded &> /dev/null; then
+    if [ "$(gamemoded -s)" = "gamemode is active" ]; then
+        gamemode_status=" 󰊴"
+    else
+        gamemode_status=""
+    fi
+else
+    gamemode_status=""
+fi
 cpu=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}')
 
 cpu_temp=$(sensors coretemp-isa-0000 | awk '/^Package/{print $4}' | sed 's/+//')
 
-echo " $cpu / $cpu_temp"
+echo "󰻠 $cpu / $cpu_temp"
