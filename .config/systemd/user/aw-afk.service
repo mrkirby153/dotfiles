@@ -3,6 +3,8 @@ Description=ActivityWatch Watcher: AFK
 
 [Service]
 ExecStart=/sbin/aw-watcher-afk
+RestartSec=30
+Restart=on-failure
 
 
 [Install]

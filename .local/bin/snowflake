@@ -23,7 +23,9 @@ worker_id = (snowflake & 0x3E0000) >> 17
 process_id = (snowflake & 0x1F000) >> 12
 increment = snowflake & 0xFFF
 
-timestamp = datetime.datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+timestamp = datetime.datetime.utcfromtimestamp(timestamp).isoformat(
+    sep=" ", timespec="milliseconds"
+)
 
 print(f"Timestamp  :\t{timestamp} UTC")
 print(f"Worker ID  :\t{worker_id}")

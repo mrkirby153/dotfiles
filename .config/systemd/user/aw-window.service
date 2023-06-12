@@ -3,6 +3,8 @@ Description=ActivityWatch Watcher: Window
 
 [Service]
 ExecStart=/sbin/aw-watcher-window
+Restart=on-failure
+RestartSec=30
 
 
 [Install]

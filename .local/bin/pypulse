@@ -8,8 +8,8 @@ try:
     import argparse
     import subprocess
     from packaging import version
-except:
-    print("Missing dependency. Ensure that pulsectl and notify2 are installed!")
+except Exception as e:
+    print(f"Missing dependency. Ensure that pulsectl and notify2 are installed!: {e}")
     exit(1)
 
 

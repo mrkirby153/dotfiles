@@ -197,7 +197,7 @@ xprop | awk '
   /^WM_NAME/{sub(/.* =/, "title:"); print}'
 }
 
-alias lanplay="sudo lan-play --netif enp34s0 --relay-server-addr mrkirby153.com:11451"
+alias lanplay="sudo lan-play --relay-server-addr 23.140.97.100:11451"
 
 alias cp="cp -iv" \
         mv="mv -iv" \
@@ -301,3 +301,4 @@ if [ ! -z "$NEED_INIT" ]; then
     echo "Initialized SSH agent as $SSH_AGENT_PID"
     ssh-add > /dev/null
 fi
+export LC_ALL="en_US.UTF-8"
