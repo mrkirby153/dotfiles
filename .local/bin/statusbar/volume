@@ -2,7 +2,7 @@
 SPEAKERS=$(jq -r '.speakers' ~/.pypulse.json)
 HEADPHONES=$(jq -r '.headphones' ~/.pypulse.json)
 
-[ "$(pamixer --get-mute)" = true ] && echo "ﱝ" && exit
+[ "$(pamixer --get-mute)" = true ] && echo "󰝟 " && exit
 
 vol="$(pamixer --get-volume)"
 
