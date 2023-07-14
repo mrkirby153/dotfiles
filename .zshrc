@@ -178,8 +178,8 @@ fi
 eval $(thefuck --alias)
 
 # Use alt + arrows to navigate words
-bindkey "\e$terminfo[kcub1]" backward-word
-bindkey "\e$terminfo[kcuf1]" forward-word
+bindkey "^[[1;3D" backward-word
+bindkey "^[[1;3C" forward-word
 
 alias pa-linein="pactl unload-module module-loopback ; pactl load-module module-loopback source_dont_move=true source=alsa_input.pci-0000_29_00.4.analog-stereo"
 #alias jack-linein="jack_connect 'Starship/Matisse HD Audio Controller Analog Stereo:capture_FL' 'Starship/Matisse HD Audio Controller Analog Stereo:playback_FL' && jack_connect 'Starship/Matisse HD Audio Controller Analog Stereo:capture_FR' 'Starship/Matisse HD Audio Controller Analog Stereo:playback_FR'"
