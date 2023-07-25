@@ -197,7 +197,7 @@ xprop | awk '
   /^WM_NAME/{sub(/.* =/, "title:"); print}'
 }
 
-alias lanplay="sudo lan-play --relay-server-addr 23.140.97.100:11451"
+alias lanplay="sudo lan-play --relay-server-addr 45.43.195.187:11451"
 
 alias cp="cp -iv" \
         mv="mv -iv" \
