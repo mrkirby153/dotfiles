@@ -1,3 +1,5 @@
 #!/bin/sh
 
-RCLONE_REPO_LOCATION="vault-local:/srv/merged"
+source ${XDG_CONFIG_DIR:-$HOME/.config}/scripts/borgbase_pw
+REPO_LOCATION="rest:https://y16f6t58:$BORGBASE_PW@y16f6t58.repo.borgbase.com"
+

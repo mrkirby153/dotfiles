@@ -52,7 +52,7 @@ load_password() {
 }
 
 run_restic_command() {
-    restic --compression max --password-file="$PWD_FILE" -r "rclone:$RCLONE_REPO_LOCATION" "$@"
+    restic --compression max --password-file="$PWD_FILE" -r "$REPO_LOCATION" "$@"
 }
 
 load_password
