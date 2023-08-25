@@ -1,6 +1,14 @@
 #!/bin/sh
-SPEAKERS=$(jq -r '.speakers' ~/.pypulse.json)
-HEADPHONES=$(jq -r '.headphones' ~/.pypulse.json)
+
+case $BUTTON in
+    2)
+        ~/.local/bin/pypulse -l > /dev/null
+        ;;
+
+esac
+
+SPEAKERS=$(jq -r '.speakers.name' ~/.pypulse.json)
+HEADPHONES=$(jq -r '.headphones.name' ~/.pypulse.json)
 
 [ "$(pamixer --get-mute)" = true ] && echo "󰝟 " && exit
 
@@ -20,7 +28,10 @@ if [ "$default" = "$SPEAKERS" ]; then
     sink="S"
 elif [ "$default" = "$HEADPHONES" ]; then
     sink="H"
+else
+    sink="?"
 fi
+
 if [ "$vol" -eq "100" ]; then
     echo "$icon $sink"
 else
