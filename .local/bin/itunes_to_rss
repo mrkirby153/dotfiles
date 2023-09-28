@@ -1,0 +1,45 @@
+#!/usr/bin/env nix-shell
+#! nix-shell shells/itunes_to_rss.nix -i python
+import requests
+import argparse
+import re
+
+regex = re.compile(r"https:\/\/podcasts\.apple\.com\/.*\/podcast\/.*\/id(\d+)")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Convert an iTunes podcast to an RSS feed."
+    )
+    parser.add_argument("url", help="The URL of the iTunes podcast.")
+
+    args = parser.parse_args()
+    match = regex.match(args.url)
+    if match is None:
+        print("Invalid URL")
+        return
+    podcast_id = match.groups()[0]
+    print("Detected podcast ID: " + podcast_id)
+
+    response = requests.get(
+        f"https://itunes.apple.com/lookup?id={podcast_id}&entity=podcast"
+    )
+    if response.status_code != 200:
+        print(f"Failed to fetch podcast info: {response.status_code} {response.text}")
+        return
+    response_json = response.json()
+    if "results" not in response_json:
+        print("Failed to fetch podcast info: no results")
+        return
+    count = response_json["resultCount"]
+    if count > 1:
+        print(f"Failed to fetch podcast info: multiple results ({count})")
+        return
+    result = response_json["results"][0]
+    print()
+    print(f"Podcast:\t{result['collectionName']}")
+    print(f"RSS Feed:\t{result['feedUrl']}")
+
+
+if __name__ == "__main__":
+    main()
