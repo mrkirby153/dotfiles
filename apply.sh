@@ -15,7 +15,7 @@ fi
 
 case "$COMMAND" in
     "apply")
-    NIX_CMD="apply"
+    NIX_CMD="switch"
     ;;
     "build")
     NIX_CMD="build"

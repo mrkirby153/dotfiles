@@ -12,6 +12,7 @@
       url = "github:zhaofengli/attic";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sops-nix.url = "github:Mic92/sops-nix";
   };
 
   outputs = {
@@ -20,6 +21,7 @@
     home-manager,
     flake-utils,
     attic,
+    sops-nix,
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: {
@@ -41,6 +43,7 @@
           inherit pkgs;
           modules =
             [
+              sops-nix.homeManagerModule
               ./hosts/${name}/configuration.nix
               ./modules
             ]
@@ -65,6 +68,7 @@
           cacert
           curl
           jq
+          sops
 
           nix-output-monitor
         ];
