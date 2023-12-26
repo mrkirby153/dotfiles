@@ -13,6 +13,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix.url = "github:Mic92/sops-nix";
+    my-nixpkgs = {
+      url = "github:mrkirby153/nix-pkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -22,6 +26,7 @@
     flake-utils,
     attic,
     sops-nix,
+    my-nixpkgs,
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: {
@@ -29,6 +34,7 @@
 
       packages = let
         pkgs = import nixpkgs {
+          overlays = [my-nixpkgs.overlays.default];
           inherit system;
         };
       in

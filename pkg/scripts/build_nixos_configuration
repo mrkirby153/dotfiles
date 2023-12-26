@@ -1,0 +1,37 @@
+#!/bin/bash
+
+select_host() {
+    local hosts=$(nix flake show --json "$flake_url" 2> /dev/null | jq -r '.nixosConfigurations | to_entries | map(select(.value.type == "nixos-configuration")) | .[].key')
+    local num_hosts=$(echo "$hosts" | wc -l)
+    if [ $num_hosts -eq 0 ]; then
+        echo "No configuration found!"
+    elif [ $num_hosts -eq 1 ]; then
+        echo "Only one host found: $hosts"
+        host="$hosts"
+    else
+        host=$(echo "$hosts" | fzf --prompt "Select a system to build")
+        if [ $? -ne 0 ]; then
+            echo "No host selected"
+            exit 1
+        fi
+    fi
+}
+
+if [ $# -eq 0 ]; then
+    flake_url="."
+    select_host
+elif [ $# -eq 1 ]; then
+    flake_url=$1
+    select_host
+elif [ $# -eq 2 ]; then
+    flake_url=$1
+    host=$2
+else
+    echo "Usage: $0 <flake location> [host]"
+    exit 1
+fi
+derivation="nixosConfigurations.$host.config.system.build.toplevel"
+
+echo "Building derevation $flake_url#$derivation"
+
+nix build "$flake_url#$derivation"

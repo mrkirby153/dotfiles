@@ -114,6 +114,26 @@
         "type": "github"
       }
     },
+    "my-nixpkgs": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1696113105,
+        "narHash": "sha256-j7tA9rsjH7HZRcVhhPlM8yY792A1TOwO8CoG4OHqMv4=",
+        "owner": "mrkirby153",
+        "repo": "nix-pkgs",
+        "rev": "40fc2501e8091c07d0a22f2711f2c14f166b03e8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mrkirby153",
+        "repo": "nix-pkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1703550282,
@@ -183,6 +203,7 @@
         "attic": "attic",
         "flake-utils": "flake-utils_2",
         "home-manager": "home-manager",
+        "my-nixpkgs": "my-nixpkgs",
         "nixpkgs": "nixpkgs",
         "sops-nix": "sops-nix"
       }
