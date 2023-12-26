@@ -2,9 +2,7 @@
   config,
   lib,
   ...
-}:
-{
-
+}: {
   options = {
     aus.sops = {
       keyPath = lib.mkOption {

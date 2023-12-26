@@ -26,6 +26,15 @@
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: {
       defaultPackage = home-manager.defaultPackage.${system};
+
+      packages = let
+        pkgs = import nixpkgs {
+          inherit system;
+        };
+      in
+        import ./pkg {
+          inherit pkgs;
+        };
     })
     // rec {
       mkSystem = {
@@ -54,8 +63,11 @@
       homeConfigurations = {
         "malos" = mkSystem {name = "malos";};
       };
-      overlays.pkgs = final: prev: {
-      };
+
+      overlays.pkgs = final: prev:
+        import ./pkg {
+          pkgs = prev;
+        };
     }
     // flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
