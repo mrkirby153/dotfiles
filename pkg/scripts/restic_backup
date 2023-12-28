@@ -2,10 +2,6 @@
 set -eE
 # Script to automatically create backups with restic
 
-# --- START CONFIGURATION ---
-source "${XDG_CONFIG_DIR:-$HOME/.config}/scripts/restic_backup"
-# --- END CONFIGURATION ---
-
 
 LOCKFILE="$XDG_RUNTIME_DIR/restic_backup.lock"
 CFG_DIR="${XDG_CONFIG_DIRS:-$HOME/.config}"

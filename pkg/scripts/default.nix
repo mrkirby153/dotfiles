@@ -155,4 +155,34 @@ in rec {
       mpc-cli
     ];
   };
+  modreload = shellScript {
+    name = "modreload";
+    path = ./modreload;
+    deps = with pkgs; [
+      kmod
+    ];
+  };
+  multimc_sync_control = shellScript {
+    name = "multimc_sync_control";
+    path = ./multimc_sync_control;
+    deps = with pkgs; [
+      curl
+    ];
+  };
+  ocr = shellScript {
+    name = "ocr";
+    path = ./ocr;
+    deps = with pkgs; [
+      tesseract
+      imagemagick
+    ];
+  };
+  power_menu = shellScript {
+    name = "power_menu";
+    path = ./power_menu;
+    deps = with pkgs; [
+      aus.dmenu
+      systemd
+    ];
+  };
 }

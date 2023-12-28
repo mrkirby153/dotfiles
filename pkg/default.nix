@@ -3,4 +3,5 @@
 in {
   scripts = scripts;
   screenshot = scripts.screenshot;
+  pypulse = pkgs.callPackage ./pypulse {};
 }
