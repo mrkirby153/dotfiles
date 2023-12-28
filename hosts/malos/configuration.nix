@@ -5,6 +5,7 @@
 
     programs = {
       screenshot.enable = true;
+      scripts.enable = true;
     };
   };
 }
