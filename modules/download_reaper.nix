@@ -48,7 +48,7 @@
           OnCalendar = config.aus.programs.download-reaper.frequency;
           Persistent = true;
         };
-        Install.WantedBy = [ "timers.target" ];
+        Install.WantedBy = ["timers.target"];
       };
     };
   };

@@ -1,12 +1,14 @@
-{ pkgs, lib, config, ...}:
-let
-  screenshot ="${pkgs.scripts.screenshot}/bin/screenshot";
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
+  screenshot = "${pkgs.scripts.screenshot}/bin/screenshot";
   pypulse = "${pkgs.pypulse}/bin/pypulse";
 
-
   update_dwmblocks = block: "${pkgs.procps}/bin/pkill -RTMIN+${builtins.toString block} dwmblocks";
-in
-{
+in {
   options.aus = {
     programs.sxhkd.enable = lib.mkEnableOption "sxhkd";
   };
