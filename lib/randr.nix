@@ -1,5 +1,5 @@
-{pkgs, ...}: let
-  xrandr = "${pkgs.xorg.xrandr}/bin/xrandr";
+{xrandr}: let
+  xrandr-bin = "${xrandr}/bin/xrandr";
 
   buildXrandrCommand = {
     name,
@@ -27,4 +27,4 @@
     else "--output ${name} --off";
 in
   monitors:
-    xrandr + " " + builtins.concatStringsSep " " (map buildXrandrCommand monitors)
+    xrandr-bin + " " + builtins.concatStringsSep " " (map buildXrandrCommand monitors)

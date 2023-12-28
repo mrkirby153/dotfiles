@@ -59,7 +59,22 @@
       };
     };
   };
-  toXrandr = import ./randr.nix {pkgs = pkgs;};
+
+  configType = lib.types.submodule {
+    options = {
+      displays = lib.mkOption {
+        type = lib.types.listOf displayType;
+        description = "The displays to configure";
+      };
+      keybind = lib.mkOption {
+        type = lib.types.str;
+        description = "The keybind to use to toggle the display";
+        default = "";
+      };
+    };
+  };
+
+  toXrandr = import ../../lib/randr.nix {xrandr = pkgs.xorg.xrandr;};
   profileNames = builtins.attrNames config.aus.displays;
 
   asCase = name: command: ''
@@ -67,7 +82,7 @@
       ${command}
       ;;'';
 
-  xrandrCommands = builtins.mapAttrs (name: display: toXrandr display) config.aus.displays;
+  xrandrCommands = builtins.mapAttrs (name: display: toXrandr display.displays) config.aus.displays;
 
   shellScript = pkgs.writeShellScriptBin "displays" ''
     [ $# -ne 1 ] && echo "Usage: displays <${builtins.concatStringsSep "|" profileNames}>" && exit 1
@@ -79,15 +94,24 @@
         ;;
     esac
   '';
+
+  keybinds = let
+    candidates = lib.attrsets.filterAttrs (key: config: config.keybind != "") config.aus.displays;
+    keybindAttrs =
+      builtins.mapAttrs (profile: config: {
+        name = config.keybind;
+        value = "${shellScript}/bin/displays ${profile}";
+      })
+      candidates;
+  in
+    builtins.listToAttrs (builtins.attrValues keybindAttrs);
 in
   with lib; {
     options.aus = {
       displays = lib.mkOption {
         default = {};
         type = with types;
-          attrsOf (
-            listOf displayType
-          );
+          attrsOf configType;
         description = "The displays to configure";
       };
     };
@@ -96,5 +120,6 @@ in
       home.packages = [
         shellScript
       ];
+      services.sxhkd.keybindings = keybinds;
     };
   }
