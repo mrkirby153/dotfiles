@@ -71,6 +71,11 @@
         description = "The keybind to use to toggle the display";
         default = "";
       };
+      default = lib.mkOption {
+        type = lib.types.bool;
+        description = "Whether this is the default profile";
+        default = false;
+      };
     };
   };
 
@@ -105,6 +110,9 @@
       candidates;
   in
     builtins.listToAttrs (builtins.attrValues keybindAttrs);
+
+  
+  defaultProfiles = (builtins.attrNames (lib.attrsets.filterAttrs (key: config: config.default) config.aus.displays));
 in
   with lib; {
     options.aus = {
@@ -117,9 +125,17 @@ in
     };
 
     config = lib.mkIf (config.aus.displays != {}) {
+      assertions = [
+        {
+          assertion = length defaultProfiles <= 1;
+          message = "Only one display profile can be the default";
+        }
+      ];
       home.packages = [
         shellScript
       ];
       services.sxhkd.keybindings = keybinds;
+
+      aus.programs.dwm.autostart.non-blocking = lib.mkIf (length defaultProfiles > 0) ["${shellScript}/bin/displays \"${builtins.head defaultProfiles}\""];
     };
   }

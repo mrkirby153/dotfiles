@@ -30,6 +30,7 @@ in {
       };
       dual = {
         keybind = "super + o";
+        default = true;
         displays =
           displays [
             {
