@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source "${XDG_CONFIG_DIR:-$HOME/.config}/scripts/download_reaper"
-
 echo "TARGET_PATH: ${TARGET_PATH}"
 echo "HOLDING_PATH_ROOT: ${HOLDING_PATH_ROOT}"
 echo "HOLDING_PATH_FALLBACK: ${HOLDING_PATH_FALLBACK}"
