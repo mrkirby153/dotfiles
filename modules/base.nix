@@ -24,5 +24,7 @@
     home.stateVersion = "23.11";
     programs.home-manager.enable = true;
     news.display = "silent";
+
+    xsession.enable = true;
   };
 }

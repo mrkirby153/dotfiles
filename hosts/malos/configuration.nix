@@ -6,6 +6,7 @@
     programs = {
       screenshot.enable = true;
       scripts.enable = true;
+      sxhkd.enable = true;
     };
   };
 }
