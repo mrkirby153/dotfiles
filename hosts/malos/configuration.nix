@@ -17,6 +17,13 @@ in {
       dwmblocks.enable = true;
       x11.enable = true;
       shell.enable = true;
+      git = {
+        enable = true;
+        sign = {
+          enable = true;
+          key = "90EF2AB021AB6FED";
+        };
+      };
     };
 
     displays = {

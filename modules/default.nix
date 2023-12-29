@@ -14,5 +14,6 @@
     ./dwmblocks
     ./x11.nix
     ./shell
+    ./git.nix
   ];
 }
