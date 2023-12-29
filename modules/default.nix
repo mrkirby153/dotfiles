@@ -12,5 +12,6 @@
     ./download_reaper.nix
     ./sxhkd.nix
     ./dwmblocks
+    ./x11.nix
   ];
 }

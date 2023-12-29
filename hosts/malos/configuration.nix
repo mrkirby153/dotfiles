@@ -15,6 +15,7 @@ in {
         autostart.enable = true;
       };
       dwmblocks.enable = true;
+      x11.enable = true;
     };
 
     displays = {
