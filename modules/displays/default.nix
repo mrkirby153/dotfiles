@@ -111,8 +111,7 @@
   in
     builtins.listToAttrs (builtins.attrValues keybindAttrs);
 
-  
-  defaultProfiles = (builtins.attrNames (lib.attrsets.filterAttrs (key: config: config.default) config.aus.displays));
+  defaultProfiles = builtins.attrNames (lib.attrsets.filterAttrs (key: config: config.default) config.aus.displays);
 in
   with lib; {
     options.aus = {

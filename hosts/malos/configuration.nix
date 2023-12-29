@@ -1,6 +1,6 @@
 {pkgs, ...}: let
   allDisplays = ["DP-0" "DP-1" "DP-2" "DP-3" "DP-4" "DP-5" "HDMI-0"];
-  displaysFunc = import ../../lib/displays.nix { lib = pkgs.lib; };
+  displaysFunc = import ../../lib/displays.nix {lib = pkgs.lib;};
   displays = displaysFunc.asDisplays allDisplays;
 in {
   config.aus = {
@@ -19,34 +19,32 @@ in {
     displays = {
       single = {
         keybind = "super + shift + o";
-        displays =
-          displays [
-            {
-              name = "DP-3";
-              enable = true;
-              primary = true;
-            }
-          ];
+        displays = displays [
+          {
+            name = "DP-3";
+            enable = true;
+            primary = true;
+          }
+        ];
       };
       dual = {
         keybind = "super + o";
         default = true;
-        displays =
-          displays [
-            {
-              name = "DP-0";
-              enable = true;
-              primary = true;
-            }
-            {
-              name = "DP-3";
-              enable = true;
-              pos = {
-                x = 1920;
-                y = 0;
-              };
-            }
-          ];
+        displays = displays [
+          {
+            name = "DP-0";
+            enable = true;
+            primary = true;
+          }
+          {
+            name = "DP-3";
+            enable = true;
+            pos = {
+              x = 1920;
+              y = 0;
+            };
+          }
+        ];
       };
     };
   };

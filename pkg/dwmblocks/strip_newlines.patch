@@ -1,0 +1,33 @@
+diff --git a/dwmblocks.c b/dwmblocks.c
+index befd252..788bba4 100644
+--- a/dwmblocks.c
++++ b/dwmblocks.c
+@@ -55,6 +55,20 @@ static char statusstr[2][STATUSLENGTH];
+ static int statusContinue = 1;
+ static int returnStatus = 0;
+ 
++void remove_all(char *str, char to_remove)
++{
++	char *read = str;
++	char *write = str;
++	while (*read) {
++		if (*read == to_remove) {
++			read++;
++			*write = read;
++		}
++		read++;
++		write++;
++	}
++}
++
+ //opens process *cmd and stores output in *output
+ void getcmd(const Block *block, char *output)
+ {
+@@ -64,6 +78,7 @@ void getcmd(const Block *block, char *output)
+ 		return;
+ 	int i = strlen(block->icon);
+ 	fgets(output+i, CMDLENGTH-i-delimLen, cmdf);
++	remove_all(output, '\n');
+ 	i = strlen(output);
+ 	if (i == 0) {
+ 		//return if block and command output are both empty
