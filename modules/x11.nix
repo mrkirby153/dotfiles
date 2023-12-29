@@ -3,8 +3,7 @@
   lib,
   config,
   ...
-}: 
-let
+}: let
   theme = {
     nord0 = "#2E3440";
     nord1 = "#3B4252";
@@ -23,8 +22,7 @@ let
     nord14 = "#A3BE8C";
     nord15 = "#B48EAD";
   };
-in
-{
+in {
   options.aus.programs.x11 = {
     enable = lib.mkEnableOption "Enable graphical environment";
   };

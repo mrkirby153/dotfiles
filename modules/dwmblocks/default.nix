@@ -162,7 +162,7 @@
           path = ./blocks/indicator_keys;
           deps = with pkgs; [
             xorg.xset
-            gnused 
+            gnused
           ];
         };
         interval = 3;

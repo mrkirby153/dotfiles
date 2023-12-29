@@ -16,6 +16,7 @@ in {
       };
       dwmblocks.enable = true;
       x11.enable = true;
+      shell.enable = true;
     };
 
     displays = {

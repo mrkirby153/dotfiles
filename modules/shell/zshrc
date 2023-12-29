@@ -1,0 +1,77 @@
+# Functions
+upload() {
+    tmpfile=$(mktemp -t uploadXXXX)
+    if tty -s; then
+        if [ $# -eq 0 ]; then
+            echo -e "Usage: $0 <file>"
+            return 1;
+        fi
+        curl --progress-bar -F "file=@$1" https://0x0.st >> $tmpfile
+    else
+        curl --progress-bar -F 'file=@-' https://0x0.st >> $tmpfile
+    fi
+    /bin/cat $tmpfile
+    xclip -selection clipboard < $tmpfile
+    rm -f $tmpfile
+}
+prompt_context() {}
+exprop()
+{
+xprop | awk '
+  /^WM_CLASS/{sub(/.* =/, "instance:"); sub(/,/, "\nclass:"); print}
+  /^WM_NAME/{sub(/.* =/, "title:"); print}'
+}
+
+dmesg() {
+    command dmesg -T "$@"
+}
+
+journalctl() {
+    sudo journalctl "${@:--b}"
+}
+
+# Variables
+export EDITOR=nvim
+# https://github.com/NixOS/nixpkgs/issues/85823
+export LOCALE_ARCHIVE=/usr/lib/locale/locale-archive
+export LC_ALL="en_US.UTF-8"
+
+# Keybindings
+bindkey "^[[1;3D" backward-word
+bindkey "^[[1;3C" forward-word
+
+# Run neofetch if not in nix shell or ssh
+f ! [ -n "$SSH_CLIENT" ] || ! [ -n "$SSH_TTY" ]; then
+    (! [ -n "$IN_NIX_SHELL" ]) && neofetch
+else
+    # Set up some ssh stuff
+    # Utility for launching GUI programs over ssh
+    ssh_launch() {
+        if [ "$#" -lt 1 ]; then
+            echo "Usage: $0 <program>"
+            return 1
+        fi
+        DISPLAY=:0.0 "$@"
+    }
+fi
+
+# Configure ssh agent
+SSH_AGENT_FILE="$HOME/.ssh/ssh_agent"
+RUNNING_AGENT=$(pgrep ssh-agent)
+if [ -f "$SSH_AGENT_FILE" ]; then
+    source "$SSH_AGENT_FILE"
+
+    if [ ! "$RUNNING_AGENT" -eq "$SSH_AGENT_PID" ]; then
+        NEED_INIT=1
+    fi
+else
+    NEED_INIT=1
+fi
+
+if [ ! -z "$NEED_INIT" ]; then
+    echo $(ssh-agent -s) | sed -e 's/echo[ A-Za-z0-9]*;//g' > "$SSH_AGENT_FILE"
+    source "$SSH_AGENT_FILE"
+    echo "Initialized SSH agent as $SSH_AGENT_PID"
+    ssh-add > /dev/null
+fi
+

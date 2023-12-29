@@ -13,5 +13,6 @@
     ./sxhkd.nix
     ./dwmblocks
     ./x11.nix
+    ./shell
   ];
 }
