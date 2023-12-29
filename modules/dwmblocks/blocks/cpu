@@ -1,0 +1,26 @@
+#!/bin/sh
+
+case $BUTTON in
+    2) setsid -f "$TERMINAL" btop ;;
+esac
+
+if command -v gamemoded &> /dev/null; then
+    if [ "$(gamemoded -s)" = "gamemode is active" ]; then
+        gamemode_status=" 󰊴"
+    else
+        gamemode_status=""
+    fi
+else
+    gamemode_status=""
+fi
+cpu=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}')
+
+cpu_temp=$(sensors k10temp-pci-00c3 | awk '/^Tccd1:/{print $2}' | sed 's/+//')
+
+if [ -z "$cpu_temp" ]; then
+    cpu_display=""
+else
+    cpu_display=" / $cpu_temp"
+fi
+
+echo "󰻠 $cpu$cpu_display$gamemode_status"

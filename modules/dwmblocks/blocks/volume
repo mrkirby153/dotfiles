@@ -2,7 +2,7 @@
 
 case $BUTTON in
     2)
-        ~/.local/bin/pypulse -l > /dev/null
+        pypulse -l > /dev/null
         ;;
 
 esac

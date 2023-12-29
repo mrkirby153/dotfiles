@@ -1,6 +1,6 @@
 #!/bin/bash
 case $BUTTON in
-    2) pkexec --user root ~/.local/bin/drop_zfs_cache ;;
+    2) pkexec --user root drop_zfs_cache ;;
 esac
 
 # free --mebi | sed -n '2{p;q}' | awk '{printf (" %2.2fGiB/%2.2fGiB\n", ( ($2 - $7) / 1024 ), ($2/1024))}'

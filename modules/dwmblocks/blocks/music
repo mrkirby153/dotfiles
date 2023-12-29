@@ -1,6 +1,6 @@
 #!/bin/bash
 case $BUTTON in
-    2) /home/austin/.local/bin/media_control play-pause ;;
+    2) media_control play-pause ;;
     3) echo "0" > "${XDG_RUNTIME_DIR}/music_paused_since" ;;
 esac
 

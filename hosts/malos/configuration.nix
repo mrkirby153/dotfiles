@@ -14,6 +14,7 @@ in {
       dwm = {
         autostart.enable = true;
       };
+      dwmblocks.enable = true;
     };
 
     displays = {

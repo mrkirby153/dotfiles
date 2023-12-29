@@ -3,7 +3,7 @@
     ./base.nix
     ./sops.nix
     # Import custom modules
-    ./home-manager/autostart.nix
+    ./home-manager
     ./displays
 
     # Import modules for programs
@@ -11,5 +11,6 @@
     ./scripts.nix
     ./download_reaper.nix
     ./sxhkd.nix
+    ./dwmblocks
   ];
 }
