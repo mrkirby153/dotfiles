@@ -53,16 +53,6 @@ in {
         };
         Install.WantedBy = ["graphical-session.target"];
       };
-      # "picom" = {
-      #   Unit = {
-      #     Description = "Picom compositor";
-      #   };
-      #   Service = {
-      #     Type = "simple";
-      #     ExecStart = "/sbin/picom -f";
-      #   };
-      #   Install.WantedBy = ["graphical-session.target"];
-      # };
       "geoclue-agent" = {
         Unit = {
           Description = "Geoclue agent";
