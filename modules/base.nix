@@ -33,5 +33,7 @@
       nil
       comma
     ];
+
+    systemd.user.startServices = "sd-switch";
   };
 }
