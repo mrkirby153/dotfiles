@@ -32,7 +32,6 @@
       nix-prefetch-scripts
       nil
       comma
-      attic-client
     ];
   };
 }

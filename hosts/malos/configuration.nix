@@ -25,6 +25,7 @@ in {
           key = "90EF2AB021AB6FED";
         };
       };
+      attic.enable = true;
     };
 
     displays = {

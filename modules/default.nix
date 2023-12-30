@@ -16,5 +16,6 @@
     ./shell
     ./git.nix
     ./autostart.nix
+    ./attic.nix
   ];
 }
