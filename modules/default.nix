@@ -19,5 +19,6 @@
     ./attic.nix
     ./dunst.nix
     ./picom
+    ./wallpaper.nix
   ];
 }

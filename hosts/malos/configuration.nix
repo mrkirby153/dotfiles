@@ -7,6 +7,11 @@ in {
     username = "austin";
     home = "/home/austin";
 
+    wallpaper = {
+      enable = true;
+      path = ./xenoblade.png;
+    };
+
     programs = {
       screenshot.enable = true;
       scripts.enable = true;

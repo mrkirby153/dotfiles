@@ -38,7 +38,6 @@ in {
         "${ckb_start}/bin/ckb_start"
         "setxkbmap -option compose:alt"
         "dwmc xrdb"
-        "${pkgs.feh}/bin/feh --bg-fill ~/Pictures/wallpaper"
       ];
     };
 
