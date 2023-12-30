@@ -6,6 +6,7 @@
 }: let
   screenshot = "${pkgs.scripts.screenshot}/bin/screenshot";
   pypulse = "${pkgs.pypulse}/bin/pypulse";
+  dunstctl = "${pkgs.dunst}/bin/dunstctl";
 
   update_dwmblocks = block: "${pkgs.procps}/bin/pkill -RTMIN+${builtins.toString block} dwmblocks";
 in {
@@ -43,7 +44,14 @@ in {
 
         "super + p" = "${pkgs.scripts.ocr}/bin/ocr";
         "alt + super + m" = "${pkgs.aus.st}/bin/st -c ncmpcpp -e ncmpcpp";
+        "alt + space" = "${dunstctl} close";
+        "alt + shift + space" = "${dunstctl} close-all";
+        "super + grave" = "${dunstctl} history-pop";
+        "super + alt + period" = "${dunstctl} context";
       };
     };
+    home.activation.reloadSxhkd = lib.hm.dag.entryAfter ["linkGeneration"] ''
+      $DRY_RUN_CMD ${pkgs.procps}/bin/pkill -SIGUSR1 sxhkd || true
+    '';
   };
 }

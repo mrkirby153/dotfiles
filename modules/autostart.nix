@@ -1,24 +1,25 @@
-{ pkgs, config, lib, ... }:
-let
-  mkAutostartEntry = procName: command:
-    "${pkgs.procps}/bin/pidof ${procName} || ${pkgs.util-linux}/bin/setsid -f ${command}";
-  mkPgrepAutostartEntry = procName: command:
-    "${pkgs.procps}/bin/pgrep -u $UID -x ${procName} || ${pkgs.util-linux}/bin/setsid -f ${command}";
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
+  mkAutostartEntry = procName: command: "${pkgs.procps}/bin/pidof ${procName} || ${pkgs.util-linux}/bin/setsid -f ${command}";
+  mkPgrepAutostartEntry = procName: command: "${pkgs.procps}/bin/pgrep -u $UID -x ${procName} || ${pkgs.util-linux}/bin/setsid -f ${command}";
 
   ckb_start = pkgs.writeShellScriptBin "ckb_start" ''
-  if lsusb | grep "Corsair .* Keyboard" >> /dev/null
-  then
-    if ps -C ckb-next >> /dev/null
+    if lsusb | grep "Corsair .* Keyboard" >> /dev/null
     then
-      echo "ckb-next is already running"
-    else
-      ckb-next -b &
-      disown
+      if ps -C ckb-next >> /dev/null
+      then
+        echo "ckb-next is already running"
+      else
+        ckb-next -b &
+        disown
+      fi
     fi
-  fi
   '';
-in
-{
+in {
   options = {
     aus.programs.autostart = {
       enable = lib.mkEnableOption "Enable autostart";
@@ -50,7 +51,7 @@ in
           Type = "simple";
           ExecStart = "/usr/lib/xfce-polkit/xfce-polkit";
         };
-        Install.WantedBy = [ "graphical-session.target" ];
+        Install.WantedBy = ["graphical-session.target"];
       };
       "picom" = {
         Unit = {
@@ -60,7 +61,7 @@ in
           Type = "simple";
           ExecStart = "/sbin/picom -f";
         };
-        Install.WantedBy = [ "graphical-session.target" ];
+        Install.WantedBy = ["graphical-session.target"];
       };
       "geoclue-agent" = {
         Unit = {
@@ -70,7 +71,7 @@ in
           Type = "simple";
           ExecStart = "${pkgs.geoclue2-with-demo-agent}/libexec/geoclue-2.0/demos/agent";
         };
-        Install.WantedBy = [ "graphical-session.target" ];
+        Install.WantedBy = ["graphical-session.target"];
       };
     };
   };

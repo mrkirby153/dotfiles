@@ -1,5 +1,9 @@
-{ pkgs, lib, config, ...}:
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options = {
     aus.programs.attic = {
       enable = lib.mkEnableOption "Enable attic";

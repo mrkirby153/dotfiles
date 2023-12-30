@@ -1,5 +1,8 @@
-{ lib, config, ...}:
 {
+  lib,
+  config,
+  ...
+}: {
   options = {
     aus.programs.git = {
       enable = lib.mkEnableOption "Enable git";
@@ -20,7 +23,6 @@
       userName = "mrkirby153";
       userEmail = "mr.austinwhyte@gmail.com";
       aliases = {
-
       };
       extraConfig = {
         commit.verbose = true;
@@ -47,6 +49,5 @@
         signByDefault = true;
       };
     };
-
   };
 }
