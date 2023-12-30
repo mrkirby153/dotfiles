@@ -72,7 +72,10 @@
             gawk
             gnused
             lm_sensors
+            util-linux
+            btop
           ];
+          pure = false;
         };
         interval = 3;
         signal = 4;
@@ -119,6 +122,7 @@
           path = ./blocks/volume;
           deps = with pkgs; [
             pypulse
+            aus.dmenu
             jq
             pamixer
             gawk

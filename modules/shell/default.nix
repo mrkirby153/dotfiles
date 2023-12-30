@@ -26,7 +26,7 @@ in
       initExtra = builtins.readFile ./zshrc;
       oh-my-zsh = {
         enable = true;
-        plugins = ["git" "docker" "kubectl" "extract" "nix-shell" "notify"];
+        plugins = ["git" "docker" "kubectl" "extract"];
         extraConfig = ''
         zstyle ':notify:*' error-title "Command failed in #{time_elapsed}"
         zstyle ':notify:*' success-title "Command finished in #{time_elapsed}"
@@ -81,6 +81,12 @@ in
         rev = "a411ef3e0992d4839f0732ebeb9823024afaaaa8";
         sha256 = "sha256-KLUYpUu4DHRumQZ3w59m9aTW6TBKMCXl2UcKi4uMd7w=";
       };
+      nix-shell = pkgs.fetchFromGitHub {
+          owner = "chisui";
+          repo = "zsh-nix-shell";
+          rev = "v0.7.0";
+          sha256 = "149zh2rm59blr2q458a5irkfh82y3dwdich60s9670kl3cl5h2m1";
+        };
     };
     aus.extraPaths = [
       "$HOME/.krew/bin"

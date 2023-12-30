@@ -6,6 +6,7 @@
     with ps; [
       pulsectl
       notify2
+      packaging
     ]);
 in
   stdenv.mkDerivation {

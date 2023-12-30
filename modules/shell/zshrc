@@ -41,7 +41,7 @@ bindkey "^[[1;3D" backward-word
 bindkey "^[[1;3C" forward-word
 
 # Run neofetch if not in nix shell or ssh
-f ! [ -n "$SSH_CLIENT" ] || ! [ -n "$SSH_TTY" ]; then
+if ! [ -n "$SSH_CLIENT" ] || ! [ -n "$SSH_TTY" ]; then
     (! [ -n "$IN_NIX_SHELL" ]) && neofetch
 else
     # Set up some ssh stuff

@@ -15,5 +15,6 @@
     ./x11.nix
     ./shell
     ./git.nix
+    ./autostart.nix
   ];
 }

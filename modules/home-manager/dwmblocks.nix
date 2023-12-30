@@ -3,7 +3,14 @@
   lib,
   config,
   ...
-}: {
+}: 
+let
+  restartStatusbar = pkgs.writeShellScriptBin "statusbar_restart" ''
+  killall -q dwmblocks
+  ${pkgs.util-linux}/bin/setsid -f ${config.programs.dwmblocks.pkg}/bin/dwmblocks
+  '';
+in
+{
   options = {
     programs.dwmblocks = {
       enable = lib.mkEnableOption "Enable dwmblocks";
@@ -16,16 +23,7 @@
   };
 
   config = lib.mkIf config.programs.dwmblocks.enable {
-    # Create a systemd service for dwmblocks
-    systemd.user.services.dwmblocks = {
-      Unit = {
-        Description = "dwmblocks";
-      };
-      Service = {
-        Type = "simple";
-        ExecStart = "${config.programs.dwmblocks.pkg}/bin/dwmblocks";
-      };
-      Install.WantedBy = ["graphical-session.target"];
-    };
+    home.packages = [ restartStatusbar ];
+    aus.programs.dwm.autostart.non-blocking = ["${restartStatusbar}/bin/statusbar_restart"];
   };
 }
