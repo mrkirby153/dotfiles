@@ -18,5 +18,6 @@
     ./autostart.nix
     ./attic.nix
     ./dunst.nix
+    ./picom.nix
   ];
 }

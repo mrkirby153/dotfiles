@@ -27,6 +27,7 @@ in {
       };
       attic.enable = true;
       dunst.enable = true;
+      picom.enable = true;
     };
 
     displays = {
