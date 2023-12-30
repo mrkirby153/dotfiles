@@ -141,6 +141,7 @@ in rec {
     path = ./multimc_sync_control;
     deps = with pkgs; [
       curl
+      libnotify
     ];
   };
   ocr = shellScript {
