@@ -17,5 +17,6 @@
     ./git.nix
     ./autostart.nix
     ./attic.nix
+    ./dunst.nix
   ];
 }

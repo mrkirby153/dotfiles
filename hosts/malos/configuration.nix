@@ -26,6 +26,7 @@ in {
         };
       };
       attic.enable = true;
+      dunst.enable = true;
     };
 
     displays = {
