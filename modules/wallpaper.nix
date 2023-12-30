@@ -20,8 +20,8 @@
       source = config.aus.wallpaper.path;
       target = "Pictures/wallpaper";
       onChange = ''
-      ${pkgs.feh}/bin/feh --bg-fill ${config.aus.wallpaper.path}
-      ${pkgs.betterlockscreen}/bin/betterlockscreen -u ${config.aus.wallpaper.path}
+      $DRY_RUN_CMD ${pkgs.feh}/bin/feh --bg-fill ${config.aus.wallpaper.path}
+      $DRY_RUN_CMD ${pkgs.betterlockscreen}/bin/betterlockscreen -u ${config.aus.wallpaper.path}
       '';
     };
   };

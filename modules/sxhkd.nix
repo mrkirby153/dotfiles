@@ -48,9 +48,10 @@ in {
         "alt + shift + space" = "${dunstctl} close-all";
         "super + grave" = "${dunstctl} history-pop";
         "super + alt + period" = "${dunstctl} context";
+        "super + shift + l" = "betterlockscreen -l dimblur";
       };
     };
-    home.activation.reloadSxhkd = lib.hm.dag.entryAfter ["linkGeneration"] ''
+    xdg.configFile."sxhkd/sxhkdrc".onChange = ''
       $DRY_RUN_CMD ${pkgs.procps}/bin/pkill -SIGUSR1 sxhkd || true
     '';
   };
