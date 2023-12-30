@@ -107,6 +107,8 @@ in rec {
       findutils
       isync
       notmuch
+      pass
+      gnused
     ];
   };
   make_apple_ringtone = shellScript {
