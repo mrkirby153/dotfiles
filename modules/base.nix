@@ -1,4 +1,5 @@
 {
+  pkgs,
   config,
   lib,
   ...
@@ -26,5 +27,12 @@
     news.display = "silent";
 
     xsession.enable = true;
+    home.packages = with pkgs; [
+      httpie
+      nix-prefetch-scripts
+      nil
+      comma
+      attic-client
+    ];
   };
 }

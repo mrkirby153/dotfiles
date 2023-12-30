@@ -122,6 +122,8 @@ in rec {
       playerctl
       mpd
       mpc-cli
+      gnugrep
+      gnused
     ];
   };
   modreload = shellScript {
