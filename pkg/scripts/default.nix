@@ -30,6 +30,7 @@ in rec {
       jq
       nix
       fzf
+      git
     ];
   };
   clean_aur_db = shellScript {
