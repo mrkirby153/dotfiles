@@ -21,6 +21,11 @@ in rec {
       maim
       xclip
       libnotify
+      feh
+      gnugrep
+      xorg.xrandr
+      imagemagick
+      flameshot
     ];
   };
   build_nixos_configuration = shellScript {

@@ -26,7 +26,7 @@ in {
 
         # Screenshots
         "super + s" = "${screenshot} -r";
-        "super + shift + s ; {r, f, l}" = "${screenshot} {--record, --freeze -r, --floating}";
+        "super + shift + s ; {r, f, l, a}" = "${screenshot} {--record, --freeze -r, --floating, --flameshot}";
         "super + shift + s ; c" = "${pkgs.maim}/bin/maim -s | ${pkgs.xclip}/bin/xclip -selection clipboard -t image/png";
 
         # Media Control
