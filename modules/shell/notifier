@@ -1,0 +1,39 @@
+#!/bin/bash
+
+while read line
+do
+    command="$line"
+done < /dev/stdin
+
+
+convertsecs() {
+    ((h=${1}/3600))
+    ((m=(${1}%3600)/60))
+    ((s=${1}%60))
+    if [ "$h" -ge 1 ]; then
+        printf "%02d:%02d:%02d\n" $h $m $s
+    elif [ "$m" -ge 1 ]; then
+        printf "%02d:%02d\n" $m $s
+    else
+        printf "%02d seconds" $s
+    fi
+}
+human_readable=$(convertsecs "$2")
+
+
+# ignore vscode
+if [ "$TERM_PROGRAM" = "vscode" ]; then
+    exit
+fi
+
+case "$1" in
+    error)
+        notify-send -a "shell" -u "critical" "Command failed in $human_readable" "$command"
+        ;;
+    success)
+        notify-send -a "shell" -t 60000 "Command finished in $human_readable" "$command"
+        ;;
+    *)
+        notify-send "Unrecognized code: $1"
+        ;;
+esac

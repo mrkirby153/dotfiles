@@ -5,6 +5,8 @@
   ...
 }: let
   httpServer = pkgs.python3.withPackages (ps: with ps; [httpserver]);
+  notifier = pkgs.writeShellScriptBin "notifier" (builtins.readFile ./notifier);
+
 in {
   options.aus = {
     programs.shell = {
@@ -26,9 +28,7 @@ in {
         enable = true;
         plugins = ["git" "docker" "kubectl" "extract"];
         extraConfig = ''
-          zstyle ':notify:*' error-title "Command failed in #{time_elapsed}"
-          zstyle ':notify:*' success-title "Command finished in #{time_elapsed}"
-          zstyle ':notify:*' app-name sh
+          zstyle ':notify:*' notifier "${notifier}/bin/notifier"
         '';
       };
       shellAliases = {
@@ -49,6 +49,16 @@ in {
     programs.starship = {
       enable = true;
       enableZshIntegration = true;
+      settings = {
+        add_newline = false;
+        line_break.disabled = true;
+        status = {
+          disabled = false;
+          symbol = "✖";
+        };
+        kubernetes.disabled = false;
+        time.disabled = false;
+      };
     };
 
     programs.fzf = {
@@ -84,6 +94,12 @@ in {
         repo = "zsh-nix-shell";
         rev = "v0.7.0";
         sha256 = "149zh2rm59blr2q458a5irkfh82y3dwdich60s9670kl3cl5h2m1";
+      };
+      notify = pkgs.fetchFromGitHub {
+        owner = "marzocchi";
+        repo = "zsh-notify";
+        rev = "9c1dac81a48ec85d742ebf236172b4d92aab2f3f";
+        sha256 = "sha256-ovmnl+V1B7J/yav0ep4qVqlZOD3Ex8sfrkC92dXPLFI=";
       };
     };
     aus.extraPaths = [
