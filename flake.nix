@@ -68,6 +68,7 @@
 
       homeConfigurations = {
         "malos" = mkSystem {name = "malos";};
+        "aus-box" = mkSystem {name = "aus-box";};
       };
 
       overlays.pkgs = final: prev:
