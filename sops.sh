@@ -1,3 +1,3 @@
-#!/usr/bin/env
+#!/usr/bin/env bash
 
-nix run nixpkgs#sops -- "$@"
+exec nix run nixpkgs#sops -- "$@"
