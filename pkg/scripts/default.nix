@@ -166,4 +166,47 @@ in rec {
       dmenu_confirm
     ];
   };
+
+  restic_backup = {
+    password-file,
+    repository-location,
+    include,
+    exclude,
+  }:
+    shellScript {
+      name = "restic_backup";
+      path = ./restic_backup;
+      deps = with pkgs; [
+        restic
+        libnotify
+        gnugrep
+      ];
+      env = {
+        REPO_LOCATION = repository-location;
+        PWD_FILE = password-file;
+        INCLUDE_FILE = include;
+        EXCLUDE_FILE = exclude;
+      };
+    };
+
+  restic_offsite = {
+    password-file,
+    repository-location,
+    include,
+    exclude,
+  }:
+    shellScript {
+      name = "restic_offsite";
+      path = ./restic_offsite;
+      deps = with pkgs; [
+        restic
+        libnotify
+      ];
+      env = {
+        REPO_LOCATION = repository-location;
+        PWD_FILE = password-file;
+        INCLUDE_FILE = include;
+        EXCLUDE_FILE = exclude;
+      };
+    };
 }

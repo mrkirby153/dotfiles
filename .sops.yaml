@@ -8,3 +8,7 @@ creation_rules:
   - path_regex: secrets/attic.toml
     key_groups:
       - age: *keys
+  - path_regex: secrets/aus-box/.*
+    key_groups:
+      - age:
+          - *aus_box

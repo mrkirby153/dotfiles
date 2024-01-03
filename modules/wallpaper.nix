@@ -1,9 +1,11 @@
 {
-  pkgs, lib, config, ...
-}:
-{
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options = {
-    aus.wallpaper  = {
+    aus.wallpaper = {
       enable = lib.mkEnableOption "Enable wallpaper";
       path = lib.mkOption {
         type = lib.types.path;
@@ -20,8 +22,8 @@
       source = config.aus.wallpaper.path;
       target = "Pictures/wallpaper";
       onChange = ''
-      $DRY_RUN_CMD ${pkgs.feh}/bin/feh --bg-fill ${config.aus.wallpaper.path}
-      $DRY_RUN_CMD ${pkgs.betterlockscreen}/bin/betterlockscreen -u ${config.aus.wallpaper.path}
+        $DRY_RUN_CMD ${pkgs.feh}/bin/feh --bg-fill ${config.aus.wallpaper.path}
+        $DRY_RUN_CMD ${pkgs.betterlockscreen}/bin/betterlockscreen -u ${config.aus.wallpaper.path}
       '';
     };
   };

@@ -4,7 +4,6 @@ set -eE
 
 
 LOCKFILE="$XDG_RUNTIME_DIR/restic_backup.lock"
-CFG_DIR="${XDG_CONFIG_DIRS:-$HOME/.config}"
 
 exit_error() {
     echo "Error: $1"
@@ -35,20 +34,6 @@ acquire_lock() {
     fi
 }
 
-load_password() {
-    if [ -f "$CFG_DIR/restic_backup/backup_password" ]; then
-        PWD_FILE="$CFG_DIR/restic_backup/backup_password"
-        echo "Reading password from $PWD_FILE"
-    else
-        echo -n "Enter repository password: "
-        read -sr password
-        echo "$password" > "$XDG_RUNTIME_DIR/restic_password" 
-        trap 'rm -f $XDG_RUNTIME_DIR/restic_password' EXIT
-        PWD_FILE="$XDG_RUNTIME_DIR/restic_password"
-    fi
-}
-
-
 # Runs a restic command on the repository
 run_restic_command() {
     restic -r "$REPO_LOCATION" --password-file="$PWD_FILE" "$@"
@@ -64,14 +49,12 @@ perform_automatic_backup() {
     echo "===== Starting automatic backup at $start_time ====="
     trap 'notify-send -u critical "Backup Failed" "The restic backup did not complete successfully"' ERR
     acquire_lock
-    echo "Back up a list of installed packages"
-    rm -f "$CFG_DIR/restic_backup/installed_packages" && pacman -Qqe > "$CFG_DIR/restic_backup/installed_packages"
     if [ -t 0 ]; then
         echo "Running in interactive mode"
-        run_restic_command backup -x --files-from="$CFG_DIR/restic_backup/include" --exclude-file="$CFG_DIR/restic_backup/exclude" --exclude-if-present=.nobackup || true
+        run_restic_command backup -x --files-from="$INCLUDE_FILE" --exclude-file="$EXCLUDE_FILE" --exclude-if-present=.nobackup || true
     else
         echo "Logging output to $tmp_out"
-        (run_restic_command backup -x --files-from="$CFG_DIR/restic_backup/include" --exclude-file="$CFG_DIR/restic_backup/exclude" --exclude-if-present=.nobackup || true) | tee "$tmp_out"
+        (run_restic_command backup -x --files-from="$INCLUDE_FILE" --exclude-file="$EXCLUDE_FILE" --exclude-if-present=.nobackup || true) | tee "$tmp_out"
     fi
     echo "===== Automatic Backup Complete ====="
     runtime=$(($(date +'%s') - start_s))
@@ -88,7 +71,6 @@ perform_automatic_backup() {
 
 verify_restic_binary
 [ ! -z "${SKIP_VERIFY_REPO:-}" ] || verify_repo
-load_password
 
 restic cache --cleanup
 case "$1" in

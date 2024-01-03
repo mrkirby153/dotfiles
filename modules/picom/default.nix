@@ -10,7 +10,7 @@
   };
   config = lib.mkIf config.aus.programs.picom.enable {
     systemd.user.services = {
-        "picom" = {
+      "picom" = {
         Unit = {
           Description = "Picom compositor";
         };

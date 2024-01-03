@@ -2,14 +2,12 @@
 set -e
 # Script to automatically create backups with restic
 
-# --- START CONFIGURATION ---
-source "${XDG_CONFIG_DIR:-$HOME/.config}/scripts/restic_offsite"
-# --- END CONFIGURATION ---
-
-
-CFG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
-
 [ -v "VERBOSE" ] && set -x
+
+if [ -f "$REPO_LOCATION" ]; then
+    echo "Repo location is a file, reading from file"
+    export REPO_LOCATION=$(cat "$REPO_LOCATION")
+fi
 
 exit_error() {
     echo "Error: $1"
@@ -38,33 +36,16 @@ verify_restic_binary() {
     fi
 }
 
-load_password() {
-    if [ -f "$CFG_DIR/restic_backup/backup_password" ]; then
-        PWD_FILE="$CFG_DIR/restic_backup/offsite_pw"
-        echo "Reading password from $PWD_FILE"
-    else
-        printf "Enter repository password: "
-        read -sr password
-        echo "$password" > "$XDG_RUNTIME_DIR/restic_password" 
-        trap 'rm -f $XDG_RUNTIME_DIR/restic_password' EXIT
-        PWD_FILE="$XDG_RUNTIME_DIR/restic_password"
-    fi
-}
-
 run_restic_command() {
     restic --compression max --password-file="$PWD_FILE" -r "$REPO_LOCATION" "$@"
 }
-
-load_password
 
 case "$1" in
 "backup")
     notify-send "Performing backup to offsite repository"
     echo "Performing backup to offsite repository $REPO_LOCATION"
-    echo "backing up packages"
-    rm -f "$CFG_DIR/restic_backup/installed_packages" && pacman -Qqe > "$CFG_DIR/restic_backup/installed_packages"
 
-    run_restic_command backup -x --files-from="$CFG_DIR/restic_backup/include" --exclude-file="$CFG_DIR/restic_backup/exclude" --exclude-file="$CFG_DIR/restic_backup/offsite_exclude" --exclude-if-present=.nobackup --exclude-if-present=.noremote || true
+    run_restic_command backup -x --files-from="$INCLUDE_FILE" --exclude-file="$EXCLUDE_FILE" --exclude-file="$CFG_DIR/restic_backup/offsite_exclude" --exclude-if-present=.nobackup --exclude-if-present=.noremote || true
     run_restic_command forget -w 5 -g "host" --prune --max-unused=0
 
     notify-send "Offiste backup complete"

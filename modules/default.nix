@@ -20,5 +20,6 @@
     ./dunst.nix
     ./picom
     ./wallpaper.nix
+    ./restic
   ];
 }

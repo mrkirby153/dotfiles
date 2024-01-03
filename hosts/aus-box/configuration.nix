@@ -1,4 +1,8 @@
-{pkgs, ...}: let
+{
+  pkgs,
+  config,
+  ...
+}: let
   allDisplays = ["DP-0" "DP-1" "DP-2" "DP-3" "DP-4" "DP-5" "HDMI-0" "HDMI-1"];
   displaysFunc = import ../../lib/displays.nix {lib = pkgs.lib;};
   displays = displaysFunc.asDisplays allDisplays;
@@ -6,6 +10,7 @@ in {
   config.aus = {
     username = "austin";
     home = "/home/austin";
+    uid = 1000;
 
     wallpaper = {
       enable = true;
@@ -37,6 +42,23 @@ in {
         enable = true;
         target_path = "/home/austin/Downloads";
         destination_path = "/autofs/popstar/downloads/";
+      };
+      restic = {
+        local = {
+          enable = true;
+          password_file = config.sops.secrets.restic_local.path;
+          repo_location = "/run/media/austin/Elements/restic/";
+          include = ["/home/austin" "/home/austin/Games" "/mnt/Samsung/Steam/steamapps/compatdata"];
+          exclude = ["/home/austin/.cache/" "/home/austin/.local/share/Trash"];
+          schedule = "*-*-* *:42:00";
+        };
+        offsite = {
+          enable = true;
+          password_file = config.sops.secrets.restic_remote_password.path;
+          repo_location = config.sops.secrets.restic_remote_repo.path;
+          include = config.aus.programs.restic.local.include;
+          exclude = config.aus.programs.restic.local.exclude ++ ["/home/austin/Downloads/" "/home/austin/Music/"];
+        };
       };
     };
 
@@ -70,6 +92,17 @@ in {
           }
         ];
       };
+    };
+  };
+  config.sops.secrets = {
+    restic_local = {
+      sopsFile = ../../secrets/aus-box/restic_passwords.yaml;
+    };
+    restic_remote_repo = {
+      sopsFile = ../../secrets/aus-box/restic_passwords.yaml;
+    };
+    restic_remote_password = {
+      sopsFile = ../../secrets/aus-box/restic_passwords.yaml;
     };
   };
 }

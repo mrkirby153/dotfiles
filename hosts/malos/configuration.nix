@@ -6,6 +6,7 @@ in {
   config.aus = {
     username = "austin";
     home = "/home/austin";
+    uid = 1000;
 
     wallpaper = {
       enable = true;

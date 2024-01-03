@@ -15,6 +15,11 @@
       example = "/home/austin";
       description = "The home directory of this host";
     };
+    uid = lib.mkOption {
+      type = lib.types.int;
+      example = 1000;
+      description = "The uid of this user";
+    };
   };
 
   config = {
@@ -32,8 +37,14 @@
       nix-prefetch-scripts
       nil
       comma
+      pypulse
     ];
 
     systemd.user.startServices = "sd-switch";
+
+    sops = {
+      defaultSymlinkPath = "/run/user/${toString config.aus.uid}/secrets";
+      defaultSecretsMountPoint = "/run/user/${toString config.aus.uid}/secrets.d";
+    };
   };
 }

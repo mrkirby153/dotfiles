@@ -6,7 +6,6 @@
 }: let
   httpServer = pkgs.python3.withPackages (ps: with ps; [httpserver]);
   notifier = pkgs.writeShellScriptBin "notifier" (builtins.readFile ./notifier);
-
 in {
   options.aus = {
     programs.shell = {
