@@ -163,6 +163,7 @@ in rec {
     deps = with pkgs; [
       aus.dmenu
       systemd
+      dmenu_confirm
     ];
   };
 }

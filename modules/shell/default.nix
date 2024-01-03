@@ -23,13 +23,13 @@ in {
         extended = true;
         ignoreDups = true;
       };
-      initExtra = builtins.readFile ./zshrc;
+      initExtra = ''
+        zstyle ':notify:*' notifier "${notifier}/bin/notifier"
+        ${builtins.readFile ./zshrc}
+      '';
       oh-my-zsh = {
         enable = true;
         plugins = ["git" "docker" "kubectl" "extract"];
-        extraConfig = ''
-          zstyle ':notify:*' notifier "${notifier}/bin/notifier"
-        '';
       };
       shellAliases = {
         a = "php artisan";
@@ -54,7 +54,7 @@ in {
         line_break.disabled = true;
         status = {
           disabled = false;
-          symbol = "✖";
+          symbol = "✖ ";
         };
         kubernetes.disabled = false;
         time.disabled = false;
