@@ -1,0 +1,10 @@
+keys: &keys
+  - &aus_box age1wxfxdf2cjcuy3hmqvdkgswz5w08k245k6h8qewq35st8gqrued2q5wzd8c
+  - &malos age12svyxwc0vgvnahqhk57y0n5q9sag3ylmgmv3src6vgqm94yz04hqc3rzjz
+creation_rules:
+  - path_regex: secrets/screenshot_key.txt
+    key_groups:
+      - age: *keys
+  - path_regex: secrets/attic.toml
+    key_groups:
+      - age: *keys

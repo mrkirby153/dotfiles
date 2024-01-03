@@ -67,7 +67,7 @@ region_capture() {
         echo "Fullscreen capture with maim"
         out_dir=$(mktemp -d)
         echo "Cropping to $out_dir"
-        out_file=$(mktemp -t screenshotXXXX.png)
+        out_file=$(mktemp -t screenshot-XXXX.png)
         maim "$out_file"
         i=0
         for mon in $(xrandr | grep -Po "\d+x\d+\+\d+\+\d+"); do
@@ -98,9 +98,17 @@ window_capture() {
 }
 
 floating_capture() {
-    file="$(mktemp $TEMP_DIR/floatingXXXXXX.png)"
+    file="$(mktemp $TEMP_DIR/floating_XXXXXX.png)"
     maim -su "$file"
     feh "$file" --class=fehfloat --reload=0
+}
+
+flameshot_capture() {
+    flameshot gui -r > $1
+    if [[ ! -s $1 ]]; then
+        echo "Flameshot failed to capture"
+        exit 1
+    fi
 }
 
 save() {
@@ -239,6 +247,7 @@ WINDOW=0
 SCREEN_RECORD=0
 FREEZE=0
 FLOAT=0
+FLAMESHOT=0
 
 # Do the argparsing
 while (("$#")); do
@@ -261,6 +270,10 @@ while (("$#")); do
         ;;
     --floating | -F)
         FLOAT=1
+        shift
+        ;;
+    --flameshot)
+        FLAMESHOT=1
         shift
         ;;
     --) # end argument parsing
@@ -301,6 +314,10 @@ fi
 if [[ FLOAT -gt 0 ]]; then
     floating_capture
     exit 0
+fi
+
+if [[ FLAMESHOT -gt 0 ]]; then
+    flameshot_capture $TEMP_OUTFILE
 fi
 
 # Kill feh
