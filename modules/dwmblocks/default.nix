@@ -114,7 +114,7 @@
           ];
         };
         interval = 10;
-        signal = 5;
+        signal = 6;
       }
       {
         command = getBlock {
@@ -129,8 +129,8 @@
             coreutils
           ];
         };
-        interval = 10;
-        signal = 6;
+        interval = 60;
+        signal = 10;
       }
       {
         command = getBlock {
