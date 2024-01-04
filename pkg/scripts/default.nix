@@ -168,13 +168,23 @@ in rec {
   };
 
   restic_backup = {
+    name,
     password-file,
     repository-location,
     include,
     exclude,
+    forget ? {
+      hourly = 24;
+      daily = 14;
+      weekly = 4;
+      monthly = 6;
+      yearly = 5;
+    },
+    exclude-if-present ? [".nobackup"],
+    skip-verify-repo ? false,
   }:
     shellScript {
-      name = "restic_backup";
+      name = name;
       path = ./restic_backup;
       deps = with pkgs; [
         restic
@@ -186,27 +196,9 @@ in rec {
         PWD_FILE = password-file;
         INCLUDE_FILE = include;
         EXCLUDE_FILE = exclude;
-      };
-    };
-
-  restic_offsite = {
-    password-file,
-    repository-location,
-    include,
-    exclude,
-  }:
-    shellScript {
-      name = "restic_offsite";
-      path = ./restic_offsite;
-      deps = with pkgs; [
-        restic
-        libnotify
-      ];
-      env = {
-        REPO_LOCATION = repository-location;
-        PWD_FILE = password-file;
-        INCLUDE_FILE = include;
-        EXCLUDE_FILE = exclude;
+        FORGET_ARGS = lib.concatStringsSep " " (lib.mapAttrsToList (key: value: "--keep-" + key + " " + toString value) forget);
+        EXCLUDE_ARGS = lib.concatStringsSep " " (map (x: "--exclude-if-present " + x) exclude-if-present);
+        SKIP_VERIFY_REPO = if skip-verify-repo then "1" else "0";
       };
     };
 }

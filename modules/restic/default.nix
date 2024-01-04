@@ -5,163 +5,109 @@
   ...
 }: let
   cfg = config.aus.programs.restic;
-  localIncludeFile = pkgs.writeTextFile {
-    name = "local-include";
-    text = lib.concatStringsSep "\n" cfg.local.include;
-  };
-  localExcludeFile = pkgs.writeTextFile {
-    name = "local-exclude";
-    text = lib.concatStringsSep "\n" cfg.local.exclude;
-  };
-  offsiteIncludeFile = pkgs.writeTextFile {
-    name = "offsite-include";
-    text = lib.concatStringsSep "\n" cfg.offsite.include;
-  };
-  offsiteExcludeFile = pkgs.writeTextFile {
-    name = "offsite-exclude";
-    text = lib.concatStringsSep "\n" cfg.offsite.exclude;
+
+  resticType = lib.types.submodule {
+    options = {
+      enable = lib.mkEnableOption "Enable";
+      password_file = lib.mkOption {
+        type = lib.types.str;
+        description = "Location of the password file for the backup repository";
+      };
+      repo_location = lib.mkOption {
+        type = lib.types.str;
+        description = "Location of the backup repository";
+      };
+      include = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        description = "List of directories to include in the backup";
+      };
+      exclude = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        description = "List of directories to exclude from the backup";
+      };
+      schedule = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = "Systemd OnCalendar schedule for the backup";
+      };
+      exclude-if-present = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        description = "List of files to exclude if present in the backup directory";
+      };
+      forget = lib.mkOption {
+        type = lib.types.attrsOf lib.types.int;
+        default = {};
+        description = "List of forget options";
+      };
+      skip-verify-repo = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Skip repository verification";
+      };
+    };
   };
 
-  resticLocal =
-    if cfg.local.enable
-    then
-      pkgs.scripts.restic_backup {
-        password-file = cfg.local.password_file;
-        repository-location = cfg.local.repo_location;
-        include = localIncludeFile;
-        exclude = localExcludeFile;
-      }
-    else null;
-  resticOffsite =
-    if cfg.offsite.enable
-    then
-      pkgs.scripts.restic_offsite {
-        password-file = cfg.offsite.password_file;
-        repository-location = cfg.offsite.repo_location;
-        include = offsiteIncludeFile;
-        exclude = offsiteExcludeFile;
-      }
-    else null;
+  buildRestic = name: restic_cfg: let
+    localIncludeFile = pkgs.writeTextFile {
+      name = "local-include";
+      text = lib.concatStringsSep "\n" restic_cfg.include;
+    };
+    localExcludeFile = pkgs.writeTextFile {
+      name = "local-exclude";
+      text = lib.concatStringsSep "\n" restic_cfg.exclude;
+    };
+  in
+    pkgs.scripts.restic_backup {
+      name = "restic_${name}";
+      password-file = restic_cfg.password_file;
+      repository-location = restic_cfg.repo_location;
+      include = localIncludeFile;
+      exclude = localExcludeFile;
+      forget = restic_cfg.forget;
+      exclude-if-present = restic_cfg.exclude-if-present;
+      skip-verify-repo = restic_cfg.skip-verify-repo;
+    };
+
+  packages = lib.mapAttrs buildRestic (lib.filterAttrs (name: val: val.enable) cfg);
+
+  buildService = name: _: {
+    Unit = {
+      Description = "Restic ${name} backup";
+      After = ["sops-nix.service"];
+    };
+    Service = {
+      ExecStart = "${packages.${name}}/bin/restic_${name} backup";
+    };
+  };
+
+  buildTimer = name: restic_cfg: {
+    Unit = {
+      Description = "Automatic restic ${name} backup";
+    };
+    Timer = {
+      OnCalendar = restic_cfg.schedule;
+      Persistent = false;
+    };
+    Install.WantedBy = ["timers.target"];
+  };
+
+  timers = lib.attrsets.mapAttrs' (name: value: lib.attrsets.nameValuePair "restic-${name}" (buildTimer name value)) (lib.filterAttrs (name: val: val.schedule != null && val.enable) cfg);
+  services = lib.attrsets.mapAttrs' (name: value: lib.attrsets.nameValuePair "restic-${name}" (buildService name value)) (lib.filterAttrs (name: val: val.schedule != null && val.enable) cfg);
 in {
   options = {
-    aus.programs.restic = {
-      local = {
-        enable = lib.mkEnableOption "Enable local backups";
-        password_file = lib.mkOption {
-          type = lib.types.str;
-          description = "Location of the password file for the local backup repository";
-        };
-        repo_location = lib.mkOption {
-          type = lib.types.str;
-          description = "Location of the local backup repository";
-        };
-        include = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          default = [];
-          description = "List of directories to include in the backup";
-        };
-        exclude = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          default = [];
-          description = "List of directories to exclude from the backup";
-        };
-        schedule = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          default = null;
-          description = "Systemd onCalendar schedule for the backup";
-        };
-      };
-
-      offsite = {
-        enable = lib.mkEnableOption "Enable offsite backups";
-        password_file = lib.mkOption {
-          type = lib.types.str;
-          description = "Location of the password file for the local backup repository";
-        };
-        repo_location = lib.mkOption {
-          type = lib.types.str;
-          description = "Location of the offsite backup repository";
-        };
-        include = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          default = [];
-          description = "List of directories to include in the backup";
-        };
-        exclude = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          default = [];
-          description = "List of directories to exclude from the backup";
-        };
-        schedule = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          default = null;
-          description = "Systemd onCalendar schedule for the backup";
-        };
-      };
+    aus.programs.restic = lib.mkOption {
+      default = {};
+      type = lib.types.attrsOf resticType;
+      description = "A list of restic backup configurations";
     };
   };
 
   config = {
-    home.packages =
-      []
-      ++ (
-        if cfg.local.enable
-        then [resticLocal]
-        else []
-      )
-      ++ (
-        if cfg.offsite.enable
-        then [resticOffsite]
-        else []
-      );
-
-    # Systemd services
-    systemd.user.services = {
-      "restic-backup" = lib.mkIf (cfg.local.schedule != null) {
-        Unit = {
-          Description = "Restic backup";
-          After = ["sops-nix.service"];
-        };
-        Service = {
-          ExecStart = "${resticLocal}/bin/restic_backup auto-backup";
-          WorkingDirectory = config.aus.home;
-          StandardOutput = "append:/tmp/restic-backup.log";
-        };
-      };
-      "restic-offsite" = lib.mkIf (cfg.offsite.schedule != null) {
-        Unit = {
-          Description = "Restic offsite backup";
-          After = ["sops-nix.service"];
-        };
-        Service = {
-          ExecStart = "${resticOffsite}/bin/restic_offsite backup";
-          WorkingDirectory = config.aus.home;
-          StandardOutput = "append:/tmp/restic-offsite.log";
-        };
-      };
-    };
-
-    systemd.user.timers = {
-      "restic-backup" = lib.mkIf (cfg.local.schedule != null) {
-        Unit = {
-          Description = "Automatic restic backup";
-        };
-        Timer = {
-          OnCalendar = cfg.local.schedule;
-          Persistent = false;
-        };
-        Install.WantedBy = ["timers.target"];
-      };
-      "restic-offsite" = lib.mkIf (cfg.offsite.schedule != null) {
-        Unit = {
-          Description = "Automatic offsite restic backup";
-        };
-        Timer = {
-          OnCalendar = cfg.offsite.schedule;
-          Persistent = false;
-        };
-        Install.WantedBy = ["timers.target"];
-      };
-    };
+    home.packages = lib.attrValues packages;
+    systemd.user.services = services;
+    systemd.user.timers = timers;
   };
 }

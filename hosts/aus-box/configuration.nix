@@ -44,20 +44,33 @@ in {
         destination_path = "/autofs/popstar/downloads/";
       };
       restic = {
-        local = {
+        backup = {
           enable = true;
           password_file = config.sops.secrets.restic_local.path;
           repo_location = "/run/media/austin/Elements/restic/";
           include = ["/home/austin" "/home/austin/Games" "/mnt/Samsung/Steam/steamapps/compatdata"];
           exclude = ["/home/austin/.cache/" "/home/austin/.local/share/Trash"];
           schedule = "*-*-* *:42:00";
+          exclude-if-present = [".no-backup"];
+          forget = {
+            hourly = 24;
+            daily = 14;
+            weekly = 4;
+            monthly = 6;
+            yearly = 5;
+          };
         };
         offsite = {
           enable = true;
+          skip-verify-repo = true;
           password_file = config.sops.secrets.restic_remote_password.path;
           repo_location = config.sops.secrets.restic_remote_repo.path;
-          include = config.aus.programs.restic.local.include;
-          exclude = config.aus.programs.restic.local.exclude ++ ["/home/austin/Downloads/" "/home/austin/Music/"];
+          include = config.aus.programs.restic.backup.include;
+          exclude = config.aus.programs.restic.backup.exclude ++ ["/home/austin/Downloads/" "/home/austin/Music/"];
+          exclude-if-present = config.aus.programs.restic.backup.exclude-if-present ++ [".no-remote"];
+          forget = {
+            last = 5;
+          };
         };
       };
     };

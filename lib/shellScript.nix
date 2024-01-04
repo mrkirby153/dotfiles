@@ -34,7 +34,7 @@ in
         export PATH="${realPath}"
       ''
       + lib.optionalString (env != []) ''
-        ${lib.strings.concatMapStrings (x: "export ${x}\n") (builtins.attrValues (builtins.mapAttrs (n: v: "${n}=${v}") env))}
+        ${lib.strings.concatMapStrings (x: "export ${x}\n") (builtins.attrValues (builtins.mapAttrs (n: v: "${n}=\"${v}\"") env))}
       ''
       + ''
         ${builtins.readFile path}

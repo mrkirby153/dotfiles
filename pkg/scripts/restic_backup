@@ -1,15 +1,21 @@
 #!/bin/bash
 set -eE
 # Script to automatically create backups with restic
+[ -v "VERBOSE" ] && set -x
 
+LOCKFILE="$XDG_RUNTIME_DIR/${LOCKFILE_NAME:-restic_backup}.lock"
 
-LOCKFILE="$XDG_RUNTIME_DIR/restic_backup.lock"
+if [ -f "$REPO_LOCATION" ]; then
+    echo "Repo location is a file. Reading repo from $REPO_LOCATION"
+    export REPO_LOCATION=$(cat "$REPO_LOCATION")
+fi
 
 exit_error() {
     echo "Error: $1"
     notify-send -u critical "$1"
     exit 1
 }
+
 verify_restic_binary() {
     if ! command -v restic &> /dev/null
     then
@@ -30,6 +36,7 @@ acquire_lock() {
         trap 'rm -f $LOCKFILE' EXIT
     else
         echo "Backup is already in progress. If you are confident no other backup processes are running delete $LOCKFILE"
+        notify-send "Backup is already in progress"
         exit 1
     fi
 }
@@ -49,12 +56,14 @@ perform_automatic_backup() {
     echo "===== Starting automatic backup at $start_time ====="
     trap 'notify-send -u critical "Backup Failed" "The restic backup did not complete successfully"' ERR
     acquire_lock
+
+    command_args="backup -x --files-from=$INCLUDE_FILE --exclude-file=$EXCLUDE_FILE $EXCLUDE_ARGS"
     if [ -t 0 ]; then
         echo "Running in interactive mode"
-        run_restic_command backup -x --files-from="$INCLUDE_FILE" --exclude-file="$EXCLUDE_FILE" --exclude-if-present=.nobackup || true
+        run_restic_command $command_args || true
     else
         echo "Logging output to $tmp_out"
-        (run_restic_command backup -x --files-from="$INCLUDE_FILE" --exclude-file="$EXCLUDE_FILE" --exclude-if-present=.nobackup || true) | tee "$tmp_out"
+        (run_restic_command $command_args || true) | tee "$tmp_out"
     fi
     echo "===== Automatic Backup Complete ====="
     runtime=$(($(date +'%s') - start_s))
@@ -78,7 +87,7 @@ case "$1" in
     perform_automatic_backup
     ;;
 "clean-backup")
-    run_restic_command forget -H 24 -d 14 -w 4 -m 6 -y 5 -g "host"
+    run_restic_command forget $FORGET_ARGS -g "host" -n
     run_restic_command prune --max-unused=0
     ;;
 *)
