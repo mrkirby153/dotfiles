@@ -51,7 +51,7 @@ in {
           include = ["/home/austin" "/home/austin/Games" "/mnt/Samsung/Steam/steamapps/compatdata"];
           exclude = ["/home/austin/.cache/" "/home/austin/.local/share/Trash"];
           schedule = "*-*-* *:42:00";
-          exclude-if-present = [".no-backup"];
+          exclude-if-present = [".nobackup"];
           forget = {
             hourly = 24;
             daily = 14;
@@ -67,7 +67,7 @@ in {
           repo_location = config.sops.secrets.restic_remote_repo.path;
           include = config.aus.programs.restic.backup.include;
           exclude = config.aus.programs.restic.backup.exclude ++ ["/home/austin/Downloads/" "/home/austin/Music/"];
-          exclude-if-present = config.aus.programs.restic.backup.exclude-if-present ++ [".no-remote"];
+          exclude-if-present = config.aus.programs.restic.backup.exclude-if-present ++ [".noremote"];
           forget = {
             last = 5;
           };
