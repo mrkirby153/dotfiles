@@ -198,7 +198,10 @@ in rec {
         EXCLUDE_FILE = exclude;
         FORGET_ARGS = lib.concatStringsSep " " (lib.mapAttrsToList (key: value: "--keep-" + key + " " + toString value) forget);
         EXCLUDE_ARGS = lib.concatStringsSep " " (map (x: "--exclude-if-present " + x) exclude-if-present);
-        SKIP_VERIFY_REPO = if skip-verify-repo then "1" else "0";
+        SKIP_VERIFY_REPO =
+          if skip-verify-repo
+          then "1"
+          else "0";
       };
     };
 }

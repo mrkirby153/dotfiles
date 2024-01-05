@@ -75,3 +75,8 @@ if [ ! -z "$NEED_INIT" ]; then
     ssh-add > /dev/null
 fi
 
+if [ -f /usr/bin/switch.sh ]; then
+    source /usr/bin/switch.sh
+    alias kctx='switch'
+    alias kns='switch ns'
+fi
