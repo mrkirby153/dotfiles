@@ -192,6 +192,7 @@ in rec {
         gnugrep
       ];
       env = {
+        LOCKFILE_NAME = name;
         REPO_LOCATION = repository-location;
         PWD_FILE = password-file;
         INCLUDE_FILE = include;
