@@ -87,7 +87,7 @@ case "$1" in
     perform_automatic_backup
     ;;
 "clean-backup")
-    run_restic_command forget $FORGET_ARGS -g "host" -n
+    run_restic_command forget $FORGET_ARGS -g "host"
     run_restic_command prune --max-unused=0
     ;;
 *)
