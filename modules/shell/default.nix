@@ -81,6 +81,11 @@ in {
       enableZshIntegration = true;
     };
 
+    programs.nix-index = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
     aus.omzExtraPlugins = {
       zsh-syntax-highlighting = pkgs.fetchFromGitHub {
         owner = "zsh-users";
