@@ -155,6 +155,9 @@ in rec {
     deps = with pkgs; [
       tesseract
       imagemagick
+      libnotify
+      maim
+      xclip
     ];
   };
   power_menu = shellScript {
