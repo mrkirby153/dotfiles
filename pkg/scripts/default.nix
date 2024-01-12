@@ -194,6 +194,7 @@ in rec {
         libnotify
         gnugrep
       ];
+      pure = false;
       env = {
         LOCKFILE_NAME = name;
         REPO_LOCATION = repository-location;
