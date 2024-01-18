@@ -35,6 +35,7 @@ in {
         (mkPgrepAutostartEntry "redshift-gtk" "redshift-gtk")
         (mkAutostartEntry "parcellite" "${pkgs.parcellite}/bin/parcellite -n")
         (mkAutostartEntry "udiskie" "${pkgs.udiskie}/bin/udiskie")
+        (mkAutostartEntry "aw-qt" "aw-qt")
         "${ckb_start}/bin/ckb_start"
         "setxkbmap -option compose:alt"
         "dwmc xrdb"
