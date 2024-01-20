@@ -76,6 +76,8 @@ in rec {
       deps = with pkgs; [
         rsync
         libnotify
+        findutils
+        gawk
       ];
       env = {
         TARGET_PATH = target_path;
