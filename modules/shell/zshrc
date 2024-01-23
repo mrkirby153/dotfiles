@@ -31,7 +31,6 @@ journalctl() {
 }
 
 # Variables
-export EDITOR=nvim
 # https://github.com/NixOS/nixpkgs/issues/85823
 export LOCALE_ARCHIVE=/usr/lib/locale/locale-archive
 export LC_ALL="en_US.UTF-8"

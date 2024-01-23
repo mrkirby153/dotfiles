@@ -17,6 +17,10 @@
       url = "github:mrkirby153/nix-pkgs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    my-nvim = {
+      url = "github:mrkirby153/nvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -27,6 +31,7 @@
     attic,
     sops-nix,
     my-nixpkgs,
+    my-nvim,
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: {
@@ -51,7 +56,7 @@
       }: let
         pkgs = import nixpkgs {
           system = arch;
-          overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default];
+          overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default ];
         };
       in
         home-manager.lib.homeManagerConfiguration {

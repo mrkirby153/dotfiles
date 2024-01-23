@@ -7,19 +7,20 @@
     ./displays
 
     # Import modules for programs
+    ./attic.nix
+    ./autostart.nix
+    ./download_reaper.nix
+    ./dunst.nix
+    ./dwmblocks
+    ./git.nix
+    ./picom
+    ./restic
     ./screenshot
     ./scripts.nix
-    ./download_reaper.nix
-    ./sxhkd.nix
-    ./dwmblocks
-    ./x11.nix
     ./shell
-    ./git.nix
-    ./autostart.nix
-    ./attic.nix
-    ./dunst.nix
-    ./picom
+    ./sxhkd.nix
+    ./vim.nix
     ./wallpaper.nix
-    ./restic
+    ./x11.nix
   ];
 }

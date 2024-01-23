@@ -73,6 +73,7 @@ in {
           };
         };
       };
+      vim.enable = true;
     };
 
     displays = {
