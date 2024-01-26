@@ -118,6 +118,7 @@ in rec {
       gnused
       gawk
       perl
+      libnotify
     ];
   };
   make_apple_ringtone = shellScript {
