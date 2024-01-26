@@ -116,6 +116,8 @@ in rec {
       notmuch
       pass
       gnused
+      gawk
+      perl
     ];
   };
   make_apple_ringtone = shellScript {
