@@ -34,6 +34,7 @@ in {
       attic.enable = true;
       dunst.enable = true;
       picom.enable = true;
+      vim.enable = true;
     };
 
     displays = {
