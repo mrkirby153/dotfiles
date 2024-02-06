@@ -99,6 +99,15 @@ in rec {
       hactool
     ];
   };
+  find-store-path-gc-roots = shellScript {
+    name = "find_store_path_gc_roots";
+    path = ./find_store_path_gc_roots;
+    deps = with pkgs; [
+      nix
+      gawk
+      gnugrep
+    ];
+  };
   font-lookup = shellScript {
     name = "font-lookup";
     path = ./font-lookup;

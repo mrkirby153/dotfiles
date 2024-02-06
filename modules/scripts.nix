@@ -12,7 +12,6 @@
 
   config = lib.mkIf config.aus.programs.scripts.enable {
     home.packages = with pkgs.scripts; [
-      screenshot
       build_nixos_configuration
       clean_aur_db
       clean_aur_signatures
@@ -20,6 +19,7 @@
       dmenu_confirm
       drop_zfs_cache
       extract_nsp
+      find-store-path-gc-roots
       font-lookup
       mailsync
       make_apple_ringtone
@@ -28,6 +28,7 @@
       multimc_sync_control
       ocr
       power_menu
+      screenshot
     ];
   };
 }
