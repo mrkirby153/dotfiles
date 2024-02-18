@@ -26,6 +26,11 @@ if [ "$TERM_PROGRAM" = "vscode" ]; then
     exit
 fi
 
+# ignore jetbrains built-in terminal
+if [ "$TERMINAL_EMULATOR" = "JetBrains-JediTerm" ]; then
+    exit
+fi
+
 case "$1" in
     error)
         notify-send -a "shell" -u "critical" "Command failed in $human_readable" "$command"
