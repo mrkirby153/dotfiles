@@ -4,13 +4,9 @@ set -e
 
 to_remove=()
 echo "Finding packages that are no longer installed"
-for file in $(paru -Ll | awk '{print $2}');
+for file in $(paru -Ll | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' | grep -v "installed" | awk '{print $2}');
 do
-    # echo "Checking $file"
-    if ! pacman -Qi "$file" > /dev/null 2>&1;
-    then
-        to_remove+=("$file")
-    fi
+    to_remove+=("$file")
 done
 
 if [ ${#to_remove[@]} -eq 0 ]; then
