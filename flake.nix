@@ -56,7 +56,7 @@
       }: let
         pkgs = import nixpkgs {
           system = arch;
-          overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default ];
+          overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default];
         };
       in
         home-manager.lib.homeManagerConfiguration {

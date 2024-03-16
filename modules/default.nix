@@ -13,6 +13,7 @@
     ./dunst.nix
     ./dwmblocks
     ./git.nix
+    ./mail.nix
     ./picom
     ./restic
     ./screenshot

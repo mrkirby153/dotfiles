@@ -35,6 +35,7 @@ in {
       dunst.enable = true;
       picom.enable = true;
       vim.enable = true;
+      mail.enable = true;
     };
 
     displays = {

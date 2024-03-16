@@ -5,6 +5,9 @@ creation_rules:
   - path_regex: secrets/screenshot_key.txt
     key_groups:
       - age: *keys
+  - path_regex: secrets/mailpass.txt
+    key_groups:
+      - age: *keys
   - path_regex: secrets/attic.toml
     key_groups:
       - age: *keys
