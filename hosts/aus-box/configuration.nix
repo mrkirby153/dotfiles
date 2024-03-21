@@ -74,6 +74,7 @@ in {
         };
       };
       vim.enable = true;
+      mail.enable = true;
     };
 
     displays = {
