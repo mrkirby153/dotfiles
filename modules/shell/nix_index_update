@@ -1,0 +1,36 @@
+#!/bin/bash
+
+echo "Updating nix-index"
+
+api=$(curl -s https://api.github.com/repos/nix-community/nix-index-database/releases/latest)
+version=$(echo $api | jq -r '.tag_name')
+arch=$(uname -m)
+
+echo "Latest version: $version"
+
+# Check if the latest version is already installed
+directory="${XDG_CACHE_HOME:-$HOME/.cache}/nix-index"
+if [ -d "$directory" ]; then
+    version_file="$directory/version"
+    if [ -f "$version_file" ]; then
+        installed_version=$(cat $version_file)
+        if [ "$installed_version" = "$version" ]; then
+            echo "Already up to date"
+            exit
+        fi
+    fi
+fi
+
+echo "Update required"
+
+# Find the release for the current architecture
+echo "Finding release for $arch"
+release_url=$(echo $api | jq -r '.assets[] | select(.name | contains("index-'$arch'-linux")) | .browser_download_url')
+echo "Release URL: $release_url"
+
+# Download the release
+curl -L -o "$directory/files" "$release_url"
+
+echo "Updated!"
+
+echo "$version" > "$directory/version"
