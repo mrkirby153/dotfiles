@@ -60,9 +60,13 @@ RUNNING_AGENT=$(pgrep ssh-agent)
 if [ -f "$SSH_AGENT_FILE" ]; then
     source "$SSH_AGENT_FILE"
 
-    if [ ! "$RUNNING_AGENT" -eq "$SSH_AGENT_PID" ]; then
-        NEED_INIT=1
-    fi
+    NEED_INIT=1
+    while IFS= read -r line; do
+        if [ "$line" = "$SSH_AGENT_PID" ]; then
+            NEED_INIT=
+            break
+        fi
+    done <<< "$RUNNING_AGENT"
 else
     NEED_INIT=1
 fi
