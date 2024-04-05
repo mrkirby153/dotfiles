@@ -35,6 +35,8 @@ in {
         "shift + { XF86AudioLowerVolume, XF86AudioRaiseVolume}" = "${pypulse} {--speakers, --headphones} ; ${update_dwmblocks 10}";
         "super + XF86AudioRaiseVolume" = "${pypulse} -l ; ${update_dwmblocks 10}";
         "{XF86AudioPlay, XF86AudioNext, XF86AudioPrev}" = "${pkgs.scripts.media_control}/bin/media_control {play-pause, next, previous}; ${update_dwmblocks 2}";
+
+        "XF86Audio{Raise,Lower}Volume" = "${pkgs.pamixer}/bin/pamixer {-i,-d} 5; ${update_dwmblocks 10}";
         "XF86AudioMute" = "${pkgs.pamixer}/bin/pamixer -t ; ${update_dwmblocks 10}";
 
         "super + Pause" = "${pkgs.scripts.power_menu}/bin/power_menu";
