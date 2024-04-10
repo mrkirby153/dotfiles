@@ -135,6 +135,7 @@ in rec {
     path = ./make_apple_ringtone;
     deps = with pkgs; [
       ffmpeg
+      bc
     ];
   };
   media_control = shellScript {
