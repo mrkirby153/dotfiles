@@ -1,7 +1,9 @@
 {
-  pkgs, config, lib, ...
-}:
-{
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   options = {
     aus.programs.mail = {
       enable = lib.mkEnableOption "Enable email management";
