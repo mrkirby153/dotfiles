@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }: {
   options = {
@@ -49,5 +50,8 @@
         signByDefault = true;
       };
     };
+    home.packages = with pkgs; [
+      lazygit
+    ];
   };
 }
