@@ -80,11 +80,11 @@
     "css3-syntax-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1704668308,
-        "narHash": "sha256-NL39jNwKo5C0NraP6sm0SBQqC0menLVvnXgCJ+R9iQY=",
+        "lastModified": 1712528467,
+        "narHash": "sha256-tPMrcTm6KLYYHrC+nrZGAbs7C1oIb2aLsttT9piZ/9o=",
         "owner": "hail2u",
         "repo": "vim-css3-syntax",
-        "rev": "b73d5028a8e79ac7d2319f4817988a41dbfd47dd",
+        "rev": "44dd2e6bada1a48f6697ec1596cfe5a1386418b3",
         "type": "github"
       },
       "original": {
@@ -146,11 +146,11 @@
         "systems": "systems_2"
       },
       "locked": {
-        "lastModified": 1705309234,
-        "narHash": "sha256-uNRRNRKmJyCRC/8y1RqBkqWBLM034y4qN7EprSdmgyA=",
+        "lastModified": 1710146030,
+        "narHash": "sha256-SZ5L6eA7HJ/nmkzGG7/ISclqe6oZdOZTNoesiInkXPQ=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "1ef2e671c3b0c19053962c07dbda38332dcebf26",
+        "rev": "b1d9ab70662946ef0850d488da1c9019f3a9752a",
         "type": "github"
       },
       "original": {
@@ -245,11 +245,11 @@
         "vaffle-src": "vaffle-src"
       },
       "locked": {
-        "lastModified": 1705992762,
-        "narHash": "sha256-uen8+Tiq8VVewpXWmEo4OUYj/aK+o1jv99OKNxVemXg=",
+        "lastModified": 1712895042,
+        "narHash": "sha256-EmGALIlO5ZtcY+u5M5TjIvpj85e0n/Rm1pTmeYiVjkQ=",
         "owner": "mrkirby153",
         "repo": "nvim",
-        "rev": "bc95b883dfe44904d56ca05fbd033db658634497",
+        "rev": "527d803a1c0ddf6ef0fcd3a7dee747faa357540e",
         "type": "github"
       },
       "original": {
