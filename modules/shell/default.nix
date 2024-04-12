@@ -53,6 +53,7 @@ in {
         http-server = "${httpServer}/bin/python -m http.server";
         lanplay = "sudo lan-play --relay-server-addr 45.43.195.187:11451";
         ls = "${pkgs.lsd}/bin/lsd";
+        lg = "lazygit";
         mv = "mv -iv";
         rm = "rm -Iv";
       };
