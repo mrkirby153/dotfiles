@@ -50,8 +50,17 @@
         signByDefault = true;
       };
     };
-    home.packages = with pkgs; [
-      lazygit
-    ];
+    programs.lazygit = {
+      enable = true;
+      settings = {
+        gui.nerdFontsVersion = "3";
+        quitOnTopLevelReturn = true;
+        promptToReturnFromSubprocess = false;
+        git.paging = {
+          colorArg = "always";
+          pager = "${pkgs.delta}/bin/delta --dark --paging=never";
+        };
+      };
+    };
   };
 }
