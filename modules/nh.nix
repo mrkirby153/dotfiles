@@ -17,6 +17,13 @@ in
       The path used for the FLAKE environment variable
       '';
     };
+    zshCompletions = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+      Whether to install zsh completions
+      '';
+    };
   };
 
   config = {
@@ -24,6 +31,11 @@ in
       packages = [
         wrappedNh
       ];
+    };
+    programs.zsh = lib.mkIf cfg.zshCompletions {
+      initExtra = ''
+      eval "$(${wrappedNh}/bin/nh completions --shell zsh)"
+      '';
     };
   };
 }
