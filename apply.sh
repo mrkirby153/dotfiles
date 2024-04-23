@@ -27,8 +27,13 @@ case "$COMMAND" in
 esac
 
 actual_hostname="${HOSTNAME:-$(hostname)}"
+user="${USER:-$(whoami)}"
+flake_ref="$user@$actual_hostname"
+configuration_name="${CONFIGURATION:-$flake_ref}"
+
+echo "Using configuration: $configuration_name"
 
 nix run --extra-experimental-features "nix-command flakes" . "$NIX_CMD" -- \
-    --flake ".#$actual_hostname" \
+    --flake ".#$configuration_name" \
     -b backup \
     --extra-experimental-features "nix-command flakes"

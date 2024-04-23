@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/release-23.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -26,6 +27,7 @@
   outputs = {
     self,
     nixpkgs,
+    nixpkgs-unstable,
     home-manager,
     flake-utils,
     attic,
@@ -58,6 +60,10 @@
           system = arch;
           overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default];
         };
+        pkgs-unstable = import nixpkgs-unstable {
+          system = arch;
+          overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default];
+        };
       in
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
@@ -68,12 +74,14 @@
               ./modules
             ]
             ++ extraModules;
-          extraSpecialArgs = inputs // extraArgs;
+          extraSpecialArgs = inputs // extraArgs // {
+            inherit pkgs-unstable;
+          };
         };
 
       homeConfigurations = {
-        "malos" = mkSystem {name = "malos";};
-        "aus-box" = mkSystem {name = "aus-box";};
+        "austin@malos" = mkSystem {name = "malos";};
+        "austin@aus-box" = mkSystem {name = "aus-box";};
       };
 
       overlays.pkgs = final: prev:

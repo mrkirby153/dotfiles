@@ -14,6 +14,7 @@
     ./dwmblocks
     ./git.nix
     ./mail.nix
+    ./nh.nix
     ./picom
     ./restic
     ./screenshot
