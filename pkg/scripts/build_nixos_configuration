@@ -34,4 +34,4 @@ derivation="nixosConfigurations.$host.config.system.build.toplevel"
 
 echo "Building derevation $flake_url#$derivation"
 
-nix build "$flake_url#$derivation"
+nix build "$flake_url#$derivation" --log-format internal-json -v |& nom --json

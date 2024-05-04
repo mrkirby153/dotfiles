@@ -36,6 +36,7 @@ in rec {
       nix
       fzf
       git
+      nix-output-monitor
     ];
   };
   clean_aur_db = shellScript {
