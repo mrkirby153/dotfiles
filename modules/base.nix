@@ -35,6 +35,7 @@
     home.packages = with pkgs; [
       httpie
       nix-prefetch-scripts
+      nix-output-monitor
       nil
       comma
       pypulse
