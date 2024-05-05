@@ -6,6 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         machine:
           - host: austin@aus-box
