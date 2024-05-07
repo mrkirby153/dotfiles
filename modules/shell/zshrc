@@ -41,7 +41,13 @@ bindkey "^[[1;3C" forward-word
 
 # Run neofetch if not in nix shell or ssh
 if ! [ -n "$SSH_CLIENT" ] || ! [ -n "$SSH_TTY" ]; then
-    (! [ -n "$IN_NIX_SHELL" ]) && neofetch
+    if ! [ -n "$IN_NIX_SHELL" ]; then
+        if command -v hyfetch > /dev/null; then
+            hyfetch
+        elif command -v neofetch > /dev/null; then
+            neofetch
+        fi
+    fi
 else
     # Set up some ssh stuff
     # Utility for launching GUI programs over ssh
