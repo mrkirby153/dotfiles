@@ -82,7 +82,18 @@ in {
 
     programs.fzf = {
       enable = true;
+    };
+
+    programs.atuin = {
+      enable = true;
       enableZshIntegration = true;
+      flags = [
+        "--disable-up-arrow"
+      ];
+      settings = {
+        filter_mode = "host";
+        show_preview = true;
+      };
     };
 
     programs.thefuck = {
