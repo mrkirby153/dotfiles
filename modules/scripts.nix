@@ -29,6 +29,7 @@
       ocr
       power_menu
       screenshot
+      st_wrapper
     ];
   };
 }

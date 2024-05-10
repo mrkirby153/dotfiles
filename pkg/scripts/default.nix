@@ -225,4 +225,9 @@ in rec {
           else "0";
       };
     };
+  st_wrapper = shellScript {
+    name = "st_wrapper";
+    path = ./st_wrapper;
+    pure = false;
+  };
 }
