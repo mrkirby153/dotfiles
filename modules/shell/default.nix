@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  pkgs-unstable,
   ...
 }: let
   httpServer = pkgs.python3.withPackages (ps: with ps; [httpserver]);
@@ -95,6 +96,7 @@ in {
         show_preview = true;
         sync_address = "https://atuin.mrkirby153.com";
       };
+      package = pkgs-unstable.atuin;
     };
 
     programs.thefuck = {
