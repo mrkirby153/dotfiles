@@ -1,6 +1,11 @@
 {
   description = "Home manager configuration";
 
+  nixConfig = {
+    extra-trusted-public-keys = "mrkirby153-public:DxpgFWGtjTaSh6U/bt+Xr5qfj4gVbRjUzaePmA/ndwM=";
+    extra-substituters = "https://cache.mrkirby153.com/mrkirby153-public";
+  };
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/release-23.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
