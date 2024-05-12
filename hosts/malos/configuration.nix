@@ -36,6 +36,10 @@ in {
       picom.enable = true;
       vim.enable = true;
       mail.enable = true;
+      nh = {
+        enable = true;
+        flake = "/home/austin/Development/nix/dotfiles";
+      };
     };
 
     displays = {
