@@ -95,6 +95,9 @@ in {
         filter_mode = "host";
         show_preview = true;
         sync_address = "https://atuin.mrkirby153.com";
+        sync = {
+          records = true;
+        };
       };
       package = pkgs-unstable.atuin;
     };
