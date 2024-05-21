@@ -79,9 +79,12 @@
               ./modules
             ]
             ++ extraModules;
-          extraSpecialArgs = inputs // extraArgs // {
-            inherit pkgs-unstable;
-          };
+          extraSpecialArgs =
+            inputs
+            // extraArgs
+            // {
+              inherit pkgs-unstable;
+            };
         };
 
       homeConfigurations = {
