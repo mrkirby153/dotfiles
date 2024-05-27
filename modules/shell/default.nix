@@ -98,8 +98,12 @@ in {
         sync = {
           records = true;
         };
+        daemon = {
+          enabled = true;
+          socket_path = "/run/user/1000/atuin.socket";
+          systemd_socket = true;
+        };
       };
-      package = pkgs-unstable.atuin;
     };
 
     programs.thefuck = {
@@ -174,6 +178,33 @@ in {
           Unit = "nix-index-update.service";
         };
         Install.WantedBy = ["timers.target"];
+      };
+    };
+    systemd.user.services.atuin-daemon = {
+      Unit = {
+        Description = "Atuin daemon";
+        Requires = ["atuin-daemon.socket"];
+      };
+      Service = {
+        ExecStart = "${lib.getExe pkgs.atuin} daemon";
+        Environment = ["ATUIN_LOG=info"];
+      };
+      Install = {
+        Also = ["atuin-daemon.socket"];
+        WantedBy = ["default.target"];
+      };
+    };
+    systemd.user.sockets.atuin-daemon = {
+      Unit = {
+        Description = "Unix socket activation for atuin";
+      };
+      Socket = {
+        ListenStream = "%t/atuin.socket";
+        SocketMode = "0600";
+        RemoveOnStop = true;
+      };
+      Install = {
+        WantedBy = ["sockets.target"];
       };
     };
   };

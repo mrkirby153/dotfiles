@@ -27,6 +27,10 @@
       url = "github:mrkirby153/nvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    atuin = {
+      url = "github:atuinsh/atuin";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs = {
@@ -39,6 +43,7 @@
     sops-nix,
     my-nixpkgs,
     my-nvim,
+    atuin,
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: {
@@ -63,11 +68,11 @@
       }: let
         pkgs = import nixpkgs {
           system = arch;
-          overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default];
+          overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default atuin.overlays.default];
         };
         pkgs-unstable = import nixpkgs-unstable {
           system = arch;
-          overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default];
+          overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default atuin.overlays.default];
         };
       in
         home-manager.lib.homeManagerConfiguration {
