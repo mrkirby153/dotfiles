@@ -74,6 +74,10 @@
           system = arch;
           overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default atuin.overlays.default];
         };
+        ts = import ./hosts/ts.nix {
+          inherit pkgs;
+          inherit (pkgs) lib;
+        };
       in
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
@@ -89,6 +93,7 @@
             // extraArgs
             // {
               inherit pkgs-unstable;
+              inherit ts;
             };
         };
 
