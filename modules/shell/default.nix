@@ -100,7 +100,7 @@ in {
         };
         daemon = {
           enabled = true;
-          socket_path = "/run/user/1000/atuin.socket";
+          socket_path = "/run/user/${toString config.aus.uid}/atuin.socket";
           systemd_socket = true;
         };
       };
