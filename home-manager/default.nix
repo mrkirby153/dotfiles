@@ -2,15 +2,12 @@
   imports = [
     ./base.nix
     ./sops.nix
-    # Import custom modules
-    ./home-manager
-
     # Import modules for programs
     ./attic.nix
     ./autostart.nix
     ./download_reaper.nix
     ./dunst.nix
-    ./dwmblocks
+    ./dwmblocks/dwmblocks.nix
     ./git.nix
     ./mail.nix
     ./nh.nix

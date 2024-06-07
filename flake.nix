@@ -88,8 +88,8 @@
             [
               sops-nix.homeManagerModule
               ./lib/modules/home-manager
-              ./hosts/${name}/configuration.nix
               ./home-manager
+              ./hosts/${name}/configuration.nix
             ]
             ++ extraModules;
           extraSpecialArgs =

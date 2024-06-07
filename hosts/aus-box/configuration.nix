@@ -17,6 +17,8 @@ in {
       path = ./derail_valley.png;
     };
 
+    dwmblocks.enable = true;
+
     programs = {
       screenshot.enable = true;
       scripts.enable = true;
@@ -25,7 +27,6 @@ in {
         autostart.enable = true;
       };
       autostart.enable = true;
-      dwmblocks.enable = true;
       x11.enable = true;
       shell.enable = true;
       git = {

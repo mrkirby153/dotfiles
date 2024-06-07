@@ -1,38 +1,8 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
-}: let
-  shellScript = import ../../lib/shellScript.nix {
-    inherit pkgs;
-    lib = pkgs.lib;
-    runtimeShell = pkgs.runtimeShell;
-    writeTextFile = pkgs.writeTextFile;
-  };
-
-  getBlock = {
-    name,
-    path,
-    pure ? true,
-    deps ? [],
-  }: let
-    real_path =
-      if builtins.hasAttr name config.aus.programs.dwmblocks.block_overrides
-      then config.aus.programs.dwmblocks.block_overrides.${name}
-      else path;
-  in "${shellScript {
-    inherit name;
-    path = real_path;
-    inherit pure;
-    inherit deps;
-  }}/bin/${name}";
-
-  dwmblocks = pkgs.dwmblocks {
-    blocks = [
-      {
-        command = getBlock {
-          name = "music";
+{pkgs, ...}: {
+  config.aus.dwmblocks = {
+    blocks = {
+      music = {
+        cmd = {
           path = ./blocks/music;
           deps = with pkgs; [
             scripts.media_control
@@ -44,10 +14,10 @@
         };
         interval = 1;
         signal = 2;
-      }
-      {
-        command = getBlock {
-          name = "memory";
+        order = 1;
+      };
+      memory = {
+        cmd = {
           path = ./blocks/memory;
           deps = with pkgs; [
             polkit
@@ -60,10 +30,10 @@
         };
         interval = 1;
         signal = 3;
-      }
-      {
-        command = getBlock {
-          name = "cpu";
+        order = 2;
+      };
+      cpu = {
+        cmd = {
           path = ./blocks/cpu;
           deps = with pkgs; [
             gamemode
@@ -75,23 +45,22 @@
             util-linux
             btop
           ];
+
           pure = false;
         };
         interval = 3;
         signal = 4;
-      }
-      {
-        command = getBlock {
-          name = "gpu";
-          path = ./blocks/gpu;
-          pure = false;
-        };
+        order = 3;
+      };
+      gpu = {
+        cmd.path = ./blocks/gpu;
+        cmd.pure = false;
         interval = 3;
         signal = 8;
-      }
-      {
-        command = getBlock {
-          name = "clock";
+        order = 4;
+      };
+      clock = {
+        cmd = {
           path = ./blocks/clock;
           deps = with pkgs; [
             libnotify
@@ -102,10 +71,10 @@
         };
         interval = 10;
         signal = 5;
-      }
-      {
-        command = getBlock {
-          name = "mail";
+        order = 5;
+      };
+      mail = {
+        cmd = {
           path = ./blocks/mail;
           deps = with pkgs; [
             util-linux
@@ -115,10 +84,10 @@
         };
         interval = 10;
         signal = 6;
-      }
-      {
-        command = getBlock {
-          name = "volume";
+        order = 6;
+      };
+      volume = {
+        cmd = {
           path = ./blocks/volume;
           deps = with pkgs; [
             pypulse
@@ -131,10 +100,10 @@
         };
         interval = 60;
         signal = 10;
-      }
-      {
-        command = getBlock {
-          name = "updates";
+        order = 7;
+      };
+      updates = {
+        cmd = {
           path = ./blocks/updates;
           pure = false;
           deps = with pkgs; [
@@ -144,10 +113,10 @@
         };
         interval = 10;
         signal = 9;
-      }
-      {
-        command = getBlock {
-          name = "mouse_battery";
+        order = 8;
+      };
+      mouse_battery = {
+        cmd = {
           path = ./blocks/mouse_battery;
           deps = with pkgs; [
             upower
@@ -159,10 +128,10 @@
         };
         interval = 30;
         signal = 8;
-      }
-      {
-        command = getBlock {
-          name = "indicator_keys";
+        order = 9;
+      };
+      indicator_keys = {
+        cmd = {
           path = ./blocks/indicator_keys;
           deps = with pkgs; [
             xorg.xset
@@ -171,10 +140,10 @@
         };
         interval = 3;
         signal = 11;
-      }
-      {
-        command = getBlock {
-          name = "internet";
+        order = 10;
+      };
+      internet = {
+        cmd = {
           path = ./blocks/internet;
           deps = with pkgs; [
             gawk
@@ -182,24 +151,8 @@
         };
         interval = 30;
         signal = 7;
-      }
-    ];
-    delimiter = " | ";
-  };
-in {
-  options.aus.programs.dwmblocks = {
-    enable = lib.mkEnableOption "dwmblocks";
-    block_overrides = lib.mkOption {
-      type = lib.types.attrsOf lib.types.path;
-      default = {};
-      description = "Override the default blocks";
-    };
-  };
-
-  config = lib.mkIf config.aus.programs.dwmblocks.enable {
-    programs.dwmblocks = {
-      enable = true;
-      pkg = dwmblocks;
+        order = 11;
+      };
     };
   };
 }

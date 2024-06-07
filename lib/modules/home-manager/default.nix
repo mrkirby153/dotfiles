@@ -1,8 +1,9 @@
 {...}: {
   imports = [
-    ./restic.nix
-    ./displays.nix
     ./autostart.nix
+    ./displays.nix
+    ./dwmblocks.nix
+    ./restic.nix
     ./zsh.nix
   ];
 }
