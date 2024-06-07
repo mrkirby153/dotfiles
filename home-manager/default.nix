@@ -4,7 +4,6 @@
     ./sops.nix
     # Import custom modules
     ./home-manager
-    ./displays
 
     # Import modules for programs
     ./attic.nix
@@ -16,7 +15,6 @@
     ./mail.nix
     ./nh.nix
     ./picom
-    ./restic
     ./screenshot
     ./scripts.nix
     ./shell

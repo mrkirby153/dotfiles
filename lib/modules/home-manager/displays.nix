@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  aus,
   ...
 }: let
   posType = lib.types.submodule {
@@ -79,7 +80,7 @@
     };
   };
 
-  toXrandr = import ../../lib/randr.nix {xrandr = pkgs.xorg.xrandr;};
+  toXrandr = aus.lib.randr;
   profileNames = builtins.attrNames config.aus.displays;
 
   asCase = name: command: ''

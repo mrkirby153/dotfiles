@@ -78,14 +78,18 @@
           inherit pkgs;
           inherit (pkgs) lib;
         };
+        aus = import ./lib {
+          inherit pkgs;
+        };
       in
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules =
             [
               sops-nix.homeManagerModule
+              ./lib/modules/home-manager
               ./hosts/${name}/configuration.nix
-              ./modules
+              ./home-manager
             ]
             ++ extraModules;
           extraSpecialArgs =
@@ -94,6 +98,7 @@
             // {
               inherit pkgs-unstable;
               inherit ts;
+              aus.lib = aus;
             };
         };
 
