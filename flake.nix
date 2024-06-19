@@ -31,6 +31,10 @@
       url = "github:atuinsh/atuin";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -44,6 +48,7 @@
     my-nixpkgs,
     my-nvim,
     atuin,
+    nix-darwin,
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: {
@@ -105,6 +110,17 @@
       homeConfigurations = {
         "austin@malos" = mkSystem {name = "malos";};
         "austin@aus-box" = mkSystem {name = "aus-box";};
+      };
+
+      darwinConfigurations = {
+        "austin@Austins-MBP" = nix-darwin.lib.darwinSystem {
+          modules = [
+            ./darwin
+            home-manager.darwinModules.home-manager {}
+            ./hosts/austins-mbp/configuration.nix
+          ];
+          specialArgs = inputs;
+        };
       };
 
       overlays.pkgs = final: prev:
