@@ -32,11 +32,6 @@
         push.autoSetupRemote = true;
         init.defaultBranch = "main";
         core.autocrlf = "input";
-        url = {
-          "git@github.com:" = {
-            insteadOf = "https://github.com/";
-          };
-        };
       };
       delta = {
         enable = true;
