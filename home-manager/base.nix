@@ -25,21 +25,28 @@
   config = {
     # Set up home manager
     home.username = config.aus.username;
-    home.homeDirectory = config.aus.home;
+    home.homeDirectory = lib.mkForce config.aus.home;
 
     home.stateVersion = "23.11";
     programs.home-manager.enable = true;
     news.display = "silent";
 
-    xsession.enable = true;
-    home.packages = with pkgs; [
-      httpie
-      nix-prefetch-scripts
-      nix-output-monitor
-      nil
-      comma
-      pypulse
-    ];
+    xsession.enable = pkgs.stdenv.isLinux;
+    home.packages = with pkgs;
+      [
+        httpie
+        nix-prefetch-scripts
+        nix-output-monitor
+        nil
+        comma
+      ]
+      ++ (
+        if pkgs.stdenv.isLinux
+        then [
+          pypulse
+        ]
+        else []
+      );
 
     systemd.user.startServices = "sd-switch";
 

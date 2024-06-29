@@ -112,14 +112,35 @@
         "austin@aus-box" = mkSystem {name = "aus-box";};
       };
 
-      darwinConfigurations = {
+      darwinConfigurations = let
+        specialArgs =
+          inputs
+          // {
+            pkgs-unstable = import nixpkgs-unstable {
+              system = "aarch64-darwin";
+              overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default atuin.overlays.default];
+            };
+          };
+      in {
         "austin@Austins-MBP" = nix-darwin.lib.darwinSystem {
           modules = [
             ./darwin
-            home-manager.darwinModules.home-manager {}
-            ./hosts/austins-mbp/configuration.nix
+            home-manager.darwinModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.austin = {
+                imports = [
+                  sops-nix.homeManagerModule
+                  ./lib/modules/home-manager
+                  ./home-manager
+                  ./hosts/austins-mbp/configuration.nix
+                ];
+              };
+              home-manager.extraSpecialArgs = specialArgs;
+            }
           ];
-          specialArgs = inputs;
+          specialArgs = specialArgs;
         };
       };
 

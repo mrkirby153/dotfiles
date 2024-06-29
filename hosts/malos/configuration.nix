@@ -74,5 +74,7 @@ in {
         ];
       };
     };
+
+    sops.enable = true;
   };
 }

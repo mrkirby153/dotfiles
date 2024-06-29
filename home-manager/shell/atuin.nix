@@ -3,7 +3,22 @@
   lib,
   pkgs,
   ...
-}: {
+}: 
+let
+cfg = config.aus.programs.shell.atuin;
+in 
+{
+
+  options = {
+    aus.programs.shell.atuin = {
+      daemon = lib.mkOption {
+        description = "Enable atuin daemon";
+        type = lib.types.bool;
+        default = pkgs.stdenv.hostPlatform.isLinux;
+      };
+    };
+  };
+
   config = lib.mkIf config.aus.programs.shell.enable {
     programs.atuin = {
       enable = true;
@@ -18,7 +33,7 @@
         sync = {
           records = true;
         };
-        daemon = {
+        daemon = lib.mkIf (cfg.daemon) {
           enabled = true;
           socket_path = "/run/user/${toString config.aus.uid}/atuin.socket";
           systemd_socket = true;

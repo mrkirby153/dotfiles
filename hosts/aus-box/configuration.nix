@@ -113,6 +113,7 @@ in {
         ];
       };
     };
+    sops.enable = true;
   };
   config.sops.secrets = {
     restic_local = {
