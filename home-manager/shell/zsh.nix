@@ -17,7 +17,7 @@ in {
         ignoreDups = true;
       };
       initExtra = ''
-        zstyle ':notify:*' notifier "${lib.getExe notifier}"
+        ${lib.strings.optionalString pkgs.stdenv.hostPlatform.isLinux "zstyle ':notify:*' notifier \"${lib.getExe notifier}\""}
         ${builtins.readFile ./scripts/zshrc}
       '';
       oh-my-zsh = {

@@ -4,7 +4,8 @@
     homebrew = {
       enable = true;
       brews = [
-
+        "gpg"
+        "terminal-notifier"
       ];
       casks = [
         "barrier"
