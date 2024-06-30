@@ -5,6 +5,8 @@
       enable = true;
       brews = [
         "gpg"
+        "hyfetch"
+        "teleport"
         "terminal-notifier"
       ];
       casks = [
