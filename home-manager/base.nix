@@ -50,7 +50,7 @@
 
     systemd.user.startServices = "sd-switch";
 
-    sops = {
+    sops = lib.mkIf pkgs.stdenv.isLinux {
       defaultSymlinkPath = "/run/user/${toString config.aus.uid}/secrets";
       defaultSecretsMountPoint = "/run/user/${toString config.aus.uid}/secrets.d";
     };
