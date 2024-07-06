@@ -14,7 +14,7 @@ in {
 
     wallpaper = {
       enable = true;
-      path = ./derail_valley.png;
+      path = ./firewatch.jpg;
     };
 
     dwmblocks.enable = true;
