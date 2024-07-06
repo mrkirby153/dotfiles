@@ -34,3 +34,32 @@ jobs:
           nix run --extra-experimental-features "nix-command flakes" . "build" -- --flake ".#${{ matrix.machine.host }}" --extra-experimental-features "nix-command flakes" -L
           nix run github:zhaofengli/attic#default login mrkirby153-public https://cache.mrkirby153.com ${{ secrets.ATTIC_TOKEN }}
           nix run github:zhaofengli/attic#default push mrkirby153-public result -j 2
+  build-osx:
+    runs-on:  macos-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        machine:
+          - host: austin@Austins-MBP
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          sudo mkdir -p /etc/nix
+          echo "machine cache.mrkirby153.com password ${{ secrets.ATTIC_TOKEN }}" | sudo tee /etc/nix/netrc > /dev/null
+          git config --global url."https://${{secrets.GH_TOKEN}}@github.com".insteadOf https://github.com
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          extra-conf: |
+            fallback = true
+            http-connections = 128
+            max-substitution-jobs = 128
+            substituters = https://cache.mrkirby153.com/mrkirby153-public?priority=43 https://nix-community.cachix.org?priority=41 https://numtide.cachix.org?priority=42 https://cache.nixos.org/
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= mrkirby153-public:DxpgFWGtjTaSh6U/bt+Xr5qfj4gVbRjUzaePmA/ndwM= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE=
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Build and push system
+        run: |
+          nix run --extra-experimental-features "nix-command flakes" nix-darwin -- build --flake ".#${{ matrix.machine.host }}"
+          nix run github:zhaofengli/attic#default login mrkirby153-public https://cache.mrkirby153.com ${{ secrets.ATTIC_TOKEN }}
+          nix run github:zhaofengli/attic#default push mrkirby153-public result -j 2
