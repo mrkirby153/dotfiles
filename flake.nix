@@ -25,7 +25,7 @@
     };
     my-nvim = {
       url = "github:mrkirby153/nvim";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     atuin = {
       url = "github:atuinsh/atuin";
