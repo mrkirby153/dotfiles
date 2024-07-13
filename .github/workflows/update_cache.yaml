@@ -33,13 +33,14 @@ jobs:
           nix run github:zhaofengli/attic#default login mrkirby153-public https://cache.mrkirby153.com ${{ secrets.ATTIC_TOKEN }}
           nix run github:zhaofengli/attic#default push mrkirby153-public result -j 2
   build-osx:
-    runs-on:  macos-latest
+    runs-on: macos-latest
     strategy:
       fail-fast: false
       max-parallel: 1
       matrix:
         machine:
           - host: austin@Austins-MBP
+    needs: [build]
     steps:
       - uses: actions/checkout@v4
       - run: |
