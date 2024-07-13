@@ -18,10 +18,10 @@ jobs:
       - run: |
           sudo mkdir -p /etc/nix
           echo "machine cache.mrkirby153.com password ${{ secrets.ATTIC_TOKEN }}" | sudo tee /etc/nix/netrc > /dev/null
-          git config --global url."https://${{secrets.GH_TOKEN}}@github.com".insteadOf https://github.com
+          git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com".insteadOf https://github.com
       - uses: DeterminateSystems/nix-installer-action@main
         with:
-          github-token: ${{ secrets.GH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           extra-conf: |
             fallback = true
             substituters = https://cache.mrkirby153.com/mrkirby153-public?priority=43 https://nix-community.cachix.org?priority=41 https://numtide.cachix.org?priority=42 https://cache.nixos.org/
@@ -46,10 +46,10 @@ jobs:
       - run: |
           sudo mkdir -p /etc/nix
           echo "machine cache.mrkirby153.com password ${{ secrets.ATTIC_TOKEN }}" | sudo tee /etc/nix/netrc > /dev/null
-          git config --global url."https://${{secrets.GH_TOKEN}}@github.com".insteadOf https://github.com
+          git config --global url."https://${{secrets.GITHUB_TOKEN}}@github.com".insteadOf https://github.com
       - uses: DeterminateSystems/nix-installer-action@main
         with:
-          github-token: ${{ secrets.GH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           extra-conf: |
             fallback = true
             substituters = https://cache.mrkirby153.com/mrkirby153-public?priority=43 https://nix-community.cachix.org?priority=41 https://numtide.cachix.org?priority=42 https://cache.nixos.org/
