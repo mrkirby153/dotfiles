@@ -1,9 +1,15 @@
 {
   pkgs,
+  pkgs-unstable,
+  my-nixpkgs,
   config,
   lib,
   ...
-}: {
+}: 
+let
+  posting = pkgs-unstable.callPackage "${my-nixpkgs}/pkgs/py/posting.nix" {};
+in
+{
   options.aus = {
     username = lib.mkOption {
       type = lib.types.str;
@@ -39,6 +45,7 @@
         nix-output-monitor
         nil
         comma
+        posting
       ]
       ++ (
         if pkgs.stdenv.isLinux
