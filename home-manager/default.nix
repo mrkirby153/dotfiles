@@ -8,7 +8,7 @@
     ./download_reaper.nix
     ./dunst.nix
     ./dwmblocks/dwmblocks.nix
-    ./git.nix
+    ./git
     ./mail.nix
     ./nh.nix
     ./picom

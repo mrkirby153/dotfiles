@@ -32,6 +32,7 @@
         push.autoSetupRemote = true;
         init.defaultBranch = "main";
         core.autocrlf = "input";
+        core.excludesFile = "${./globalignore}";
       };
       delta = {
         enable = true;
