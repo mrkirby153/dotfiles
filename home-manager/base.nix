@@ -45,7 +45,7 @@ in
         nix-output-monitor
         nil
         comma
-        posting
+        # posting
       ]
       ++ (
         if pkgs.stdenv.isLinux
