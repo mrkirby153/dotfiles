@@ -3,12 +3,9 @@
   lib,
   pkgs,
   ...
-}: 
-let
-cfg = config.aus.programs.shell.atuin;
-in 
-{
-
+}: let
+  cfg = config.aus.programs.shell.atuin;
+in {
   options = {
     aus.programs.shell.atuin = {
       daemon = lib.mkOption {

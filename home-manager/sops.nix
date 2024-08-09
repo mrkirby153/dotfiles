@@ -2,11 +2,9 @@
   config,
   lib,
   ...
-}: 
-let
+}: let
   cfg = config.aus.sops;
-  in
-{
+in {
   options = {
     aus.sops = {
       enable = lib.mkEnableOption "sops";

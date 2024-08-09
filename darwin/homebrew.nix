@@ -1,5 +1,8 @@
-{ pkgs, lib, ...}:
 {
+  pkgs,
+  lib,
+  ...
+}: {
   config = {
     homebrew = {
       enable = true;

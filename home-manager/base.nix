@@ -5,11 +5,9 @@
   config,
   lib,
   ...
-}: 
-let
+}: let
   posting = pkgs-unstable.callPackage "${my-nixpkgs}/pkgs/py/posting.nix" {};
-in
-{
+in {
   options.aus = {
     username = lib.mkOption {
       type = lib.types.str;
@@ -43,8 +41,9 @@ in
         httpie
         nix-prefetch-scripts
         nix-output-monitor
-        nil
+        nixd
         comma
+        alejandra
         # posting
       ]
       ++ (
