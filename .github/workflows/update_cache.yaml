@@ -48,7 +48,7 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Build and push system
         run: |
-          nix run --extra-experimental-features "nix-command flakes" . "build" -- --flake ".#${{ matrix.configuration.host }}" --extra-experimental-features "nix-command flakes" -L
+          nix run --extra-experimental-features "nix-command flakes" . "build" -- --flake ".#${{ matrix.configuration }}" --extra-experimental-features "nix-command flakes" -L
           nix run github:zhaofengli/attic#default login mrkirby153-public https://cache.mrkirby153.com ${{ secrets.ATTIC_TOKEN }}
           nix run github:zhaofengli/attic#default push mrkirby153-public result -j 2
   build-osx:
@@ -74,6 +74,6 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Build and push system
         run: |
-          nix run --extra-experimental-features "nix-command flakes" nix-darwin -- build --flake ".#${{ matrix.configuration.host }}"
+          nix run --extra-experimental-features "nix-command flakes" nix-darwin -- build --flake ".#${{ matrix.configuration }}"
           nix run github:zhaofengli/attic#default login mrkirby153-public https://cache.mrkirby153.com ${{ secrets.ATTIC_TOKEN }}
           nix run github:zhaofengli/attic#default push mrkirby153-public result -j 2
