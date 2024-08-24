@@ -16,6 +16,7 @@
     ./scripts.nix
     ./shell
     ./sxhkd.nix
+    ./terminal.nix
     ./vim.nix
     ./wallpaper.nix
     ./x11.nix

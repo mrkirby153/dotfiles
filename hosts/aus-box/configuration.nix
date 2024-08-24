@@ -19,6 +19,12 @@ in {
 
     dwmblocks.enable = true;
 
+    terminal = {
+      enable = true;
+      terminal = "ghostty";
+      fallback = null;
+    };
+
     programs = {
       screenshot.enable = true;
       scripts.enable = true;

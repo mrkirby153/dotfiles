@@ -463,11 +463,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1722830992,
-        "narHash": "sha256-dAVPSCigBMCEripE7xUGKWbJFWLu2cssngMx9p3A9zk=",
+        "lastModified": 1724462132,
+        "narHash": "sha256-wfR7i3Mm+V38VEUDr58Awhf8v2UBteVxKtm+MyMShNY=",
         "owner": "mrkirby153",
         "repo": "nix-pkgs",
-        "rev": "5b137c45f6fa1b488eefc9001e54807a7cfef0a3",
+        "rev": "a2aea04c5c447c2772affd13c55187cd40f59996",
         "type": "github"
       },
       "original": {
