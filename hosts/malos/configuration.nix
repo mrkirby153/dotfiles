@@ -15,6 +15,11 @@ in {
 
     dwmblocks.enable = true;
 
+    terminal = {
+      enable = true;
+      terminal = "${pkgs.aus.st}/bin/st";
+    };
+
     programs = {
       screenshot.enable = true;
       scripts.enable = true;
