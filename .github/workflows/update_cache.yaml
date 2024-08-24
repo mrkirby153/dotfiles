@@ -4,15 +4,34 @@ on:
     branches:
       - main
 jobs:
+  discover-configurations:
+    runs-on: ubuntu-latest
+    outputs:
+      home: ${{ steps.discover-configurations.outputs.home }}
+      darwin: ${{ steps.discover-configurations.outputs.darwin }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - id: discover-configurations
+        run: |
+          echo "Discovering home configurations..."
+          configurations=$(nix eval --json .#homeConfigurations --apply builtins.attrNames)
+          echo "Discovered the following home configurations: $configurations"
+          echo "home={\"configuration\":$configurations}" >> "$GITHUB_OUTPUT"
+          echo "Discovering darwin configurations..."
+          configurations=$(nix eval --json .#darwinConfigurations --apply builtins.attrNames)
+          echo "Discovered the following darwin configurations: $configurations"
+          echo "darwin={\"configuration\":$configurations}" >> "$GITHUB_OUTPUT"
+
   build:
+    needs: discover-configurations
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       max-parallel: 1
-      matrix:
-        machine:
-          - host: austin@aus-box
-          - host: austin@malos
+      matrix: ${{fromJson(needs.discover-configurations.outputs.home)}}
     steps:
       - uses: actions/checkout@v4
       - run: |
@@ -29,7 +48,7 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Build and push system
         run: |
-          nix run --extra-experimental-features "nix-command flakes" . "build" -- --flake ".#${{ matrix.machine.host }}" --extra-experimental-features "nix-command flakes" -L
+          nix run --extra-experimental-features "nix-command flakes" . "build" -- --flake ".#${{ matrix.configuration.host }}" --extra-experimental-features "nix-command flakes" -L
           nix run github:zhaofengli/attic#default login mrkirby153-public https://cache.mrkirby153.com ${{ secrets.ATTIC_TOKEN }}
           nix run github:zhaofengli/attic#default push mrkirby153-public result -j 2
   build-osx:
@@ -37,10 +56,8 @@ jobs:
     strategy:
       fail-fast: false
       max-parallel: 1
-      matrix:
-        machine:
-          - host: austin@Austins-MBP
-    needs: [build]
+      matrix: ${{fromJson(needs.discover-configurations.outputs.darwin)}}
+    needs: [discover-configurations, build]
     steps:
       - uses: actions/checkout@v4
       - run: |
@@ -57,6 +74,6 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Build and push system
         run: |
-          nix run --extra-experimental-features "nix-command flakes" nix-darwin -- build --flake ".#${{ matrix.machine.host }}"
+          nix run --extra-experimental-features "nix-command flakes" nix-darwin -- build --flake ".#${{ matrix.configuration.host }}"
           nix run github:zhaofengli/attic#default login mrkirby153-public https://cache.mrkirby153.com ${{ secrets.ATTIC_TOKEN }}
           nix run github:zhaofengli/attic#default push mrkirby153-public result -j 2
