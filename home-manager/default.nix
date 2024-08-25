@@ -8,6 +8,7 @@
     ./download_reaper.nix
     ./dunst.nix
     ./dwmblocks/dwmblocks.nix
+    ./ghostty.nix
     ./git
     ./mail.nix
     ./nh.nix

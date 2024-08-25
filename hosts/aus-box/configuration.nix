@@ -42,6 +42,7 @@ in {
           key = "90EF2AB021AB6FED";
         };
       };
+      ghostty.enable = true;
       attic.enable = true;
       dunst.enable = true;
       picom.enable = true;
