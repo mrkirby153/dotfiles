@@ -12,6 +12,7 @@
         "teleport"
         "terminal-notifier"
         "syncthing"
+        "rustup"
       ];
       casks = [
         "barrier"

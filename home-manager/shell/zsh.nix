@@ -72,6 +72,7 @@ in {
       "$HOME/.config/composer/vendor/bin"
       "$HOME/.local/bin"
       "$HOME/.mix/escripts"
+      "$HOME/.cargo/bin"
     ];
   };
 }
