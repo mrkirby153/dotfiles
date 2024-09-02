@@ -13,6 +13,7 @@
         "terminal-notifier"
         "syncthing"
         "rustup"
+        "protobuf"
       ];
       casks = [
         "barrier"
