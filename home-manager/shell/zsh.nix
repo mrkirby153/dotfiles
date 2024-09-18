@@ -1,11 +1,22 @@
 {
   pkgs,
+  pkgs-unstable,
   lib,
   config,
   ...
 }: let
   notifier = pkgs.writeShellScriptBin "notifier" (builtins.readFile ./scripts/notifier);
   httpServer = pkgs.python3.withPackages (ps: with ps; [httpserver]);
+
+  kubecolor = pkgs-unstable.kubecolor.overrideAttrs (oldAttrs: {
+    src = pkgs.fetchFromGitHub {
+      owner = "kubecolor";
+      repo = "kubecolor";
+      rev = "v0.4.0";
+      sha256 = "sha256-jOFeTAfV7X8+z+DBOBOFVcspxZ8QssKFWRGK9HnqBO0=";
+    };
+    vendorHash = "sha256-b99HAM1vsncq9Q5XJiHZHyv7bjQs6GGyNAMONmGpxms=";
+  });
 in {
   config = lib.mkIf config.aus.programs.shell.enable {
     programs.zsh = {
@@ -36,6 +47,7 @@ in {
         ls = "${lib.getExe pkgs.lsd}";
         lg = "lazygit";
         mv = "mv -iv";
+        kubectl = "${lib.getExe kubecolor}";
         rm = "rm -Iv";
       };
     };
