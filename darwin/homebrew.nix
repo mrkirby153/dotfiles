@@ -20,6 +20,7 @@
         "raycast"
         "visual-studio-code"
         "orbstack"
+        "readdle-spark"
       ];
       taps = [
         "homebrew/services"
