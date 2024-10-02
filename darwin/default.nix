@@ -10,8 +10,9 @@
     nix.settings = {
       experimental-features = "nix-command flakes";
       trusted-users = ["austin" "root"];
-      auto-optimise-store = true;
+      auto-optimise-store = false;
     };
+    nix.optimise.automatic = true;
     programs.zsh.enable = true;
 
     nixpkgs.overlays = [
