@@ -1,13 +1,10 @@
 {
   pkgs,
   pkgs-unstable,
-  my-nixpkgs,
   config,
   lib,
   ...
-}: let
-  posting = pkgs-unstable.callPackage "${my-nixpkgs}/pkgs/py/posting.nix" {};
-in {
+}: {
   options.aus = {
     username = lib.mkOption {
       type = lib.types.str;
@@ -44,10 +41,10 @@ in {
         nixd
         comma
         alejandra
-        # posting
+        pkgs-unstable.binsider
       ]
       ++ (
-        if pkgs.stdenv.isLinux
+        if stdenv.isLinux
         then [
           pypulse
         ]
