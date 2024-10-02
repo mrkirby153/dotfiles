@@ -41,12 +41,12 @@
         nixd
         comma
         alejandra
-        pkgs-unstable.binsider
       ]
       ++ (
         if stdenv.isLinux
         then [
           pypulse
+          pkgs-unstable.binsider
         ]
         else []
       );
