@@ -17,7 +17,8 @@ in {
 
     terminal = {
       enable = true;
-      terminal = "${pkgs.aus.st}/bin/st";
+      terminal = "ghostty";
+      fallback = null;
     };
 
     programs = {
@@ -46,6 +47,7 @@ in {
         enable = true;
         flake = "/home/austin/Development/nix/dotfiles";
       };
+      ghostty.enable = true;
     };
 
     displays = {
