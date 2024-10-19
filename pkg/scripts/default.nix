@@ -230,4 +230,9 @@ in rec {
     path = ./st_wrapper;
     pure = false;
   };
+  usb_wake_disable = shellScript {
+    name = "usb_wake_disable";
+    path = ./usb_wake_disable;
+    deps = [];
+  };
 }

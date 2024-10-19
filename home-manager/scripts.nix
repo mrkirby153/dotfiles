@@ -30,6 +30,7 @@
       power_menu
       screenshot
       st_wrapper
+      usb_wake_disable
     ];
   };
 }
