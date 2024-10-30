@@ -97,6 +97,11 @@ in {
             name = "DP-4";
             enable = true;
             primary = true;
+            mode = {
+              width = 2560;
+              height = 1440;
+            };
+            rate = 144.0;
           }
         ];
       };
@@ -108,14 +113,24 @@ in {
             name = "DP-4";
             enable = true;
             primary = true;
+            mode = {
+              width = 2560;
+              height = 1440;
+            };
+            rate = 144.0;
           }
           {
             name = "DP-0";
             enable = true;
             pos = {
-              x = 1920;
+              x = 2560;
               y = 0;
             };
+            mode = {
+              width = 2560;
+              height = 1440;
+            };
+            rate = 144.0;
           }
         ];
       };

@@ -45,6 +45,11 @@
           y = 0;
         };
       };
+      rate = lib.mkOption {
+        type = lib.types.float;
+        description = "The refresh rate of the display";
+        default = 60.0;
+      };
       rotate = lib.mkOption {
         type = lib.types.enum ["normal" "left" "right" "inverted"];
         description = "How the display should be rotated";
