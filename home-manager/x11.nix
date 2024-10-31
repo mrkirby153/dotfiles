@@ -22,12 +22,23 @@
     nord14 = "#A3BE8C";
     nord15 = "#B48EAD";
   };
+  cfg = config.aus.programs.x11;
 in {
   options.aus.programs.x11 = {
     enable = lib.mkEnableOption "Enable graphical environment";
+    cursorSize = lib.mkOption {
+      type = lib.types.int;
+      default = 24;
+      description = "Size of the cursor";
+    };
+    cursorTheme = lib.mkOption {
+      type = lib.types.str;
+      default = "Adwaita";
+      description = "Name of the cursor theme";
+    };
   };
 
-  config = lib.mkIf config.aus.programs.x11.enable {
+  config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
       aus.st
       aus.dwm
@@ -55,6 +66,8 @@ in {
       "*.color13" = theme.nord15;
       "*.color14" = theme.nord7;
       "*.color15" = theme.nord6;
+      "Xcursor.theme" = cfg.cursorTheme;
+      "Xcursor.size" = cfg.cursorSize;
     };
 
     home.file."theme" = {
