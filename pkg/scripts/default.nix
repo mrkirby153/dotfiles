@@ -15,17 +15,18 @@ in rec {
     name = "screenshot";
     path = ./screenshot;
     deps = with pkgs; [
+      aus.dmenu
       curl
-      ffmpeg-full
-      slop
-      maim
-      xclip
-      libnotify
       feh
-      gnugrep
-      xorg.xrandr
-      imagemagick
+      ffmpeg-full
       flameshot
+      gnugrep
+      imagemagick
+      libnotify
+      maim
+      slop
+      xclip
+      xorg.xrandr
     ];
   };
   build_nixos_configuration = shellScript {

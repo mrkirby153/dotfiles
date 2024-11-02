@@ -25,6 +25,7 @@ fi
 
 debug() {
     if [[ $VERBOSE -gt 0 ]]; then
+        set -x
         echo "debug: $@"
     fi
 }
@@ -146,7 +147,7 @@ record() {
     local tempout=$(mktemp $TEMP_DIR/outXXXXXXXXXX.avi)
     local temppalette
     local tempframe
-    local outfile="$TEMP_DIR/output.gif"
+    local outfile
 
     _record_cleanup() {
         debug "cleaning up after record"
@@ -208,14 +209,39 @@ record() {
         exit 1
     fi
 
-    notify-send "Encoding recording. This may take some time"
-    temppalette=$(mktemp $TEMP_DIR/outXXXXXXX.png)
-    debug "Temp pallete: $temppallete"
-    ffmpeg -v info -i "$tempout" -vf "fps=$RECORD_FRAMERATE,palettegen=stats_mode=full" -y $temppalette
-    ffmpeg -v info -i "$tempout" -i "$temppalette" -lavfi "fps=$RECORD_FRAMERATE [x]; [x][1:v] paletteuse=dither=sierra2_4a" -y $outfile
+    # Get the first frame
+    tempframe=$(mktemp $TEMP_DIR/frameXXXXXXXXXX.png)
+    ffmpeg -i "$tempout" -vframes 1 -y "$tempframe"
+
+
+    type=$(printf "gif\nvideo" | dmenu -c -l 20 -i -p "What do you want to do?")
+
+    local out_ext=""
+
+    case $type in
+        gif)
+        notify-send "Converting to gif..."
+        outfile="$TEMP_DIR/output.gif"
+        out_ext="gif"
+        temppalette=$(mktemp $TEMP_DIR/outXXXXXXX.png)
+        debug "Temp pallete: $temppallete"
+        ffmpeg -v info -i "$tempout" -vf "fps=$RECORD_FRAMERATE,palettegen=stats_mode=full" -y $temppalette
+        ffmpeg -v info -i "$tempout" -i "$temppalette" -lavfi "fps=$RECORD_FRAMERATE [x]; [x][1:v] paletteuse=dither=sierra2_4a" -y $outfile
+        ;;
+        video)
+        notify-send "Re-encoding video..."
+        outfile="$TEMP_DIR/output.mp4"
+        out_ext="mp4"
+        ffmpeg -i "$tempout" -c:v libx264 -crf 28 -preset fast -movflags +faststart "$outfile"
+        ;;
+        *)
+            echo "Invalid type"
+            exit 1
+        ;;
+    esac
 
     echo "Saved to $outfile"
-    notify-send "Uploading gif..."
+    notify-send "Uploading video..."
     upload $outfile
 
     echo "Saving to folder"
@@ -230,13 +256,13 @@ record() {
     else
         debug "$folder already exists"
     fi
-    file="$folder/screencapture-${date}-${day}_${time}.gif"
+    file="$folder/screencapture-${date}-${day}_${time}.$out_ext"
     cp $outfile $file
 
     result=$(cat $TEMP_DIR/output)
     echo "Uploaded as $result"
     echo -n $result | xclip -selection c
-    notify-send "Uploaded" "Gif has been uploaded as $result"
+    notify-send "Uploaded" "Video has been uploaded as $result" -i "$tempframe"
 }
 
 debug "Temporary directory is $TEMP_DIR"
