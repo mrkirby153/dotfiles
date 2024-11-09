@@ -105,6 +105,21 @@ in {
           }
         ];
       };
+      single-alt = {
+        keybind = "super + ctrl + shift + o";
+        displays = displays [
+          {
+            name = "DP-0";
+            enable = true;
+            primary = true;
+            mode = {
+              width = 2560;
+              height = 1440;
+            };
+            rate = 144.0;
+          }
+        ];
+      };
       dual = {
         keybind = "super + o";
         default = true;
