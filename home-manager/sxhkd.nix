@@ -51,6 +51,7 @@ in {
         "super + grave" = "${dunstctl} history-pop";
         "super + alt + period" = "${dunstctl} context";
         "super + shift + l" = "betterlockscreen -l dimblur";
+        "ctrl + super + m" = "${pkgs.scripts.monitorctl}/bin/monitorctl";
       };
     };
     xdg.configFile."sxhkd/sxhkdrc".onChange = ''

@@ -236,4 +236,18 @@ in rec {
     path = ./usb_wake_disable;
     deps = [];
   };
+  monitorctl = shellScript {
+    name = "monitorctl";
+    path = ./monitorctl;
+    pure = false;
+    deps = with pkgs; [
+      ddcutil
+      aus.dmenu
+      gawk
+      gnused
+      gnugrep
+      kmod
+      polkit
+    ];
+  };
 }

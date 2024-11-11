@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+dmenu_cmd="dmenu -c -l 20"
+
+load_i2c() {
+    if lsmod | grep -wq "i2c_dev"; then
+        return
+    else
+        echo "loading i2c-dev"
+        pkexec --user root "modprobe i2c-dev"
+    fi
+}
+
+
+load_i2c
+
+display=$(ddcutil detect | awk '/Display/ {d=$2} /DRM connector:/ {sub("card0-", "", $3); print "Display " d ": " $3}' | $dmenu_cmd | awk -F'[: ]+' '{print $2}')
+
+if [ ! "$display" ]; then
+    exit
+fi
+
+selected_input=$(ddcutil -d "$display" capabilities | awk '/Feature: 60 \(Input Source\)/ {flag=1; next} /Feature:/ {flag=0} flag && /Values:/ {next} flag' | sed 's/^[[:space:]]*//' | $dmenu_cmd | awk -F'[: ]+' '{print $1}')
+
+if [ ! "$selected_input" ]; then
+    exit
+fi
+
+ddcutil -d "$display" setvcp 60 "$selected_input"
