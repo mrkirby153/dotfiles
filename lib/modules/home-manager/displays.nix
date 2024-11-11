@@ -5,6 +5,7 @@
   aus,
   ...
 }: let
+  cfg = config.aus.displays.displays;
   posType = lib.types.submodule {
     options = {
       x = lib.mkOption {
@@ -86,14 +87,14 @@
   };
 
   toXrandr = aus.lib.randr;
-  profileNames = builtins.attrNames config.aus.displays;
+  profileNames = builtins.attrNames cfg;
 
   asCase = name: command: ''
     "${name}")
       ${command}
       ;;'';
 
-  xrandrCommands = builtins.mapAttrs (name: display: toXrandr display.displays) config.aus.displays;
+  xrandrCommands = builtins.mapAttrs (name: display: toXrandr display.displays) cfg;
 
   shellScript = pkgs.writeShellScriptBin "displays" ''
     [ $# -ne 1 ] && echo "Usage: displays <${builtins.concatStringsSep "|" profileNames}>" && exit 1
@@ -107,7 +108,7 @@
   '';
 
   keybinds = let
-    candidates = lib.attrsets.filterAttrs (key: config: config.keybind != "") config.aus.displays;
+    candidates = lib.attrsets.filterAttrs (key: config: config.keybind != "") cfg;
     keybindAttrs =
       builtins.mapAttrs (profile: config: {
         name = config.keybind;
@@ -117,19 +118,26 @@
   in
     builtins.listToAttrs (builtins.attrValues keybindAttrs);
 
-  defaultProfiles = builtins.attrNames (lib.attrsets.filterAttrs (key: config: config.default) config.aus.displays);
+  defaultProfiles = builtins.attrNames (lib.attrsets.filterAttrs (key: config: config.default) cfg);
 in
   with lib; {
     options.aus = {
-      displays = lib.mkOption {
-        default = {};
-        type = with types;
-          attrsOf configType;
-        description = "The displays to configure";
+      displays = {
+        displays = lib.mkOption {
+          default = {};
+          type = with types;
+            attrsOf configType;
+          description = "The displays to configure";
+        };
+        pkg = lib.mkOption {
+          default = shellScript;
+          type = types.package;
+          description = "The package to use for display management";
+        };
       };
     };
 
-    config = lib.mkIf (config.aus.displays != {}) {
+    config = lib.mkIf (cfg != {}) {
       assertions = [
         {
           assertion = length defaultProfiles <= 1;
@@ -137,7 +145,7 @@ in
         }
       ];
       home.packages = [
-        shellScript
+        config.aus.displays.pkg
       ];
       services.sxhkd.keybindings = keybinds;
 

@@ -50,7 +50,7 @@ in {
       ghostty.enable = true;
     };
 
-    displays = {
+    displays.displays = {
       single = {
         keybind = "super + shift + o";
         displays = displays [

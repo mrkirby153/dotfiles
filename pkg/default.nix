@@ -1,7 +1,5 @@
-{pkgs}: let
+{pkgs}: rec {
   scripts = pkgs.callPackage ./scripts {};
-in {
-  scripts = scripts;
   screenshot = scripts.screenshot;
   pypulse = pkgs.callPackage ./pypulse {};
 

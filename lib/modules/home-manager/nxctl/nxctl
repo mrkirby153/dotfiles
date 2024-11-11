@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+disconnect_line_in() {
+    for input in "${LINE_IN[@]}"; do
+        for output in "${SPEAKERS[@]}" "${HEADPHONES[@]}"; do
+            pw-jack jack_disconnect "$input" "$output" 2>/dev/null || true
+        done
+    done
+}
+
+headphones_connect() {
+    pw-jack jack_connect "${LINE_IN[0]}" "${HEADPHONES[0]}"
+    pw-jack jack_connect "${LINE_IN[1]}" "${HEADPHONES[1]}"
+}
+
+speakers_connect() {
+    pw-jack jack_connect "${LINE_IN[0]}" "${SPEAKERS[0]}"
+    pw-jack jack_connect "${LINE_IN[1]}" "${SPEAKERS[1]}"
+}
+
+if [ "$#" -eq 0 ]; then
+    option=$(echo -e "Activate\nDeactivate" | dmenu -c -l 20 -p "Select action")
+    if [ -z "$option" ]; then
+        exit 1
+    fi
+else
+    option=$1
+fi
+
+case "$option" in
+    "activate"|"Activate")
+        selected=$(echo -e "Speakers\nHeadphones" | dmenu -c -l 20 -p "Select audio output")
+        if [ -z "$selected" ]; then
+            exit 1
+        fi
+        disconnect_line_in
+        case "$selected" in
+            "Speakers")
+                speakers_connect
+                ;;
+            "Headphones")
+                headphones_connect
+                ;;
+        esac
+        displays single-alt
+        # Set source for display 2 to HDMI-2
+        ddcutil -d "$MONITOR_NUM" setvcp 60 "$SWITCH_INPUT"
+        ;;
+    "deactivate"|"Deactivate")
+        disconnect_line_in
+        displays dual
+        # Set source for display 2 to DisplayPort-1
+        ddcutil -d "$MONITOR_NUM" setvcp 60 "$COMPUTER_INPUT"
+        ;;
+    *)
+        echo "Usage: $0 {activate|deactivate}"
+        exit 1
+        ;;
+esac

@@ -17,6 +17,10 @@
     if pure
     then "${depsPath}:${defaultDeps}"
     else "${depsPath}:$PATH";
+  variableToString = x:
+    if lib.isList x
+    then "(${lib.strings.concatMapStringsSep " " (x: "\"${x}\"") x})"
+    else "\"${builtins.toString x}\"";
 in
   writeTextFile {
     inherit name;
@@ -34,7 +38,7 @@ in
         export PATH="${realPath}"
       ''
       + lib.optionalString (env != []) ''
-        ${lib.strings.concatMapStrings (x: "export ${x}\n") (builtins.attrValues (builtins.mapAttrs (n: v: "${n}=\"${v}\"") env))}
+        ${lib.strings.concatMapStrings (x: "export ${x}\n") (builtins.attrValues (builtins.mapAttrs (n: v: "${n}=${variableToString v}") env))}
       ''
       + ''
         ${builtins.readFile path}
