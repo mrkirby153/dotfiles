@@ -55,6 +55,10 @@ nix_linux() {
     fi
     ref=".#homeConfigurations.\"$configuration_name\".config.home.activationPackage"
     $nix build --extra-experimental-features "nix-command flakes" "$ref" --out-link "$out_link"
+    if [ $? -ne 0 ]; then
+        echo "Failed to build configuration"
+        exit 1
+    fi
 
     if [ "$NIX_CMD" = "switch" ]; then
         echo "Activating configuration..."
@@ -81,6 +85,10 @@ nix_darwin() {
     fi
 
     $nix build --extra-experimental-features "nix-command flakes" "$ref" --out-link "$out_link"
+    if [ $? -ne 0 ]; then
+        echo "Failed to build configuration"
+        exit 1
+    fi
     
     if [ "$NIX_CMD" = "switch" ]; then
         echo "Activating user configuration..."
