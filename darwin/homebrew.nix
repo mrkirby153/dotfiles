@@ -21,6 +21,7 @@
         "visual-studio-code"
         "orbstack"
         "readdle-spark"
+        "zoom"
       ];
       taps = [
         "homebrew/services"
