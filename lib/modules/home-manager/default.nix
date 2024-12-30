@@ -6,6 +6,7 @@
     ./ghostty.nix
     ./nxctl
     ./restic.nix
+    ./uxplay.nix
     ./zsh.nix
   ];
 }

@@ -57,5 +57,7 @@
       defaultSymlinkPath = "/run/user/${toString config.aus.uid}/secrets";
       defaultSecretsMountPoint = "/run/user/${toString config.aus.uid}/secrets.d";
     };
+
+    programs.uxplay.enable = true;
   };
 }
