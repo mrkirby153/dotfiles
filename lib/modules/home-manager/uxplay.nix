@@ -37,6 +37,7 @@ in {
         Service = {
           Type = "simple";
           ExecStart = "${cfg.pkg}/bin/uxplay ${cliOptions}";
+          Restart = "unless-stopped";
         };
         Install.WantedBy = ["default.target"];
       };
