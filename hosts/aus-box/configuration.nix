@@ -109,7 +109,7 @@ in {
         keybind = "super + ctrl + shift + o";
         displays = displays [
           {
-            name = "DP-0";
+            name = "DP-2";
             enable = true;
             primary = true;
             mode = {
@@ -135,7 +135,7 @@ in {
             rate = 144.0;
           }
           {
-            name = "DP-0";
+            name = "DP-2";
             enable = true;
             pos = {
               x = 2560;
