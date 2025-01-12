@@ -2,8 +2,26 @@
   pkgs,
   lib,
   config,
+  aus,
   ...
-}: {
+}: let
+  cfg = config.aus.programs.download-reaper;
+  downloadReaper = aus.lib.shellScript {
+    name = "download_reaper";
+    path = ./download_reaper;
+    deps = with pkgs; [
+      rsync
+      libnotify
+      findutils
+      gawk
+    ];
+    env = {
+      TARGET_PATH = cfg.target_path;
+      HOLDING_PATH_ROOT = cfg.destination_path;
+      HOLDING_PATH_FALLBACK = "${cfg.target_path}/.stale";
+    };
+  };
+in {
   options.aus.programs.download-reaper = {
     enable = lib.mkEnableOption "Enable download reaper";
     frequency = lib.mkOption {
@@ -19,9 +37,13 @@
       type = lib.types.str;
       description = "Path to move files to";
     };
+    pkg = lib.mkOption {
+      type = lib.types.pkgs;
+      default = downloadReaper;
+    };
   };
 
-  config = lib.mkIf config.aus.programs.download-reaper.enable {
+  config = lib.mkIf cfg.enable {
     systemd.user.services = {
       "download-reaper" = {
         Unit = {
@@ -29,13 +51,7 @@
         };
         Service = {
           Type = "oneshot";
-          ExecStart = let
-            download_reaper = pkgs.scripts.download_reaper rec {
-              target_path = config.aus.programs.download-reaper.target_path;
-              holding_path_root = config.aus.programs.download-reaper.destination_path;
-              holding_path_fallback = "${target_path}/.stale";
-            };
-          in "${download_reaper}/bin/download_reaper";
+          ExecStart = lib.getExe downloadReaper;
         };
       };
     };
@@ -45,7 +61,7 @@
           Description = "Clean up downloads";
         };
         Timer = {
-          OnCalendar = config.aus.programs.download-reaper.frequency;
+          OnCalendar = cfg.frequency;
           Persistent = true;
         };
         Install.WantedBy = ["timers.target"];

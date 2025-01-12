@@ -67,26 +67,6 @@ in rec {
       aus.dmenu
     ];
   };
-  download_reaper = {
-    target_path,
-    holding_path_root,
-    holding_path_fallback,
-  }:
-    shellScript {
-      name = "download_reaper";
-      path = ./download_reaper;
-      deps = with pkgs; [
-        rsync
-        libnotify
-        findutils
-        gawk
-      ];
-      env = {
-        TARGET_PATH = target_path;
-        HOLDING_PATH_ROOT = holding_path_root;
-        HOLDING_PATH_FALLBACK = holding_path_fallback;
-      };
-    };
   drop_zfs_cache = shellScript {
     name = "drop_zfs_cache";
     path = ./drop_zfs_cache;
@@ -186,46 +166,6 @@ in rec {
       dmenu_confirm
     ];
   };
-
-  restic_backup = {
-    name,
-    password-file,
-    repository-location,
-    include,
-    exclude,
-    forget ? {
-      hourly = 24;
-      daily = 14;
-      weekly = 4;
-      monthly = 6;
-      yearly = 5;
-    },
-    exclude-if-present ? [".nobackup"],
-    skip-verify-repo ? false,
-  }:
-    shellScript {
-      name = name;
-      path = ./restic_backup;
-      deps = with pkgs; [
-        restic
-        libnotify
-        gnugrep
-      ];
-      pure = false;
-      env = {
-        LOCKFILE_NAME = name;
-        REPO_LOCATION = repository-location;
-        PWD_FILE = password-file;
-        INCLUDE_FILE = include;
-        EXCLUDE_FILE = exclude;
-        FORGET_ARGS = lib.concatStringsSep " " (lib.mapAttrsToList (key: value: "--keep-" + key + " " + toString value) forget);
-        EXCLUDE_ARGS = lib.concatStringsSep " " (map (x: "--exclude-if-present " + x) exclude-if-present);
-        SKIP_VERIFY_REPO =
-          if skip-verify-repo
-          then "1"
-          else "0";
-      };
-    };
   st_wrapper = shellScript {
     name = "st_wrapper";
     path = ./st_wrapper;

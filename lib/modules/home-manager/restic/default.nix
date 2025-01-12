@@ -2,9 +2,51 @@
   pkgs,
   lib,
   config,
+  aus,
   ...
 }: let
   cfg = config.aus.programs.restic;
+  shellScript = aus.lib.shellScript;
+
+  resticBackup = {
+    name,
+    password-file,
+    repository-location,
+    include,
+    exclude,
+    forget ? {
+      hourly = 24;
+      daily = 14;
+      weekly = 4;
+      monthly = 6;
+      yearly = 5;
+    },
+    exclude-if-present ? [".nobackup"],
+    skip-verify-repo ? false,
+  }:
+    shellScript {
+      name = "restic_${name}";
+      path = ./restic_backup;
+      deps = with pkgs; [
+        restic
+        libnotify
+        gnugrep
+      ];
+      pure = false;
+      env = {
+        LOCKFILE_NAME = name;
+        REPO_LOCATION = repository-location;
+        PWD_FILE = password-file;
+        INCLUDE_FILE = include;
+        EXCLUDE_FILE = exclude;
+        FORGET_ARGS = lib.concatStringsSep " " (lib.mapAttrsToList (key: value: "--keep-" + key + " " + toString value) forget);
+        EXCLUDE_ARGS = lib.concatStringsSep " " (map (x: "--exclude-if-present " + x) exclude-if-present);
+        SKIP_VERIFY_REPO =
+          if skip-verify-repo
+          then "1"
+          else "0";
+      };
+    };
 
   resticType = lib.types.submodule {
     options = {
@@ -60,8 +102,8 @@
       text = lib.concatStringsSep "\n" restic_cfg.exclude;
     };
   in
-    pkgs.scripts.restic_backup {
-      name = "restic_${name}";
+    resticBackup {
+      name = name;
       password-file = restic_cfg.password_file;
       repository-location = restic_cfg.repo_location;
       include = localIncludeFile;

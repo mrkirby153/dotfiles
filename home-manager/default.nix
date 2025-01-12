@@ -5,7 +5,6 @@
     # Import modules for programs
     ./attic.nix
     ./autostart.nix
-    ./download_reaper.nix
     ./dunst.nix
     ./dwmblocks/dwmblocks.nix
     ./ghostty.nix
