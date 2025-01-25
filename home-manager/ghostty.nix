@@ -24,7 +24,7 @@ in {
         cursor-style-blink = false;
         confirm-close-surface = false;
         copy-on-select = "clipboard";
-        adw-toast = "no-clipboard-copy";
+        app-notifications = "no-clipboard-copy";
       };
     };
   };
