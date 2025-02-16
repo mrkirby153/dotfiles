@@ -5,15 +5,20 @@
   ...
 }: let
   cfg = config.aus.programs.ghostty;
+  ghostty-mock = pkgs.writeShellScriptBin "__ghostty_mock" ''
+    true
+  '';
 in {
   options.aus.programs.ghostty = {
     enable = lib.mkEnableOption "ghostty";
   };
 
-  config = lib.mkIf cfg.enable {
-    programs.ghostty = {
+  config = {
+    programs.ghostty = lib.mkIf cfg.enable {
       enable = true;
-      config = {
+      package = ghostty-mock;
+      enableZshIntegration = true;
+      settings = {
         theme = "nord";
         font-family = "SauceCodePro Nerd Font";
         font-size = 11;
