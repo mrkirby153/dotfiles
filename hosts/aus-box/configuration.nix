@@ -153,8 +153,8 @@ in {
     sops.enable = true;
     nxctl = {
       enable = true;
-      line-in = ["Family 17h/19h HD Audio Controller Analog Stereo:capture_FL" "Family 17h/19h HD Audio Controller Analog Stereo:capture_FR"];
-      speakers = ["Family 17h/19h HD Audio Controller Analog Stereo:playback_FL" "Family 17h/19h HD Audio Controller Analog Stereo:playback_FR"];
+      line-in = ["Family 17h/19h/1ah HD Audio Controller Analog Stereo:capture_FL" "Family 17h/19h/1ah HD Audio Controller Analog Stereo:capture_FR"];
+      speakers = ["Family 17h/19h/1ah HD Audio Controller Analog Stereo:playback_FL" "Family 17h/19h/1ah HD Audio Controller Analog Stereo:playback_FR"];
       headphones = ["HyperX QuadCast Analog Stereo:playback_FL" "HyperX QuadCast Analog Stereo:playback_FR"];
       monitor = 2;
       profiles = {
