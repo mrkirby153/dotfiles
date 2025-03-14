@@ -89,3 +89,8 @@ if [ -f /usr/bin/switch.sh ]; then
     alias kctx='switch'
     alias kns='switch ns'
 fi
+
+# Fix for https://github.com/getcursor/cursor/issues/549
+if [[ "$ARGV0" == "/opt/cursor-bin/cursor-bin.AppImage" ]]; then
+  unset ARGV0
+fi
