@@ -16,11 +16,13 @@
         "protobuf"
       ];
       casks = [
+        "bambu-studio"
         "barrier"
-        "raycast"
-        "visual-studio-code"
         "orbstack"
+        "orcaslicer"
+        "raycast"
         "readdle-spark"
+        "visual-studio-code"
         "zoom"
       ];
       taps = [
