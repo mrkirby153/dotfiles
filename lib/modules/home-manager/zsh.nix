@@ -34,7 +34,7 @@ in {
       plugins = builtins.attrNames cfg;
       custom = "${omz-custom}";
     };
-    programs.zsh.initExtra =
+    programs.zsh.initContent =
       if config.aus.extraPaths != []
       then ''
         export PATH="${builtins.concatStringsSep ":" config.aus.extraPaths}:$PATH"

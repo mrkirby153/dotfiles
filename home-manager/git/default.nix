@@ -45,7 +45,7 @@
       signing = lib.mkIf config.aus.programs.git.sign.enable {
         key = config.aus.programs.git.sign.key;
         signByDefault = true;
-        gpgPath = "gpg";
+        signer = "gpg";
       };
     };
     programs.lazygit = {

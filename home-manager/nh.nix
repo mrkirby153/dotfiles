@@ -41,7 +41,7 @@ in {
       ];
     };
     programs.zsh = lib.mkIf cfg.zshCompletions {
-      initExtra = ''
+      initContent = ''
         eval "$(${wrappedNh}/bin/nh completions --shell zsh)"
       '';
     };

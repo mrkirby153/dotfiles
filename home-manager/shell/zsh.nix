@@ -27,7 +27,7 @@ in {
         extended = true;
         ignoreDups = true;
       };
-      initExtra = ''
+      initContent = ''
         ${lib.strings.optionalString pkgs.stdenv.hostPlatform.isLinux "zstyle ':notify:*' notifier \"${lib.getExe notifier}\""}
         ${builtins.readFile ./scripts/zshrc}
       '';
