@@ -11,7 +11,7 @@
     if (cfg.flake != null)
     then
       pkgs.writeScriptBin "nh" ''
-        export FLAKE="${cfg.flake}"
+        export NH_FLAKE="${cfg.flake}"
         exec ${nh}/bin/nh "$@"
       ''
     else nh;
@@ -42,7 +42,7 @@ in {
     };
     programs.zsh = lib.mkIf cfg.zshCompletions {
       initContent = ''
-        eval "$(${wrappedNh}/bin/nh completions --shell zsh)"
+        eval "$(${wrappedNh}/bin/nh completions zsh)"
       '';
     };
   };
