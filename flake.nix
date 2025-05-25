@@ -52,7 +52,7 @@
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: {
-      defaultPackage = home-manager.defaultPackage.${system};
+      defaultPackage = home-manager.packages.${system}.default;
 
       packages = let
         pkgs = import nixpkgs {
