@@ -18,10 +18,13 @@
       casks = [
         "bambu-studio"
         "barrier"
+        "calibre"
+        "libreoffice"
         "orbstack"
         "orcaslicer"
         "raycast"
         "readdle-spark"
+        "spotify"
         "visual-studio-code"
         "zoom"
       ];

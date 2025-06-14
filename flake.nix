@@ -44,7 +44,6 @@
     nixpkgs-unstable,
     home-manager,
     flake-utils,
-    attic,
     sops-nix,
     my-nixpkgs,
     atuin,
@@ -71,7 +70,7 @@
         extraModules ? [],
         extraArgs ? {},
       }: let
-        overlays = [my-nixpkgs.overlays.default attic.overlays.default atuin.overlays.default self.overlays.pkgs];
+        overlays = [my-nixpkgs.overlays.default atuin.overlays.default self.overlays.pkgs];
         pkgs = import nixpkgs {
           inherit overlays;
           system = arch;
@@ -119,12 +118,20 @@
           // {
             pkgs-unstable = import nixpkgs-unstable {
               system = "aarch64-darwin";
-              overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default atuin.overlays.default];
+              overlays = [my-nixpkgs.overlays.default self.overlays.pkgs atuin.overlays.default];
             };
           };
+        pkgs = import nixpkgs {
+          system = "aarch64-darwin";
+          overlays = [my-nixpkgs.overlays.default self.overlays.pkgs atuin.overlays.default];
+        };
       in {
         "austin@Austins-MBP" = nix-darwin.lib.darwinSystem {
+          inherit pkgs;
           modules = [
+            {
+              system.primaryUser = "austin";
+            }
             ./darwin
             home-manager.darwinModules.home-manager
             {
