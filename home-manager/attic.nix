@@ -11,7 +11,7 @@
   };
   config = lib.mkIf config.aus.programs.attic.enable {
     home.packages = with pkgs; [
-      # attic-client
+      attic-client
     ];
 
     sops.secrets.attic = {

@@ -71,13 +71,14 @@
         extraModules ? [],
         extraArgs ? {},
       }: let
+        overlays = [my-nixpkgs.overlays.default attic.overlays.default atuin.overlays.default self.overlays.pkgs];
         pkgs = import nixpkgs {
+          inherit overlays;
           system = arch;
-          overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default atuin.overlays.default];
         };
         pkgs-unstable = import nixpkgs-unstable {
+          inherit overlays;
           system = arch;
-          overlays = [my-nixpkgs.overlays.default self.overlays.pkgs attic.overlays.default atuin.overlays.default];
         };
         ts = import ./hosts/ts.nix {
           inherit pkgs;
@@ -144,9 +145,19 @@
         };
       };
 
-      overlays.pkgs = final: prev:
+      overlays.pkgs = final: prev: let
+        # Workaround for https://github.com/zhaofengli/attic/issues/249 and https://github.com/zhaofengli/attic/issues/250
+        atticPkg = final.callPackage "${inputs.attic}/package.nix" {nix = final.nixVersions.nix_2_24;};
+      in
         import ./pkg {
           pkgs = prev;
+        }
+        // {
+          attic = atticPkg;
+          attic-server = (atticPkg.override {creates = ["attic-server"];}).overrideAttrs (oldAttrs: {
+            meta = final.lib.recursiveUpdate (oldAttrs.meta or {}) {mainProgram = "atticd";};
+          });
+          attic-client = atticPkg.override {clientOnly = true;};
         };
     }
     // flake-utils.lib.eachDefaultSystem (system: let
