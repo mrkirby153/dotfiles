@@ -37,6 +37,11 @@ fi
 
 echo "Using $nix"
 
+if [ -f "$HOME/.dotfiles-host" ]; then
+    CONFIGURATION="$(cat "$HOME/.dotfiles-host")"
+    echo "Overriding configuration: $CONFIGURATION"
+fi
+
 nix_linux() {
     actual_hostname="${HOSTNAME:-$(hostname)}"
     user="${USER:-$(whoami)}"
