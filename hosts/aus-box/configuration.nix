@@ -57,7 +57,7 @@ in {
           password_file = config.sops.secrets.restic_local.path;
           repo_location = "/run/media/austin/Elements/restic/";
           include = ["/home/austin" "/home/austin/Games" "/mnt/Samsung/Steam/steamapps/compatdata"];
-          exclude = ["/home/austin/.cache/" "/home/austin/.local/share/Trash"];
+          exclude = ["/home/austin/.cache/" "/home/austin/.local/share/Trash" "/home/austin/.local/share/contianers/storage/overlay/" "/home/austin/.local/share/containers/storage/volumes/"];
           schedule = "*-*-* *:42:00";
           exclude-if-present = [".nobackup"];
           forget = {
