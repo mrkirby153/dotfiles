@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }: {
   config = lib.mkIf config.aus.programs.shell.enable {
@@ -22,5 +23,9 @@
       enable = true;
       enableZshIntegration = true;
     };
+    home.packages = with pkgs; [
+      hyfetch
+      fastfetch
+    ];
   };
 }
