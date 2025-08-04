@@ -30,7 +30,10 @@ in {
       };
       autostart.enable = true;
       x11.enable = true;
-      shell.enable = true;
+      shell = {
+        enable = true;
+        hyfetch.enable = true;
+      };
       git = {
         enable = true;
         sign = {

@@ -7,6 +7,7 @@
 
   imports = [
     ./atuin.nix
+    ./hyfetch.nix
     ./msc.nix
     ./nix-shell.nix
     ./starship.nix

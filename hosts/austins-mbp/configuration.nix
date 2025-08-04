@@ -7,7 +7,10 @@
     sops.enable = true;
 
     programs = {
-      shell.enable = true;
+      shell = {
+        enable = true;
+        hyfetch.enable = true;
+      };
       git = {
         enable = true;
         sign = {
