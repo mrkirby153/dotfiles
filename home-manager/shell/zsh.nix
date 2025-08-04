@@ -29,6 +29,7 @@ in {
       };
       initContent = ''
         ${lib.strings.optionalString pkgs.stdenv.hostPlatform.isLinux "zstyle ':notify:*' notifier \"${lib.getExe notifier}\""}
+        ${lib.strings.optionalString pkgs.stdenv.hostPlatform.isDarwin "alias tailscale=\"/Applications/Tailscale.app/Contents/MacOS/Tailscale\""}
         ${builtins.readFile ./scripts/zshrc}
       '';
       oh-my-zsh = {

@@ -8,7 +8,6 @@
       enable = true;
       brews = [
         "gpg"
-        "hyfetch"
         "teleport"
         "terminal-notifier"
         "syncthing"
@@ -18,8 +17,10 @@
       casks = [
         "bambu-studio"
         "barrier"
+        "batfi"
         "calibre"
         "libreoffice"
+        "notion-calendar"
         "orbstack"
         "orcaslicer"
         "raycast"

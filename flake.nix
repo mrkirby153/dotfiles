@@ -126,7 +126,7 @@
           overlays = [my-nixpkgs.overlays.default self.overlays.pkgs atuin.overlays.default];
         };
       in {
-        "austin@Austins-MBP" = nix-darwin.lib.darwinSystem {
+        "Austins-MacBook-Pro" = nix-darwin.lib.darwinSystem {
           inherit pkgs;
           modules = [
             {

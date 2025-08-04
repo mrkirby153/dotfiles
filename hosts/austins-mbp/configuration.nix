@@ -21,6 +21,10 @@
       attic.enable = true;
       vim.enable = true;
       screenshot.enable = false;
+      nh = {
+        enable = true;
+        flake = "/Users/austin/Development/mrkirby153/dotfiles";
+      };
     };
   };
 }
