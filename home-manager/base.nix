@@ -42,6 +42,7 @@
         nixd
         comma
         alejandra
+        posting
       ]
       ++ (
         if stdenv.isLinux
