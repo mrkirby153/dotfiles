@@ -28,10 +28,6 @@
       url = "github:mrkirby153/nvim";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    atuin = {
-      url = "github:atuinsh/atuin";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
     nix-darwin = {
       url = "github:LnL7/nix-darwin/nix-darwin-25.05";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -46,7 +42,6 @@
     flake-utils,
     sops-nix,
     my-nixpkgs,
-    atuin,
     nix-darwin,
     ...
   } @ inputs:
@@ -70,7 +65,7 @@
         extraModules ? [],
         extraArgs ? {},
       }: let
-        overlays = [my-nixpkgs.overlays.default atuin.overlays.default self.overlays.pkgs];
+        overlays = [my-nixpkgs.overlays.default self.overlays.pkgs];
         pkgs = import nixpkgs {
           inherit overlays;
           system = arch;
@@ -113,17 +108,18 @@
       };
 
       darwinConfigurations = let
+        overlays = [my-nixpkgs.overlays.default self.overlays.pkgs];
         specialArgs =
           inputs
           // {
             pkgs-unstable = import nixpkgs-unstable {
               system = "aarch64-darwin";
-              overlays = [my-nixpkgs.overlays.default self.overlays.pkgs atuin.overlays.default];
+              inherit overlays;
             };
           };
         pkgs = import nixpkgs {
           system = "aarch64-darwin";
-          overlays = [my-nixpkgs.overlays.default self.overlays.pkgs atuin.overlays.default];
+          inherit overlays;
         };
       in {
         "Austins-MacBook-Pro" = nix-darwin.lib.darwinSystem {

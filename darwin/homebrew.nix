@@ -8,11 +8,12 @@
       enable = true;
       brews = [
         "gpg"
+        "protobuf"
+        "ripgrep"
+        "rustup"
+        "syncthing"
         "teleport"
         "terminal-notifier"
-        "syncthing"
-        "rustup"
-        "protobuf"
       ];
       casks = [
         "bambu-studio"
