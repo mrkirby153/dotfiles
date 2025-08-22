@@ -36,6 +36,9 @@ in {
         enable = true;
         plugins = ["git" "docker" "kubectl" "extract"];
       };
+      keybinds = {
+        "^T" = "transpose-chars";
+      };
       shellAliases = {
         a = "php artisan";
         cat = "${lib.getExe pkgs.bat}";

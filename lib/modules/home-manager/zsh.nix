@@ -15,6 +15,15 @@
       ${builtins.concatStringsSep "\n" copyCommands}
     '';
   };
+
+  initContent = lib.mkOrder 1000 (
+    lib.strings.optionalString (config.aus.extraPaths != []) "export PATH=\"${builtins.concatStringsSep ":" config.aus.extraPaths}:$PATH]\""
+  );
+
+  keybindContent = let
+    mapped = lib.mapAttrsToList (name: value: "bindkey '${name}' ${value}") config.programs.zsh.keybinds;
+  in
+    lib.mkOrder 1500 (lib.concatStringsSep "\n" mapped);
 in {
   options = {
     aus.omzExtraPlugins = lib.mkOption {
@@ -27,6 +36,11 @@ in {
       default = [];
       description = "List of additional paths to add to PATH";
     };
+    programs.zsh.keybinds = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      default = {};
+      description = "Zsh keybindings to set up";
+    };
   };
 
   config = {
@@ -34,11 +48,6 @@ in {
       plugins = builtins.attrNames cfg;
       custom = "${omz-custom}";
     };
-    programs.zsh.initContent =
-      if config.aus.extraPaths != []
-      then ''
-        export PATH="${builtins.concatStringsSep ":" config.aus.extraPaths}:$PATH"
-      ''
-      else "";
+    programs.zsh.initContent = lib.mkMerge [initContent keybindContent];
   };
 }
