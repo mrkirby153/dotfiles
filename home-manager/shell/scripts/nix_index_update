@@ -25,7 +25,7 @@ echo "Update required"
 
 # Find the release for the current architecture
 echo "Finding release for $arch"
-release_url=$(echo $api | jq -r '.assets[] | select(.name | contains("index-'$arch'-linux")) | .browser_download_url')
+release_url=$(echo $api | jq -r '.assets[] | select(.name=="index-'$arch'-linux") | .browser_download_url')
 echo "Release URL: $release_url"
 
 # Download the release
