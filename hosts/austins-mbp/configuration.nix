@@ -25,6 +25,7 @@
         enable = true;
         flake = "/Users/austin/Development/mrkirby153/dotfiles";
       };
+      ffsend.enable = true;
     };
   };
 }

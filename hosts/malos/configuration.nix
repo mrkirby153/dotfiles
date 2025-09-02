@@ -51,6 +51,7 @@ in {
         flake = "/home/austin/Development/nix/dotfiles";
       };
       ghostty.enable = true;
+      ffsend.enable = true;
     };
 
     displays.displays = {

@@ -7,6 +7,7 @@
     ./autostart.nix
     ./dunst.nix
     ./dwmblocks/dwmblocks.nix
+    ./ffsend.nix
     ./ghostty.nix
     ./git
     ./mail.nix
