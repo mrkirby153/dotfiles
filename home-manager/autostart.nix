@@ -6,19 +6,6 @@
 }: let
   mkAutostartEntry = procName: command: "${pkgs.procps}/bin/pidof ${procName} || ${pkgs.util-linux}/bin/setsid -f ${command}";
   mkPgrepAutostartEntry = procName: command: "${pkgs.procps}/bin/pgrep -u $UID -x ${procName} || ${pkgs.util-linux}/bin/setsid -f ${command}";
-
-  ckb_start = pkgs.writeShellScriptBin "ckb_start" ''
-    if lsusb | grep "Corsair .* Keyboard" >> /dev/null
-    then
-      if ps -C ckb-next >> /dev/null
-      then
-        echo "ckb-next is already running"
-      else
-        ckb-next -b &
-        disown
-      fi
-    fi
-  '';
 in {
   options = {
     aus.programs.autostart = {
@@ -36,8 +23,7 @@ in {
         (mkAutostartEntry "parcellite" "${pkgs.parcellite}/bin/parcellite -n")
         (mkAutostartEntry "udiskie" "${pkgs.udiskie}/bin/udiskie")
         (mkAutostartEntry "aw-qt" "aw-qt")
-        "${ckb_start}/bin/ckb_start"
-        "setxkbmap -option compose:alt"
+        "setxkbmap -option compose:ralt"
         "dwmc xrdb"
       ];
     };
