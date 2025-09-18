@@ -5,6 +5,7 @@
     # Import modules for programs
     ./attic.nix
     ./autostart.nix
+    ./compose.nix
     ./dunst.nix
     ./dwmblocks/dwmblocks.nix
     ./ffsend.nix

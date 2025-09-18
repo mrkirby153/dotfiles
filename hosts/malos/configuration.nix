@@ -52,6 +52,7 @@ in {
       };
       ghostty.enable = true;
       ffsend.enable = true;
+      compose.enable = true;
     };
 
     displays.displays = {

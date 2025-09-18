@@ -23,7 +23,6 @@ in {
         (mkAutostartEntry "parcellite" "${pkgs.parcellite}/bin/parcellite -n")
         (mkAutostartEntry "udiskie" "${pkgs.udiskie}/bin/udiskie")
         (mkAutostartEntry "aw-qt" "aw-qt")
-        "setxkbmap -option compose:ralt"
         "dwmc xrdb"
       ];
     };

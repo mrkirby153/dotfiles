@@ -91,6 +91,7 @@ in {
         flake = "/home/austin/Development/nix/dotfiles";
       };
       ffsend.enable = true;
+      compose.enable = true;
     };
 
     displays.displays = {
