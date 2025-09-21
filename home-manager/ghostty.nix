@@ -19,7 +19,7 @@ in {
       package = ghostty-mock;
       enableZshIntegration = true;
       settings = {
-        theme = "nord";
+        theme = "Nord";
         font-family = "SauceCodePro Nerd Font";
         font-size = 11;
         window-decoration = false;
