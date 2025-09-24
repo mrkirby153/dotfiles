@@ -1,13 +1,9 @@
 {
-  pkgs,
   lib,
   config,
   ...
 }: let
   cfg = config.aus.programs.ghostty;
-  ghostty-mock = pkgs.writeShellScriptBin "__ghostty_mock" ''
-    true
-  '';
 in {
   options.aus.programs.ghostty = {
     enable = lib.mkEnableOption "ghostty";
@@ -16,7 +12,7 @@ in {
   config = {
     programs.ghostty = lib.mkIf cfg.enable {
       enable = true;
-      package = ghostty-mock;
+      package = null;
       enableZshIntegration = true;
       settings = {
         theme = "Nord";
