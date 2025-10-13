@@ -9,7 +9,6 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-25.05-darwin";
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,10 +27,6 @@
       url = "github:mrkirby153/nvim";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    nix-darwin = {
-      url = "github:LnL7/nix-darwin/nix-darwin-25.05";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
-    };
   };
 
   outputs = {
@@ -42,7 +37,6 @@
     flake-utils,
     sops-nix,
     my-nixpkgs,
-    nix-darwin,
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: {
@@ -105,47 +99,7 @@
       homeConfigurations = {
         "austin@malos" = mkSystem {name = "malos";};
         "austin@aus-box" = mkSystem {name = "aus-box";};
-      };
-
-      darwinConfigurations = let
-        overlays = [my-nixpkgs.overlays.default self.overlays.pkgs];
-        specialArgs =
-          inputs
-          // {
-            pkgs-unstable = import nixpkgs-unstable {
-              system = "aarch64-darwin";
-              inherit overlays;
-            };
-          };
-        pkgs = import nixpkgs {
-          system = "aarch64-darwin";
-          inherit overlays;
-        };
-      in {
-        "Austins-MacBook-Pro" = nix-darwin.lib.darwinSystem {
-          inherit pkgs;
-          modules = [
-            {
-              system.primaryUser = "austin";
-            }
-            ./darwin
-            home-manager.darwinModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.austin = {
-                imports = [
-                  sops-nix.homeManagerModule
-                  ./lib/modules/home-manager
-                  ./home-manager
-                  ./hosts/austins-mbp/configuration.nix
-                ];
-              };
-              home-manager.extraSpecialArgs = specialArgs;
-            }
-          ];
-          specialArgs = specialArgs;
-        };
+        "austin@Austins-MacBook-Pro" = mkSystem {name="austins-mbp"; arch="aarch64-darwin";};
       };
 
       overlays.pkgs = final: prev:
