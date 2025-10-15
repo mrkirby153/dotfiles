@@ -1,4 +1,6 @@
 name: Update Nix Cache
+# SYSTEM="x86_64-linux"
+# nix eval --json .#homeConfigurations --apply "configs: builtins.filter (name: configs.\${name}.pkgs.system == \"$SYSTEM\") (builtins.attrNames configs)"
 on:
   push:
     branches:
@@ -16,12 +18,16 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - id: discover-configurations
         run: |
-          echo "Discovering home configurations..."
-          configurations=$(nix eval --json .#homeConfigurations --apply builtins.attrNames)
+          echo "Discovering x86_64-linux home configurations..."
+          configurations=$(nix eval --json .#homeConfigurations --apply "configs: builtins.filter (name: configs.\${name}.pkgs.system == \"x86_64-linux\") (builtins.attrNames configs)")
           echo "Discovered the following home configurations: $configurations"
           echo "home={\"configuration\":$configurations}" >> "$GITHUB_OUTPUT"
+          echo "Discovering aarch64-darwin home configurations..."
+          configurations=$(nix eval --json .#homeConfigurations --apply "configs: builtins.filter (name: configs.\${name}.pkgs.system == \"aarch64-darwin\") (builtins.attrNames configs)")
+          echo "Discovered the following aarch64-darwin home configurations: $configurations"
+          echo "darwin={\"configuration\":$configurations}" >> "$GITHUB_OUTPUT"
 
-  build:
+  build-x86_64-linux:
     needs: discover-configurations
     runs-on: ubuntu-latest
     strategy:
@@ -47,4 +53,30 @@ jobs:
       - name: Build and push system
         run: |
           nix run --extra-experimental-features "nix-command flakes" . "build" -- --flake ".#${{ matrix.configuration }}" --extra-experimental-features "nix-command flakes" -L
+          nix run github:zhaofengli/attic#default push mrkirby153-public result -j 2
+  build-aarch64-darwin:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix: ${{fromJson(needs.discover-configurations.outputs.darwin)}}
+    needs: [discover-configurations]
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          sudo mkdir -p /etc/nix
+          echo "machine cache.mrkirby153.com password ${{ secrets.ATTIC_TOKEN }}" | sudo tee /etc/nix/netrc > /dev/null
+          git config --global url."https://${{secrets.GITHUB_TOKEN}}@github.com".insteadOf https://github.com
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          extra-conf: |
+            fallback = true
+            substituters = https://cache.mrkirby153.com/mrkirby153-public?priority=43 https://nix-community.cachix.org?priority=41 https://numtide.cachix.org?priority=42 https://cache.nixos.org/
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= mrkirby153-public:DxpgFWGtjTaSh6U/bt+Xr5qfj4gVbRjUzaePmA/ndwM= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE=
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Build and push system
+        run: |
+          nix run --extra-experimental-features "nix-command flakes" nix-darwin -- build --flake ".#${{ matrix.configuration }}"
+          nix run github:zhaofengli/attic#default login mrkirby153-public https://cache.mrkirby153.com ${{ secrets.ATTIC_TOKEN }}
           nix run github:zhaofengli/attic#default push mrkirby153-public result -j 2
