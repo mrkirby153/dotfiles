@@ -9,6 +9,11 @@
   dunstctl = "${pkgs.dunst}/bin/dunstctl";
 
   update_dwmblocks = block: "${pkgs.procps}/bin/pkill -RTMIN+${builtins.toString block} dwmblocks";
+
+  run_cmd =
+    if config.aus.programs.rofi.enable
+    then "${pkgs.rofi}/bin/rofi -modes \"drun,run\" -show drun"
+    else "${pkgs.j4-dmenu-desktop}/bin/j4-dmenu-desktop --dmenu=\"${pkgs.aus.dmenu}/bin/dmenu -c -l 20 -i\" --display-binary";
 in {
   options.aus = {
     programs.sxhkd.enable = lib.mkEnableOption "sxhkd";
@@ -41,7 +46,7 @@ in {
 
         "super + Pause" = "${pkgs.scripts.power_menu}/bin/power_menu";
 
-        "super + d" = "${pkgs.j4-dmenu-desktop}/bin/j4-dmenu-desktop --dmenu=\"${pkgs.aus.dmenu}/bin/dmenu -c -l 20 -i\" --display-binary";
+        "super + d" = run_cmd;
         "super + r" = "${pkgs.aus.dmenu}/bin/dmenu_run -c -l 20 -i";
 
         "super + p" = "${pkgs.scripts.ocr}/bin/ocr";

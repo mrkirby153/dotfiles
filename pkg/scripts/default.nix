@@ -10,12 +10,16 @@
     inherit runtimeShell;
     inherit lib;
   };
+  dmenu_wrapper = pkgs.writeShellScriptBin "dmenu" ''
+    config=''${XDG_CONFIG_HOME:-$HOME/.config}/dmenu_path
+    exec $(cat $config 2>/dev/null || echo "${pkgs.aus.dmenu}/bin/dmenu") "$@"
+  '';
 in rec {
   screenshot = shellScript {
     name = "screenshot";
     path = ./screenshot;
     deps = with pkgs; [
-      aus.dmenu
+      dmenu_wrapper
       curl
       feh
       ffmpeg-full
@@ -63,8 +67,8 @@ in rec {
   dmenu_confirm = shellScript {
     name = "dmenu_confirm";
     path = ./dmenu_confirm;
-    deps = with pkgs; [
-      aus.dmenu
+    deps = [
+      dmenu_wrapper
     ];
   };
   drop_zfs_cache = shellScript {
@@ -161,7 +165,7 @@ in rec {
     name = "power_menu";
     path = ./power_menu;
     deps = with pkgs; [
-      aus.dmenu
+      dmenu_wrapper
       systemd
       dmenu_confirm
     ];
@@ -182,7 +186,7 @@ in rec {
     pure = false;
     deps = with pkgs; [
       ddcutil
-      aus.dmenu
+      dmenu_wrapper
       gawk
       gnused
       gnugrep

@@ -92,6 +92,10 @@ in {
       };
       ffsend.enable = true;
       compose.enable = true;
+      rofi = {
+        enable = true;
+        dmenu = true;
+      };
     };
 
     displays.displays = {

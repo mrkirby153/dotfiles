@@ -14,6 +14,7 @@
     ./mail.nix
     ./nh.nix
     ./picom
+    ./rofi
     ./screenshot
     ./scripts.nix
     ./shell
