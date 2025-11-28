@@ -26,6 +26,8 @@ in {
         confirm-close-surface = false;
         copy-on-select = "clipboard";
         app-notifications = "no-clipboard-copy";
+        window-inherit-working-directory = false;
+        working-directory = "inherit";
       };
     };
   };
