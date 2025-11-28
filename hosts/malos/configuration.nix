@@ -53,6 +53,7 @@ in {
       ghostty.enable = true;
       ffsend.enable = true;
       compose.enable = true;
+      cloudflared.enable = true;
     };
 
     displays.displays = {

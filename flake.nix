@@ -99,7 +99,10 @@
       homeConfigurations = {
         "austin@malos" = mkSystem {name = "malos";};
         "austin@aus-box" = mkSystem {name = "aus-box";};
-        "austin@Austins-MacBook-Pro" = mkSystem {name="austins-mbp"; arch="aarch64-darwin";};
+        "austin@Austins-MacBook-Pro" = mkSystem {
+          name = "austins-mbp";
+          arch = "aarch64-darwin";
+        };
       };
 
       overlays.pkgs = final: prev:

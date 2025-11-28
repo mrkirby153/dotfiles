@@ -96,6 +96,7 @@ in {
         enable = true;
         dmenu = true;
       };
+      cloudflared.enable = true;
     };
 
     displays.displays = {

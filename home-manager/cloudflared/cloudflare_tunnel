@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+if [ $# -eq 2 ]; then
+    HOST="$1"
+    PORT="$2"
+elif [ $# -eq 1 ]; then
+    HOST="localhost"
+    PORT="$1"
+elif [ $# -eq 0 ]; then
+    HOST="localhost"
+    PORT="8080"
+else
+    echo "Invalid usage"
+    exit 1
+fi
+
+echo "Host: $HOST"
+echo "Port: $PORT"
+
+
+cloudflared tunnel run --url "http://$HOST:$PORT" localhost
