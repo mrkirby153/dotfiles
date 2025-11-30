@@ -1,7 +1,7 @@
 {
   config,
   lib,
-  pkgs,
+  pkgs-unstable,
   ...
 }: {
   config = lib.mkIf config.aus.programs.shell.enable {
@@ -12,6 +12,7 @@
       enable = true;
       enableZshIntegration = true;
       nix-direnv.enable = true;
+      nix-direnv.package = pkgs-unstable.nix-direnv;
     };
 
     programs.thefuck = {

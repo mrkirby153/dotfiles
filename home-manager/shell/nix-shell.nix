@@ -19,11 +19,6 @@
   };
 in {
   config = lib.mkIf config.aus.programs.shell.enable {
-    programs.nix-index = {
-      enable = true;
-      enableZshIntegration = true;
-    };
-
     systemd.user.services = {
       "nix-index-update" = {
         Unit = {
