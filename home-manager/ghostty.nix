@@ -14,6 +14,7 @@ in {
       enable = true;
       package = null;
       enableZshIntegration = true;
+      systemd.enable = false;
       settings = {
         theme = "Nord";
         font-family = "SauceCodePro Nerd Font";

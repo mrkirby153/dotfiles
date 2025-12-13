@@ -7,7 +7,7 @@
           deps = with pkgs; [
             scripts.media_control
             playerctl
-            mpc-cli
+            mpc
             gnused
             gnugrep
           ];

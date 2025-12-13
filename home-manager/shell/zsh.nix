@@ -43,7 +43,7 @@ in {
         a = "php artisan";
         cat = "${lib.getExe pkgs.bat}";
         cp = "cp -iv";
-        dust = "${lib.getExe pkgs.du-dust} -r -b";
+        dust = "${lib.getExe pkgs.dust} -r -b";
         files = "thunar .";
         flatten-folder = "mv ./*/**/*(.D) .";
         http-server = "${lib.getExe httpServer} -m http.server";

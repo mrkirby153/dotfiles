@@ -15,11 +15,6 @@
       nix-direnv.package = pkgs-unstable.nix-direnv;
     };
 
-    programs.thefuck = {
-      enable = true;
-      enableZshIntegration = true;
-    };
-
     programs.zoxide = {
       enable = true;
       enableZshIntegration = true;

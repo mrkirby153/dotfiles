@@ -130,7 +130,7 @@ in rec {
     deps = with pkgs; [
       playerctl
       mpd
-      mpc-cli
+      mpc
       gnugrep
       gnused
     ];
