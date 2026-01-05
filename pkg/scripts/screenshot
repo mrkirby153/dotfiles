@@ -63,13 +63,13 @@ cleanup() {
 }
 
 region_capture() {
-    debug 'Capturing region with maim'
+    debug 'Capturing region with scrot'
     if [ $FREEZE -gt 0 ]; then
-        echo "Fullscreen capture with maim"
+        echo "Fullscreen capture with scrot"
         out_dir=$(mktemp -d)
         echo "Cropping to $out_dir"
         out_file=$(mktemp -t screenshot-XXXX.png)
-        maim "$out_file"
+        scrot - > "$out_file"
         i=0
         for mon in $(xrandr | grep -Po "\d+x\d+\+\d+\+\d+"); do
             echo "Cropping monitor $0 at $mon"
@@ -88,19 +88,19 @@ region_capture() {
         rm -v "$XDG_RUNTIME_DIR/ss_feh.pid"
         exit
     fi
-    maim -su $1
+    scrot -ps $1
     play_sound "$DIR/resources/CaptureSound.wav"
 }
 
 window_capture() {
-    debug 'Capturing full window with maim'
-    maim -i $(xdotool getactivewindow) $1
+    debug 'Capturing full window with scrot'
+    scrot -w $(xdotool getactivewindow) $1
     play_sound "$DIR/resources/CaptureSound.wav"
 }
 
 floating_capture() {
     file="$(mktemp $TEMP_DIR/floating_XXXXXX.png)"
-    maim -su "$file"
+    scrot -ps - > "$file"
     feh "$file" --class=fehfloat --reload=0
 }
 

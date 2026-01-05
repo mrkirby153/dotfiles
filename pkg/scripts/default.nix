@@ -27,10 +27,11 @@ in rec {
       gnugrep
       imagemagick
       libnotify
-      maim
+      scrot
       slop
       xclip
       xorg.xrandr
+      xdotool
     ];
   };
   build_nixos_configuration = shellScript {
