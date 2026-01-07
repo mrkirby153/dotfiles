@@ -36,7 +36,6 @@
     home.packages = with pkgs;
       [
         httpie
-        nix
         nix-prefetch-scripts
         nix-output-monitor
         nixd
