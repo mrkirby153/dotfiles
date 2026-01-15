@@ -16,7 +16,7 @@ in {
     aus.programs.dwm.autostart = {
       non-blocking = [
         "numlockx"
-        (mkAutostartEntry "DiscordCanary" "discord-canary --ignore-gpu-blocklist --disable-features=UseOzonePlatform --enable-features=VaapiVideoDecoder --use-gl=desktop --enable-gpu-rasterization --enable-zero-copy")
+        (mkAutostartEntry "DiscordCanary" "discord-canary")
         (mkAutostartEntry "spotify" "spotify")
         (mkAutostartEntry "1password" "1password --silent")
         (mkPgrepAutostartEntry "redshift-gtk" "redshift-gtk")

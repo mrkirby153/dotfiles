@@ -49,7 +49,6 @@ in {
         http-server = "${lib.getExe httpServer} -m http.server";
         lanplay = "sudo lan-play --relay-server-addr 45.43.195.187:11451";
         ls = "${lib.getExe pkgs.lsd}";
-        lg = "lazygit";
         mv = "mv -iv";
         kubectl = "${lib.getExe kubecolor}";
         rm = "rm -Iv";
