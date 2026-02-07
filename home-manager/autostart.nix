@@ -22,7 +22,6 @@ in {
         (mkPgrepAutostartEntry "redshift-gtk" "redshift-gtk")
         (mkAutostartEntry "parcellite" "parcellite -n")
         (mkAutostartEntry "udiskie" "${pkgs.udiskie}/bin/udiskie")
-        (mkAutostartEntry "aw-qt" "aw-qt")
         "dwmc xrdb"
       ];
     };
