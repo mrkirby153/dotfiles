@@ -39,7 +39,7 @@
     my-nixpkgs,
     ...
   } @ inputs:
-    flake-utils.lib.eachDefaultSystem (system: {
+    flake-utils.lib.eachDefaultSystem (system: rec {
       defaultPackage = home-manager.packages.${system}.default;
 
       packages = let
@@ -50,6 +50,9 @@
       in
         import ./pkg {
           inherit pkgs;
+        }
+        // {
+          default = defaultPackage;
         };
     })
     // rec {
