@@ -13,7 +13,7 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    flake-utils.url = "flake-utils";
+    flake-utils.url = "github:numtide/flake-utils";
     attic = {
       url = "github:zhaofengli/attic";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -29,25 +29,27 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    nixpkgs-unstable,
-    home-manager,
-    flake-utils,
-    sops-nix,
-    my-nixpkgs,
-    ...
-  } @ inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixpkgs-unstable,
+      home-manager,
+      flake-utils,
+      sops-nix,
+      my-nixpkgs,
+      ...
+    }@inputs:
     flake-utils.lib.eachDefaultSystem (system: rec {
       defaultPackage = home-manager.packages.${system}.default;
 
-      packages = let
-        pkgs = import nixpkgs {
-          overlays = [my-nixpkgs.overlays.default];
-          inherit system;
-        };
-      in
+      packages =
+        let
+          pkgs = import nixpkgs {
+            overlays = [ my-nixpkgs.overlays.default ];
+            inherit system;
+          };
+        in
         import ./pkg {
           inherit pkgs;
         }
@@ -56,39 +58,43 @@
         };
     })
     // rec {
-      mkSystem = {
-        name,
-        arch ? "x86_64-linux",
-        extraModules ? [],
-        extraArgs ? {},
-      }: let
-        overlays = [my-nixpkgs.overlays.default self.overlays.pkgs];
-        pkgs = import nixpkgs {
-          inherit overlays;
-          system = arch;
-        };
-        pkgs-unstable = import nixpkgs-unstable {
-          inherit overlays;
-          system = arch;
-        };
-        ts = import ./hosts/ts.nix {
-          inherit pkgs;
-          inherit (pkgs) lib;
-        };
-        aus = import ./lib {
-          inherit pkgs;
-        };
-      in
+      mkSystem =
+        {
+          name,
+          arch ? "x86_64-linux",
+          extraModules ? [ ],
+          extraArgs ? { },
+        }:
+        let
+          overlays = [
+            my-nixpkgs.overlays.default
+            self.overlays.pkgs
+          ];
+          pkgs = import nixpkgs {
+            inherit overlays;
+            system = arch;
+          };
+          pkgs-unstable = import nixpkgs-unstable {
+            inherit overlays;
+            system = arch;
+          };
+          ts = import ./hosts/ts.nix {
+            inherit pkgs;
+            inherit (pkgs) lib;
+          };
+          aus = import ./lib {
+            inherit pkgs;
+          };
+        in
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          modules =
-            [
-              sops-nix.homeManagerModule
-              ./lib/modules/home-manager
-              ./home-manager
-              ./hosts/${name}/configuration.nix
-            ]
-            ++ extraModules;
+          modules = [
+            sops-nix.homeManagerModule
+            ./lib/modules/home-manager
+            ./home-manager
+            ./hosts/${name}/configuration.nix
+          ]
+          ++ extraModules;
           extraSpecialArgs =
             inputs
             // extraArgs
@@ -100,34 +106,39 @@
         };
 
       homeConfigurations = {
-        "austin@malos" = mkSystem {name = "malos";};
-        "austin@aus-box" = mkSystem {name = "aus-box";};
+        "austin@malos" = mkSystem { name = "malos"; };
+        "austin@aus-box" = mkSystem { name = "aus-box"; };
         "austin@Austins-MacBook-Pro" = mkSystem {
           name = "austins-mbp";
           arch = "aarch64-darwin";
         };
       };
 
-      overlays.pkgs = final: prev:
+      overlays.pkgs =
+        final: prev:
         import ./pkg {
           pkgs = prev;
         };
     }
-    // flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = import nixpkgs {
-        system = system;
-      };
-    in {
-      formatter = pkgs.alejandra;
-      devShells.default = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          cacert
-          curl
-          jq
-          sops
+    // flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs {
+          system = system;
+        };
+      in
+      {
+        formatter = pkgs.alejandra;
+        devShells.default = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            cacert
+            curl
+            jq
+            sops
 
-          nix-output-monitor
-        ];
-      };
-    });
+            nix-output-monitor
+          ];
+        };
+      }
+    );
 }
