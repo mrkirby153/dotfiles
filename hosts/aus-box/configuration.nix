@@ -3,7 +3,16 @@
   config,
   ...
 }: let
-  allDisplays = ["DP-0" "DP-1" "DP-2" "DP-3" "DP-4" "DP-5" "HDMI-0" "HDMI-1"];
+  allDisplays = [
+    "DP-0"
+    "DP-1"
+    "DP-2"
+    "DP-3"
+    "DP-4"
+    "DP-5"
+    "HDMI-0"
+    "HDMI-1"
+  ];
   displaysFunc = import ../../lib/displays.nix {lib = pkgs.lib;};
   displays = displaysFunc.asDisplays allDisplays;
 in {
@@ -14,7 +23,7 @@ in {
 
     wallpaper = {
       enable = true;
-      path = ./firewatch.jpg;
+      path = ./art002e009301.jpg;
     };
 
     dwmblocks.enable = true;
@@ -59,8 +68,17 @@ in {
           enable = true;
           password_file = config.sops.secrets.restic_local.path;
           repo_location = "/run/media/austin/Elements/restic/";
-          include = ["/home/austin" "/home/austin/Games" "/mnt/Samsung/Steam/steamapps/compatdata"];
-          exclude = ["/home/austin/.cache/" "/home/austin/.local/share/Trash" "/home/austin/.local/share/contianers/storage/overlay/" "/home/austin/.local/share/containers/storage/volumes/"];
+          include = [
+            "/home/austin"
+            "/home/austin/Games"
+            "/mnt/Samsung/Steam/steamapps/compatdata"
+          ];
+          exclude = [
+            "/home/austin/.cache/"
+            "/home/austin/.local/share/Trash"
+            "/home/austin/.local/share/contianers/storage/overlay/"
+            "/home/austin/.local/share/containers/storage/volumes/"
+          ];
           schedule = "*-*-* *:42:00";
           exclude-if-present = [".nobackup"];
           forget = {
@@ -77,7 +95,12 @@ in {
           password_file = config.sops.secrets.restic_remote_password.path;
           repo_location = config.sops.secrets.restic_remote_repo.path;
           include = config.aus.programs.restic.backup.include;
-          exclude = config.aus.programs.restic.backup.exclude ++ ["/home/austin/Downloads/" "/home/austin/Music/"];
+          exclude =
+            config.aus.programs.restic.backup.exclude
+            ++ [
+              "/home/austin/Downloads/"
+              "/home/austin/Music/"
+            ];
           exclude-if-present = config.aus.programs.restic.backup.exclude-if-present ++ [".noremote"];
           forget = {
             last = 5;
@@ -163,9 +186,18 @@ in {
     sops.enable = true;
     nxctl = {
       enable = true;
-      line-in = ["Family 17h/19h/1ah HD Audio Controller Analog Stereo:capture_FL" "Family 17h/19h/1ah HD Audio Controller Analog Stereo:capture_FR"];
-      speakers = ["Family 17h/19h/1ah HD Audio Controller Analog Stereo:playback_FL" "Family 17h/19h/1ah HD Audio Controller Analog Stereo:playback_FR"];
-      headphones = ["HyperX QuadCast Analog Stereo:playback_FL" "HyperX QuadCast Analog Stereo:playback_FR"];
+      line-in = [
+        "Family 17h/19h/1ah HD Audio Controller Analog Stereo:capture_FL"
+        "Family 17h/19h/1ah HD Audio Controller Analog Stereo:capture_FR"
+      ];
+      speakers = [
+        "Family 17h/19h/1ah HD Audio Controller Analog Stereo:playback_FL"
+        "Family 17h/19h/1ah HD Audio Controller Analog Stereo:playback_FR"
+      ];
+      headphones = [
+        "HyperX QuadCast Analog Stereo:playback_FL"
+        "HyperX QuadCast Analog Stereo:playback_FR"
+      ];
       monitor = 2;
       profiles = {
         activate = {

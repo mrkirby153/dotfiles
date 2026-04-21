@@ -214,7 +214,7 @@ record() {
     ffmpeg -i "$tempout" -vframes 1 -y "$tempframe"
 
 
-    type=$(printf "gif\nvideo" | dmenu -c -l 20 -i -p "What do you want to do?")
+    type=$(printf "video\ngif" | dmenu -c -l 20 -i -p "What do you want to do?")
 
     local out_ext=""
 
@@ -232,7 +232,7 @@ record() {
         notify-send "Re-encoding video..."
         outfile="$TEMP_DIR/output.mp4"
         out_ext="mp4"
-        ffmpeg -i "$tempout" -c:v libx264 -crf 28 -preset fast -movflags +faststart "$outfile"
+        ffmpeg -i "$tempout" -c:v libx264 -crf 28 -preset fast -movflags +faststart -pix_fmt yuv420p "$outfile"
         ;;
         *)
             echo "Invalid type"
