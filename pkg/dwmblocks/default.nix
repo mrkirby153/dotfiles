@@ -1,7 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
-  xorg,
+  libx11,
   pkg-config,
   writeTextFile,
 }: {
@@ -35,7 +35,7 @@
         sha256 = "sha256-FnxQ5bfIs3qg9ZMhQSuGd9TJsEeAhJqmQ8XReFlPqG0=";
       };
       meta.mainProgram = "dwmblocks";
-      buildInputs = [xorg.libX11 pkg-config];
+      buildInputs = [libx11 pkg-config];
       makeFlags = ["PREFIX=$(out)"];
       preBuild = ''
         cp ${blockFile} blocks.h

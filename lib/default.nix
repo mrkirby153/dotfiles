@@ -3,7 +3,7 @@
 in {
   displays = import ./displays.nix {inherit lib;};
   randr = import ./randr.nix {
-    xrandr = pkgs.xorg.xrandr;
+    xrandr = pkgs.xrandr;
   };
   shellScript = import ./shellScript.nix {
     inherit pkgs;

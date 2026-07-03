@@ -8,7 +8,7 @@
 
   setComposeKey = pkgs.writeShellScriptBin "set-compose-key" ''
     #!${pkgs.runtimeShell}
-    ${pkgs.xorg.setxkbmap}/bin/setxkbmap -option compose:${cfg.key}
+    ${pkgs.setxkbmap}/bin/setxkbmap -option compose:${cfg.key}
   '';
 in {
   options = {

@@ -134,7 +134,7 @@
         cmd = {
           path = ./blocks/indicator_keys;
           deps = with pkgs; [
-            xorg.xset
+            xset
             gnused
           ];
         };

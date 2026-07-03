@@ -56,7 +56,6 @@
           icon_positon = "left";
           min_icon_size = 0;
           max_icon_size = 64;
-          icon_path = "/usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/";
 
           sticky_history = "yes";
           history_length = 20;
