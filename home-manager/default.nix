@@ -5,6 +5,7 @@
     # Import modules for programs
     ./attic.nix
     ./autostart.nix
+    ./claude
     ./cloudflared
     ./compose.nix
     ./dunst.nix

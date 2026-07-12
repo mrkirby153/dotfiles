@@ -54,6 +54,7 @@ in {
       ffsend.enable = true;
       compose.enable = true;
       cloudflared.enable = true;
+      claude.enable = true;
     };
 
     displays.displays = {

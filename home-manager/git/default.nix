@@ -4,7 +4,10 @@
   pkgs,
   pkgs-unstable,
   ...
-}: {
+}: let
+  cfg = config.aus.programs.git;
+  globalIgnore = pkgs.writeText "globalignore" cfg.globalignore or "";
+in {
   options = {
     aus.programs.git = {
       enable = lib.mkEnableOption "Enable git";
@@ -16,24 +19,40 @@
           description = "The key to use for signing git commits";
         };
       };
+      username = lib.mkOption {
+        type = lib.types.str;
+        default = "mrkirby153";
+        description = "The username to use for git commits";
+      };
+      email = lib.mkOption {
+        type = lib.types.str;
+        default = "mr.austinwhyte@gmail.com";
+        description = "The email to use for git commits";
+      };
+      globalignore = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        description = "A list of global gitignore patterns";
+      };
     };
   };
 
-  config = lib.mkIf config.aus.programs.git.enable {
+  config = lib.mkIf cfg.enable {
+    aus.programs.git.globalignore = builtins.readFile ./globalignore;
     programs.git = {
       enable = true;
       settings = {
-        user.name = "mrkirby153";
-        user.email = "mr.austinwhyte@gmail.com";
+        user.name = cfg.username;
+        user.email = cfg.email;
         commit.verbose = true;
         fetch.prune = true;
         push.autoSetupRemote = true;
         init.defaultBranch = "main";
         core.autocrlf = "input";
-        core.excludesFile = "${./globalignore}";
+        core.excludesFile = "${globalIgnore}";
       };
-      signing = lib.mkIf config.aus.programs.git.sign.enable {
-        key = config.aus.programs.git.sign.key;
+      signing = lib.mkIf cfg.sign.enable {
+        key = cfg.sign.key;
         signByDefault = true;
         signer = "gpg";
       };

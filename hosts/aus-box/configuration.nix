@@ -120,6 +120,7 @@ in {
         dmenu = true;
       };
       cloudflared.enable = true;
+      claude.enable = true;
     };
 
     displays.displays = {

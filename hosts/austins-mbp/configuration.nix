@@ -26,6 +26,7 @@
         flake = "/Users/austin/Development/mrkirby153/dotfiles";
       };
       ffsend.enable = true;
+      claude.enable = true;
     };
   };
 }
