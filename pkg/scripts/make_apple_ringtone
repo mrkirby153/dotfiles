@@ -11,6 +11,7 @@ ffmpeg -y -i "$1" -ss 0 -t 30 -acodec aac -vn -b:a 256k "$tmp_file" &> /dev/null
 
 duration=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$tmp_file")
 crossfade_start=$(echo "$duration - 0.25" | bc -l)
+crossfade_start="0${crossfade_start}"
 
 echo "Removing pop"
 ffmpeg -y -i "$tmp_file" -af "afade=t=out:st=$crossfade_start:d=0.25" "$tmp_file2" &> /dev/null
