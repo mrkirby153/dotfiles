@@ -2,9 +2,11 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   cfg = config.aus.programs.claude;
-in {
+in
+{
   options = {
     aus.programs.claude = {
       enable = lib.mkEnableOption "Enable claude";
@@ -14,6 +16,7 @@ in {
   config = lib.mkIf cfg.enable {
     aus.programs.git.globalignore = ''
       .claude/settings.local.json
+      .mcp.json
     '';
     aus.programs.claude.statusline = {
       enable = true;
