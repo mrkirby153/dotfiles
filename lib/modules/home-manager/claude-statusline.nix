@@ -7,7 +7,7 @@
   cfg = config.aus.programs.claude.statusline;
 
   captures =
-    lib.imap0 (i: s: ''sl${toString i}=$(${toString s} <<<"$INPUT")'')
+    lib.imap0 (i: s: ''sl${toString i}=$(${s} <<<"$INPUT")'')
     cfg.scripts;
 
   fmt = lib.concatMapStringsSep cfg.separator (_: "%s") cfg.scripts;
