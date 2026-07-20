@@ -42,6 +42,7 @@
         comma
         alejandra
         posting
+        vykar
       ]
       ++ (
         if stdenv.isLinux

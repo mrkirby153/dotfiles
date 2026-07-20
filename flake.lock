@@ -72,6 +72,21 @@
         "type": "github"
       }
     },
+    "crane_2": {
+      "locked": {
+        "lastModified": 1783203018,
+        "narHash": "sha256-G6R9IT/xwFuu+CYBWDUAok6AdC4ERC4ZfPPFtEpxnZE=",
+        "owner": "ipetkov",
+        "repo": "crane",
+        "rev": "80db5bdc391be8a1794f6d8a2d56e3a84ebcede2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ipetkov",
+        "repo": "crane",
+        "type": "github"
+      }
+    },
     "css3-syntax-src": {
       "flake": false,
       "locked": {
@@ -198,6 +213,24 @@
     "flake-utils_2": {
       "inputs": {
         "systems": "systems_2"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_3": {
+      "inputs": {
+        "systems": "systems_4"
       },
       "locked": {
         "lastModified": 1731533236,
@@ -487,7 +520,65 @@
         "my-nvim": "my-nvim",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "vykar": "vykar"
+      }
+    },
+    "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "vykar",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783747106,
+        "narHash": "sha256-KlepQu/O5m11lAjcJ4ER5bc6bIzyX2UMPDARzMzQfIw=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "e598b37857b895b81020a65a802ef55f5bbed72f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "skia-binaries-aarch64-darwin": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-5bZ+FmMwnLwgl10GP5Oapx+uXNGx7a41W6eLiKkvacc=",
+        "type": "file",
+        "url": "https://github.com/rust-skia/skia-binaries/releases/download/0.99.0/skia-binaries-a25a0fdb7d90429aa2d1-aarch64-apple-darwin-gl-jpegd-jpege-pdf-textlayout-vulkan.tar.gz"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/rust-skia/skia-binaries/releases/download/0.99.0/skia-binaries-a25a0fdb7d90429aa2d1-aarch64-apple-darwin-gl-jpegd-jpege-pdf-textlayout-vulkan.tar.gz"
+      }
+    },
+    "skia-binaries-aarch64-linux": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-tXfDNCfFckRE3XT64+w/5JMKy0cwklAIRMLcCUc0IYU=",
+        "type": "file",
+        "url": "https://github.com/rust-skia/skia-binaries/releases/download/0.99.0/skia-binaries-a25a0fdb7d90429aa2d1-aarch64-unknown-linux-gnu-gl-jpegd-jpege-pdf-textlayout-vulkan.tar.gz"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/rust-skia/skia-binaries/releases/download/0.99.0/skia-binaries-a25a0fdb7d90429aa2d1-aarch64-unknown-linux-gnu-gl-jpegd-jpege-pdf-textlayout-vulkan.tar.gz"
+      }
+    },
+    "skia-binaries-x86_64-linux": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-eUb2aJV5bp4gffHKjqBPyjVQF4iyrlg4RWzv2Ny5TVE=",
+        "type": "file",
+        "url": "https://github.com/rust-skia/skia-binaries/releases/download/0.99.0/skia-binaries-a25a0fdb7d90429aa2d1-x86_64-unknown-linux-gnu-gl-jpegd-jpege-pdf-textlayout-vulkan.tar.gz"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/rust-skia/skia-binaries/releases/download/0.99.0/skia-binaries-a25a0fdb7d90429aa2d1-x86_64-unknown-linux-gnu-gl-jpegd-jpege-pdf-textlayout-vulkan.tar.gz"
       }
     },
     "sops-nix": {
@@ -553,6 +644,21 @@
         "type": "github"
       }
     },
+    "systems_4": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
     "telescope-recent-files-src": {
       "flake": false,
       "locked": {
@@ -582,6 +688,32 @@
       "original": {
         "owner": "cocopon",
         "repo": "vaffle.vim",
+        "type": "github"
+      }
+    },
+    "vykar": {
+      "inputs": {
+        "crane": "crane_2",
+        "flake-utils": "flake-utils_3",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": "rust-overlay",
+        "skia-binaries-aarch64-darwin": "skia-binaries-aarch64-darwin",
+        "skia-binaries-aarch64-linux": "skia-binaries-aarch64-linux",
+        "skia-binaries-x86_64-linux": "skia-binaries-x86_64-linux"
+      },
+      "locked": {
+        "lastModified": 1783851226,
+        "narHash": "sha256-uhAZY8Rv3CS5K6AR7WI/PY/BqnBkXqb8Ine4k+2tZAg=",
+        "owner": "borgbase",
+        "repo": "vykar",
+        "rev": "3a500bf50a8b30a04e9329cc5ab1a2938ea81783",
+        "type": "github"
+      },
+      "original": {
+        "owner": "borgbase",
+        "repo": "vykar",
         "type": "github"
       }
     }

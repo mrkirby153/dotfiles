@@ -27,6 +27,10 @@
       url = "github:mrkirby153/nvim";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    vykar = {
+      url = "github:borgbase/vykar";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -114,6 +118,9 @@
       overlays.pkgs = final: prev:
         import ./pkg {
           pkgs = prev;
+        }
+        // {
+          vykar = inputs.vykar.packages.${prev.system}.vykar;
         };
     }
     // flake-utils.lib.eachDefaultSystem (
