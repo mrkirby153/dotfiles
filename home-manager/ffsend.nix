@@ -2,14 +2,16 @@
   config,
   pkgs,
   lib,
+  aus,
   ...
 }: let
   cfg = config.aus.programs.ffsend;
 
-  wrappedFfsend = pkgs.writeScriptBin "ffsend" ''
-    export FFSEND_HOST="${cfg.host}"
-    exec ${lib.getExe pkgs.ffsend} "$@"
-  '';
+  ffsend = aus.lib.wrapProgram {
+    pkg = pkgs.ffsend;
+    binaryName = "ffsend";
+    args = "--set FFSEND_HOST \"${cfg.host}\"";
+  };
 in {
   options.aus = {
     programs.ffsend = {
@@ -24,7 +26,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     home.packages = [
-      wrappedFfsend
+      ffsend
     ];
   };
 }

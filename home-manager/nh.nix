@@ -3,6 +3,7 @@
   lib,
   config,
   pkgs-unstable,
+  aus,
   ...
 }: let
   cfg = config.aus.programs.nh;
@@ -10,10 +11,11 @@
   wrappedNh =
     if (cfg.flake != null)
     then
-      pkgs.writeScriptBin "nh" ''
-        export NH_FLAKE="${cfg.flake}"
-        exec ${nh}/bin/nh "$@"
-      ''
+      aus.lib.wrapProgram {
+        pkg = nh;
+        binaryName = "nh";
+        args = "--set NH_FLAKE \"${cfg.flake}\"";
+      }
     else nh;
 in {
   options.aus.programs.nh = {

@@ -11,4 +11,7 @@ in {
     inherit (pkgs) runtimeShell;
     inherit (pkgs) writeTextFile;
   };
+  wrapProgram = import ./wrapProgram.nix {
+    inherit pkgs;
+  };
 }
