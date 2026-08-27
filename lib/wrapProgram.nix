@@ -13,16 +13,21 @@
     else args;
   wrapLines = builtins.concatStringsSep "\\\n      " (
     map (name: ''
-      wrapProgram $out/bin/${name}\
-        ${builtArgs}
+      wrapProgram $out/bin/${name} ${builtArgs}
     '')
     binaryNames
   );
 in
-  pkg.overrideAttrs (old: {
-    buildInputs = (old.buildInputs or []) ++ [pkgs.makeWrapper];
+  pkgs.stdenv.mkDerivation {
+    name = "${pkg.name}-wrapped";
+    buildInputs = [pkgs.makeWrapper];
+    # Copy the original package to the output
+    src = pkg;
+    installPhase = ''
+      mkdir -p $out
+      cp -r ${pkg}/. $out/
+    '';
     postFixup = ''
-      ${old.postFixup or ""}
       ${wrapLines}
     '';
-  })
+  }
