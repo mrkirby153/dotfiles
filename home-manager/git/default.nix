@@ -64,10 +64,10 @@ in {
         gui.nerdFontsVersion = "3";
         quitOnTopLevelReturn = true;
         promptToReturnFromSubprocess = false;
-        git.pagers = [
+        git.diffRenderers = [
           {
             colorArg = "always";
-            pager = "${pkgs.delta}/bin/delta --dark --paging=never";
+            command = "${pkgs.delta}/bin/delta --dark --paging=never";
           }
         ];
       };
