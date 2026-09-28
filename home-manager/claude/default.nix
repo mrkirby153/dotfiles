@@ -2,11 +2,9 @@
   lib,
   config,
   ...
-}:
-let
+}: let
   cfg = config.aus.programs.claude;
-in
-{
+in {
   options = {
     aus.programs.claude = {
       enable = lib.mkEnableOption "Enable claude";

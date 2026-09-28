@@ -60,6 +60,7 @@ in {
     programs.lazygit = {
       enable = true;
       package = pkgs-unstable.lazygit;
+      enableZshIntegration = false;
       settings = {
         gui.nerdFontsVersion = "3";
         quitOnTopLevelReturn = true;
