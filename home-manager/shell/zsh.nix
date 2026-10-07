@@ -34,7 +34,12 @@ in {
       '';
       oh-my-zsh = {
         enable = true;
-        plugins = ["git" "docker" "kubectl" "extract"];
+        plugins = [
+          "git"
+          "docker"
+          "kubectl"
+          "extract"
+        ];
       };
       keybinds = {
         "^T" = "transpose-chars";
@@ -52,6 +57,7 @@ in {
         mv = "mv -iv";
         kubectl = "${lib.getExe kubecolor}";
         rm = "rm -Iv";
+        lg = "lazygit";
       };
     };
 
@@ -76,16 +82,14 @@ in {
           sha256 = "149zh2rm59blr2q458a5irkfh82y3dwdich60s9670kl3cl5h2m1";
         };
       }
-      (lib.mkIf
-        pkgs.stdenv.hostPlatform.isLinux
-        {
-          notify = pkgs.fetchFromGitHub {
-            owner = "marzocchi";
-            repo = "zsh-notify";
-            rev = "9c1dac81a48ec85d742ebf236172b4d92aab2f3f";
-            sha256 = "sha256-ovmnl+V1B7J/yav0ep4qVqlZOD3Ex8sfrkC92dXPLFI=";
-          };
-        })
+      (lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+        notify = pkgs.fetchFromGitHub {
+          owner = "marzocchi";
+          repo = "zsh-notify";
+          rev = "9c1dac81a48ec85d742ebf236172b4d92aab2f3f";
+          sha256 = "sha256-ovmnl+V1B7J/yav0ep4qVqlZOD3Ex8sfrkC92dXPLFI=";
+        };
+      })
     ];
     aus.extraPaths = [
       "$HOME/.krew/bin"
