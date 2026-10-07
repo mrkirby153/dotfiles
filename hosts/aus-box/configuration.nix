@@ -23,7 +23,7 @@ in {
 
     wallpaper = {
       enable = true;
-      path = ./art002e009301.jpg;
+      path = ./starship.png;
     };
 
     dwmblocks.enable = true;
