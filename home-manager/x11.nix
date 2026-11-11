@@ -36,6 +36,7 @@ in {
       default = "Adwaita";
       description = "Name of the cursor theme";
     };
+    snixembed.enable = lib.mkEnableOption "Enable snixembed support";
   };
 
   config = lib.mkIf cfg.enable {
@@ -94,6 +95,22 @@ in {
           color13 = theme.nord15;
           color14 = theme.nord7;
           color15 = theme.nord6;
+        };
+      };
+    };
+
+    systemd.user.services = lib.mkIf cfg.snixembed.enable {
+      snixembed = {
+        Unit = {
+          Description = "Snixembed service";
+        };
+        Service = {
+          Type = "simple";
+          ExecStart = "${pkgs.snixembed}/bin/snixembed";
+          Restart = "always";
+        };
+        Install = {
+          WantedBy = ["default.target"];
         };
       };
     };

@@ -43,6 +43,7 @@ in {
       };
       autostart.enable = true;
       x11.enable = true;
+      x11.snixembed.enable = true;
       shell = {
         enable = true;
         hyfetch.enable = true;
