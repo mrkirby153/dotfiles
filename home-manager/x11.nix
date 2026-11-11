@@ -107,6 +107,7 @@ in {
         Service = {
           Type = "simple";
           ExecStart = "${pkgs.snixembed}/bin/snixembed";
+          Environment = "GDK_PIXBUF_MODULE_FILE=${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
           Restart = "always";
         };
         Install = {
