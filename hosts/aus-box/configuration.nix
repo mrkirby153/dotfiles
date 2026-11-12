@@ -42,8 +42,15 @@ in {
         autostart.enable = true;
       };
       autostart.enable = true;
-      x11.enable = true;
-      x11.snixembed.enable = true;
+      x11 = {
+        enable = true;
+        trayproxy = {
+          enable = true;
+          config = {
+            hide = ["spotify-client"];
+          };
+        };
+      };
       shell = {
         enable = true;
         hyfetch.enable = true;

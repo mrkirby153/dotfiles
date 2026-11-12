@@ -31,6 +31,10 @@
       url = "github:borgbase/vykar";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    trayproxy = {
+      url = "github:mrkirby153/trayproxy";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -41,6 +45,7 @@
     flake-utils,
     sops-nix,
     my-nixpkgs,
+    trayproxy,
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: rec {
@@ -67,6 +72,7 @@
         extraArgs ? {},
       }: let
         overlays = [
+          trayproxy.overlays.default
           my-nixpkgs.overlays.default
           self.overlays.pkgs
         ];

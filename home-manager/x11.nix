@@ -23,6 +23,7 @@
     nord15 = "#B48EAD";
   };
   cfg = config.aus.programs.x11;
+  trayproxyFormat = pkgs.formats.toml {};
 in {
   options.aus.programs.x11 = {
     enable = lib.mkEnableOption "Enable graphical environment";
@@ -36,7 +37,14 @@ in {
       default = "Adwaita";
       description = "Name of the cursor theme";
     };
-    snixembed.enable = lib.mkEnableOption "Enable snixembed support";
+    trayproxy = {
+      enable = lib.mkEnableOption "Enable trayproxy support";
+      config = lib.mkOption {
+        type = lib.types.attrs;
+        description = "Configuration for trayproxy";
+        default = {};
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -99,21 +107,24 @@ in {
       };
     };
 
-    systemd.user.services = lib.mkIf cfg.snixembed.enable {
-      snixembed = {
+    systemd.user.services = lib.mkIf cfg.trayproxy.enable {
+      trayproxy = {
         Unit = {
-          Description = "Snixembed service";
+          Description = "Trayproxy service";
         };
         Service = {
           Type = "simple";
-          ExecStart = "${pkgs.snixembed}/bin/snixembed";
-          Environment = "GDK_PIXBUF_MODULE_FILE=${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
+          ExecStart = "${pkgs.trayproxy}/bin/trayproxy";
           Restart = "always";
         };
         Install = {
           WantedBy = ["default.target"];
         };
       };
+    };
+    xdg.configFile."trayproxy/config.toml" = {
+      enable = cfg.trayproxy.enable;
+      source = trayproxyFormat.generate "config.toml" cfg.trayproxy.config;
     };
   };
 }
