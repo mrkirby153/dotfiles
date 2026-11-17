@@ -118,7 +118,7 @@ in {
           Restart = "always";
         };
         Install = {
-          WantedBy = ["default.target"];
+          WantedBy = ["graphical-session.target"];
         };
       };
     };
