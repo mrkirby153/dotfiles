@@ -118,6 +118,40 @@
         "type": "github"
       }
     },
+    "dmenu-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1730289805,
+        "narHash": "sha256-uCyecN2Pto+vbe86BZ2DuJ9MHv5oLLMNuh2VujlNxnE=",
+        "ref": "refs/heads/master",
+        "rev": "86f0b5119eaa39943013d009967432ffd9d18365",
+        "revCount": 619,
+        "type": "git",
+        "url": "https://git.suckless.org/dmenu"
+      },
+      "original": {
+        "rev": "86f0b5119eaa39943013d009967432ffd9d18365",
+        "type": "git",
+        "url": "https://git.suckless.org/dmenu"
+      }
+    },
+    "dwm-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1660902442,
+        "narHash": "sha256-m5O7CtgVwz/4+kdVOTLX2ITSNtd46uyazRXTAeNc/ms=",
+        "ref": "refs/heads/master",
+        "rev": "84d7322113c2bf023f5eaa8537fb0e72d4105046",
+        "revCount": 1711,
+        "type": "git",
+        "url": "https://git.suckless.org/dwm"
+      },
+      "original": {
+        "rev": "84d7322113c2bf023f5eaa8537fb0e72d4105046",
+        "type": "git",
+        "url": "https://git.suckless.org/dwm"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -517,6 +551,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "sops-nix": "sops-nix",
+        "suckless": "suckless",
         "trayproxy": "trayproxy",
         "vykar": "vykar"
       }
@@ -593,6 +628,46 @@
       "original": {
         "owner": "Mic92",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "st-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1723203296,
+        "narHash": "sha256-pW1b7nFFXPufNbvOLJf8lIZ9WEg2pMFne0Q/SkA5TdE=",
+        "ref": "refs/heads/master",
+        "rev": "a0274bc20e11d8672bb2953fdd1d3010c0e708c5",
+        "revCount": 1173,
+        "type": "git",
+        "url": "https://git.suckless.org/st"
+      },
+      "original": {
+        "rev": "a0274bc20e11d8672bb2953fdd1d3010c0e708c5",
+        "type": "git",
+        "url": "https://git.suckless.org/st"
+      }
+    },
+    "suckless": {
+      "inputs": {
+        "dmenu-src": "dmenu-src",
+        "dwm-src": "dwm-src",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "st-src": "st-src"
+      },
+      "locked": {
+        "lastModified": 1794894826,
+        "narHash": "sha256-SSFxxosiuXd9eKqH6/+Ape2WtGVB2vS9hXudvSL1IC8=",
+        "owner": "mrkirby153",
+        "repo": "suckless",
+        "rev": "81765279c01affc74cc63191827a625871e70a87",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mrkirby153",
+        "repo": "suckless",
         "type": "github"
       }
     },

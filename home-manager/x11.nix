@@ -49,9 +49,9 @@ in {
 
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
-      aus.st
-      aus.dwm
-      aus.dmenu
+      aus-suckless.st
+      aus-suckless.dwm
+      aus-suckless.dmenu
     ];
     xresources.properties = {
       "*.foreground" = theme.nord4;

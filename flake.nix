@@ -35,6 +35,10 @@
       url = "github:mrkirby153/trayproxy";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    suckless = {
+      url = "github:mrkirby153/suckless";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -46,6 +50,7 @@
     sops-nix,
     my-nixpkgs,
     trayproxy,
+    suckless,
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: rec {
@@ -72,6 +77,7 @@
         extraArgs ? {},
       }: let
         overlays = [
+          suckless.overlays.default
           trayproxy.overlays.default
           my-nixpkgs.overlays.default
           self.overlays.pkgs
